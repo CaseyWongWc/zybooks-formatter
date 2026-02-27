@@ -3,7 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { formatZybooksText } from "@/lib/zybooks-formatter";
-import { Copy, Check, Trash2, FileText, ArrowRight } from "lucide-react";
+import {
+  markdownToNotebook,
+  downloadNotebook,
+  generateFilename,
+} from "@/lib/notebook-generator";
+import { Copy, Check, Trash2, FileText, ArrowRight, Download } from "lucide-react";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -46,6 +51,22 @@ export default function Home() {
     setCopied(false);
   }, []);
 
+  const handleDownloadNotebook = useCallback(() => {
+    if (!output.trim()) return;
+    try {
+      const notebook = markdownToNotebook(output);
+      const filename = generateFilename(output);
+      downloadNotebook(notebook, filename);
+      toast({ title: "Notebook downloaded", description: filename });
+    } catch {
+      toast({
+        title: "Generation failed",
+        description: "Could not create notebook file.",
+        variant: "destructive",
+      });
+    }
+  }, [output, toast]);
+
   const inputLineCount = input ? input.split("\n").length : 0;
   const outputLineCount = output ? output.split("\n").length : 0;
 
@@ -62,7 +83,7 @@ export default function Home() {
                 zyBooks Formatter
               </h1>
               <p className="text-xs text-muted-foreground leading-tight" data-testid="text-app-description">
-                Clean zyBooks pastes into readable markdown
+                Clean zyBooks pastes into markdown &amp; Colab notebooks
               </p>
             </div>
           </div>
@@ -120,7 +141,7 @@ export default function Home() {
                 <label className="text-sm font-medium" htmlFor="output-area" data-testid="label-output">
                   Clean Markdown
                 </label>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs text-muted-foreground" data-testid="text-output-lines">
                     {outputLineCount} lines
                   </span>
@@ -138,6 +159,16 @@ export default function Home() {
                     )}
                     {copied ? "Copied" : "Copy"}
                   </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={handleDownloadNotebook}
+                    disabled={!output}
+                    data-testid="button-download-notebook"
+                  >
+                    <Download className="w-4 h-4 mr-1.5" />
+                    Download .ipynb
+                  </Button>
                 </div>
               </div>
               <Textarea
@@ -154,7 +185,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t px-6 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-xs text-muted-foreground">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-xs text-muted-foreground flex-wrap">
           <span data-testid="text-footer-info">Strips navigation, metadata, UI controls, and animation descriptions</span>
           <span data-testid="text-footer-preserves">Keeps participation &amp; challenge activity headers</span>
         </div>
