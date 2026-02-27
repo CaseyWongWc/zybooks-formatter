@@ -110,16 +110,24 @@ export function formatZybooksText(input: string): string {
   text = text.replace(/^(\d+)\)\s*$/gm, '');
 
   text = text.replace(/^Loop\s*$/gm, '');
-
   text = text.replace(/^Output\s*$/gm, '');
   text = text.replace(/^Input\s*$/gm, '');
-  text = text.replace(/^sum:\s*$/gm, '');
-  text = text.replace(/^num:\s*$/gm, '');
+
+  text = text.replace(/^List\s*$/gm, '');
+  text = text.replace(/^Counter\s*$/gm, '');
+  text = text.replace(/^Max\s*$/gm, '');
+
+  text = text.replace(/^(?:sum|num|val|max|count|avg)\s*=\s*(?:Get next input|\d+)\s*$/gm, '');
+
+  text = text.replace(/^(?:sum|num|val|max|count|avg)\s*=\s*(?:sum|num|val|avg|max|count)\s*[\+\-\*\/]\s*(?:sum|num|val|avg|max|count|\d+)\s*$/gm, '');
+  text = text.replace(/^(?:num)\s*=\s*(?:num)\s*\+\s*1\s*$/gm, '');
 
   text = text.replace(/^Put (?:sum|avg|max|count|val) to output.*$/gm, '');
   text = text.replace(/^avg = sum \/ num\s*$/gm, '');
 
   text = text.replace(/^(?:sum|num|val|max|count|avg):[\d\s-]*$/gm, '');
+  text = text.replace(/^sum:\s*$/gm, '');
+  text = text.replace(/^num:\s*$/gm, '');
 
   text = text.replace(/^(?:sum|num|val|avg|max|count)\s*=\s*(?:sum|num|val|avg|max|count|Get next input|\d+).*(?:sum|val|num|avg|max|count)\s*=\s*(?:sum|num|val|avg|max|count|Get next input|\d+).*$/gm, '');
 
