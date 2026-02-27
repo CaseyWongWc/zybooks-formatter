@@ -1,0 +1,31 @@
+Here's the comparison of the two outputs:
+
+**Replit App Output (Clean Markdown - right panel)**: [replit](https://replit.com/@caseywongwc/ZyBooks-Formatter)
+- Starts cleanly with "5.5 For loops" - all the nav metadata ("5.4 Counting", "Students:", "C5", "Activities:", etc.) is stripped
+- "Introduction to for loops" section text is preserved verbatim
+- Code construct (`for variable in container:`) is kept inline (not in a code block though)
+- `**PARTICIPATION ACTIVITY**` labels with section numbers (5.5.1, 5.5.2) are kept as bold markers
+- Code examples like `for list_name in ["Kai", "Sam", "Alex"]:` show up correctly
+- 305 lines raw -> 194 lines cleaned - significant reduction
+
+**Notion Page Output**: [notion](https://www.notion.so/replit-app-3140e51f71de800f99bdc4f6fa75f74f)
+- Same content but Notion renders it with nice visual blocks
+- Code blocks appear as gray highlighted blocks
+- The "Statements to execute after the for loop is complete" appears as a large heading (that's a `TITLE` placeholder that leaked through - should be stripped)
+- Participation activities are labeled and questions preserved
+
+**What's working great:**
+- Navigation metadata fully stripped (no "5.4 Counting", no "zyBooks catalog", no "Casey Wong")
+- Survey text gone
+- Challenge IDs gone
+- Most UI buttons stripped
+- Core educational content preserved verbatim
+
+**What still needs work:**
+- `TITLE` placeholders ("Statements to execute after the for loop is complete") are rendering as headings - these are zyBooks internal placeholders that should be removed
+- Some artifacts remain at the bottom of the raw paste: "Feedback?", "How was this section?", "Provide section feedback", "Activity summary", "Completion details", "5.6 Counting using the range() function"
+- Animation step descriptions (Step 1, Step 2, Step 3) are still in there - those are the verbose descriptions of what the animation shows, which add a lot of noise
+- Code isn't wrapped in triple backticks yet, so there's no code vs text differentiation (that's the AI integration feature)
+- The "Check", "Next level", "1 2 3" level indicators from challenge activities leaked through
+
+Overall though - this went from a completely unusable mess to something very readable. The core content you need for studying is all there. The remaining issues are polish items that the Replit bot can iterate on. Want to flag those specific issues to the bot?

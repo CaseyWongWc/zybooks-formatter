@@ -65,6 +65,9 @@ export function formatZybooksText(input: string): string {
   text = text.replace(/^Construct \d+\.\d+\.\d+:.*$/gm, '');
   text = text.replace(/^Figure \d+\.\d+\.\d+:.*$/gm, '');
 
+  text = text.replace(/^TITLE\s+.*$/gm, '');
+  text = text.replace(/^TITLE\s*$/gm, '');
+
   text = text.replace(/^(?:Start)\s*$/gm, '');
   text = text.replace(/^\s*2x speed\s*$/gm, '');
   text = text.replace(/^\s*Captions\s*$/gm, '');
@@ -85,8 +88,13 @@ export function formatZybooksText(input: string): string {
 
   text = text.replace(/^!\[\]\(blob:https:\/\/learn\.zybooks\.com\/[^)]*\)\s*$/gm, '');
 
-  text = text.replace(/^Step \d+:.*$/gm, '');
-  text = text.replace(/^Static [Ff]igure:.*$/gm, '');
+  text = text.replace(/^Step \d+[:\s].*$/gm, '');
+  text = text.replace(/^Static [Ff]igure[:\s].*$/gm, '');
+  text = text.replace(/^Begin Python code[:\s].*$/gm, '');
+  text = text.replace(/^Begin Python code\s*$/gm, '');
+  text = text.replace(/^End Python code[:\s].*$/gm, '');
+  text = text.replace(/^End Python code\.?\s*$/gm, '');
+  text = text.replace(/^.*\.\.\.\[Truncated\]\s*$/gm, '');
 
   text = text.replace(/^(?:Awake\?|1st check|2nd check|3rd check|False|True|Baby in car)\s*$/gm, '');
   text = text.replace(/^Awake\?(?:\d+(?:st|nd|rd|th) check)+(?:False|True)*(?:Baby in car)*\s*$/gm, '');
@@ -114,11 +122,6 @@ export function formatZybooksText(input: string): string {
   text = text.replace(/^.*?Casey Wong.*$/gm, '');
   text = text.replace(/^\s*Search zyBook\s*$/gm, '');
   text = text.replace(/^\s*About this Material\s*$/gm, '');
-
-  text = text.replace(/^\d+\.\d+\s+(?:Counting|LAB:).*$/gm, function(match) {
-    if (/LAB:/.test(match)) return '';
-    return match;
-  });
 
   text = text.replace(/\s*\\>\s*/g, ' ');
 
