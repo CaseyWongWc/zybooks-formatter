@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { formatZybooksText } from "@/lib/zybooks-formatter";
+import type { PasteMode } from "@/lib/zybooks-formatter";
 import {
   markdownToNotebook,
   downloadNotebook,
@@ -14,6 +15,7 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [copied, setCopied] = useState(false);
+  const [pasteMode, setPasteMode] = useState<PasteMode>("regular");
   const { toast } = useToast();
 
   const handleFormat = useCallback(() => {
@@ -25,9 +27,9 @@ export default function Home() {
       });
       return;
     }
-    const formatted = formatZybooksText(input);
+    const formatted = formatZybooksText(input, pasteMode);
     setOutput(formatted);
-  }, [input, toast]);
+  }, [input, pasteMode, toast]);
 
   const handleCopy = useCallback(async () => {
     if (!output) return;
@@ -110,14 +112,46 @@ export default function Home() {
                 <label className="text-sm font-medium" htmlFor="input-area" data-testid="label-input">
                   Raw zyBooks Paste
                 </label>
-                <span className="text-xs text-muted-foreground" data-testid="text-input-lines">
-                  {inputLineCount} lines
-                </span>
+                <div className="flex items-center gap-2">
+                  <div className="flex rounded-md border border-input overflow-hidden text-xs" data-testid="toggle-paste-mode">
+                    <button
+                      type="button"
+                      onClick={() => setPasteMode("regular")}
+                      className={`px-3 py-1.5 transition-colors ${
+                        pasteMode === "regular"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background text-muted-foreground hover:bg-muted"
+                      }`}
+                      data-testid="button-mode-regular"
+                    >
+                      Regular Paste
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPasteMode("markdown")}
+                      className={`px-3 py-1.5 transition-colors border-l border-input ${
+                        pasteMode === "markdown"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background text-muted-foreground hover:bg-muted"
+                      }`}
+                      data-testid="button-mode-markdown"
+                    >
+                      Copy as Markdown
+                    </button>
+                  </div>
+                  <span className="text-xs text-muted-foreground" data-testid="text-input-lines">
+                    {inputLineCount} lines
+                  </span>
+                </div>
               </div>
               <Textarea
                 id="input-area"
                 data-testid="input-raw-text"
-                placeholder="Paste your zyBooks content here..."
+                placeholder={
+                  pasteMode === "regular"
+                    ? "Paste your zyBooks content here (Ctrl+A, Ctrl+C from zyBooks)..."
+                    : "Paste content from the 'Copy as Markdown' browser extension..."
+                }
                 className="flex-1 min-h-[400px] lg:min-h-[600px] font-mono text-sm resize-none"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}

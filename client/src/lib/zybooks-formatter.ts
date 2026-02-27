@@ -1,4 +1,13 @@
-export function formatZybooksText(input: string): string {
+export type PasteMode = 'regular' | 'markdown';
+
+export function formatZybooksText(input: string, mode: PasteMode = 'regular'): string {
+  if (mode === 'markdown') {
+    return formatMarkdownPaste(input);
+  }
+  return formatRegularPaste(input);
+}
+
+function formatRegularPaste(input: string): string {
   let text = input;
 
   text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
@@ -214,6 +223,212 @@ export function formatZybooksText(input: string): string {
     }
   }
 
+  return collapseWhitespace(text);
+}
+
+function formatMarkdownPaste(input: string): string {
+  let text = input;
+
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  text = text.replace(/^\[Skip to main content\]\([^)]*\)\s*$/gm, '');
+  text = text.replace(/^_menu_\s*$/gm, '');
+  text = text.replace(/^\[!\[zyBooks\]\([^)]*\)\]\([^)]*\)\s*$/gm, '');
+  text = text.replace(/^!\[zyBooks\]\([^)]*\)\s*$/gm, '');
+
+  text = text.replace(/^\[_library\\_books_ zyBooks catalog\]\([^)]*\).*$/gm, '');
+  text = text.replace(/^\[_help_ Help\/FAQ\]\([^)]*\)\s*$/gm, '');
+  text = text.replace(/^\[_search_ Search zyBook\]\([^)]*\)\s*$/gm, '');
+
+  text = text.replace(/^-\s+\[My library\]\([^)]*\)\s*\\?>?\s*$/gm, '');
+  text = text.replace(/^-\s+\[CS \d+:.*?home\]\([^)]*\)\s*\\?>?\s*$/gm, '');
+  text = text.replace(/^-\s+\[\d+\.\d+:.*?\]\([^)]*\)\s*$/gm, '');
+
+  text = text.replace(/_account\\_circle_ .*? _arrow\\_drop\\_down_/gs, '');
+
+  text = text.replace(/^-\s+_info_\s*$/gm, '');
+  text = text.replace(/^\s+You have unverified email.*$/gm, '');
+  text = text.replace(/^\s+_close_\s*$/gm, '');
+
+  text = text.replace(/^-\s+\[_search_.*?\]\([^)]*\)\s*$/gm, '');
+  text = text.replace(/^-\s+_info_ About this Material\s*$/gm, '');
+
+  text = text.replace(/^-\s+\d+\)\s+.*$/gm, '');
+  text = text.replace(/^\s+_expand\\_(?:more|less)_\s*$/gm, '');
+  text = text.replace(/\s+-\s+\[\d+\.\d+\s+[^\]]*?\s*\]\(https:\/\/learn\.zybooks\.com[^)]*\)/g, '');
+  text = text.replace(/\s+-\s+\[_print_ Print chapter\s*\]\([^)]*\)/g, '');
+  text = text.replace(/^\s+Lab\s*$/gm, '');
+
+  text = text.replace(/^\[_arrow\\_upward_.*?\]\([^)]*\)\s*$/gm, '');
+  text = text.replace(/^\[_arrow\\_downward_.*?\]\([^)]*\)\s*$/gm, '');
+
+  text = text.replace(/^_assignment_\s*$/gm, '');
+  text = text.replace(/^Students:\s*$/gm, '');
+  text = text.replace(/^Section \d+\.\d+ is a part of \d+ assignment.*$/gm, '');
+  text = text.replace(/^Activities:\s*$/gm, '');
+  text = text.replace(/^\s*P\s*$/gm, '');
+  text = text.replace(/^Participation\s*$/gm, '');
+  text = text.replace(/^\s*C\s*$/gm, '');
+  text = text.replace(/^Challenge\s*$/gm, '');
+  text = text.replace(/^Due:.*(?:PST|PDT|EST|EDT|CST|CDT|MST|MDT|UTC).*$/gm, '');
+
+  text = text.replace(/^##\s*$/gm, '');
+  text = text.replace(/^##\s*\n\s*Survey\s*$/gm, '');
+  text = text.replace(/^Survey\s*$/gm, '');
+  text = text.replace(/^The following questions are part of a zyBooks survey.*$/gm, '');
+  text = text.replace(/^.*Please take a short moment to answer the \[student survey\]\([^)]*\)\.?\s*$/gm, '');
+
+  text = text.replace(/^##\s*\n\s*Construct \d+\.\d+\.\d+:.*$/gm, '');
+  text = text.replace(/^Construct \d+\.\d+\.\d+:.*$/gm, '');
+  text = text.replace(/^##\s*\n\s*Figure \d+\.\d+\.\d+:.*$/gm, '');
+  text = text.replace(/^Figure \d+\.\d+\.\d+:.*$/gm, '');
+
+  text = text.replace(/^Start\s*$/gm, '');
+  text = text.replace(/^Start Jump to level \d+\s*$/gm, '');
+  text = text.replace(/^\s*2x speed\s*$/gm, '');
+  text = text.replace(/^\s*Captions\s*$/gm, '');
+  text = text.replace(/^\s*_keyboard\\_arrow\\_up_\s*$/gm, '');
+  text = text.replace(/^\s*_keyboard\\_arrow\\_down_\s*$/gm, '');
+  text = text.replace(/^\s*Feedback\?\s*$/gm, '');
+
+  text = text.replace(/^Check Show answer\s*$/gm, '');
+  text = text.replace(/^Check Next level\s*$/gm, '');
+  text = text.replace(/^\s*Check\s*$/gm, '');
+  text = text.replace(/^\s*Show answer\s*$/gm, '');
+  text = text.replace(/^\s*Next\s*$/gm, '');
+  text = text.replace(/^\s*Next level\s*$/gm, '');
+  text = text.replace(/^\s*Try again\s*$/gm, '');
+  text = text.replace(/^\s*Show solution\s*$/gm, '');
+  text = text.replace(/^\s*Click here for example\s*$/gm, '');
+  text = text.replace(/^\*\*Click here for example\*\*.*$/gm, '');
+  text = text.replace(/^\s*Type the program's output\s*$/gm, '');
+  text = text.replace(/^question\\_mark signifies.*$/gm, '');
+  text = text.replace(/^question_mark signifies.*$/gm, '');
+  text = text.replace(/^\*\*Done\*\*\..*$/gm, '');
+  text = text.replace(/^✖.*$/gm, '');
+  text = text.replace(/^!\[Correct\]\([^)]*\)\s*$/gm, '');
+  text = text.replace(/^\s*Solution\s*$/gm, '');
+  text = text.replace(/^\s*Input Output\s*$/gm, '');
+
+  text = text.replace(/^\d{6,}\.\d+\.\w+\s*$/gm, '');
+  text = text.replace(/^\s*\d{6,}\.\d+\.\w+\s*$/gm, '');
+
+  text = text.replace(/^Static figure:.*$/gim, '');
+  text = text.replace(/^Begin Python code:.*$/gm, '');
+  text = text.replace(/^End Python code\..*$/gm, '');
+  text = text.replace(/^Step \d+:.*$/gm, '');
+  text = text.replace(/^.*\.\.\.\[Truncated\]\s*$/gm, '');
+
+  text = text.replace(/^[הה]{10,}\s*$/gm, '');
+  text = text.replace(/^X{10,}\s*$/gm, '');
+
+  text = text.replace(/^\| -.*main\.py.*\|.*\|\s*$/gm, '');
+  text = text.replace(/^\|\s*---\s*(?:\|\s*---\s*)*\|\s*$/gm, '');
+
+  text = text.replace(/^\|[^|].*\|\s*$/gm, function(match) {
+    if (/^\|\s*---/.test(match)) return '';
+    if (/^\|\s*-\s*main\.py/.test(match)) return '';
+
+    const inner = match.replace(/^\|\s*/, '').replace(/\s*\|\s*$/, '');
+    const isCodeTable = inner.includes('\\=') || inner.includes('for ') || inner.includes('print') || inner.includes('def ') || inner.includes('total') || inner.includes('average');
+    if (!isCodeTable) return match;
+
+    function unescapeMd(s: string): string {
+      return s
+        .replace(/\\=/g, '=')
+        .replace(/\\\[/g, '[')
+        .replace(/\\\]/g, ']')
+        .replace(/\\\\/g, '\\')
+        .replace(/\\\|/g, '|')
+        .replace(/\\_/g, '_');
+    }
+
+    const columns = inner.split(/\s*(?<!\\)\|\s*/);
+    if (columns.length === 2) {
+      const code = unescapeMd(columns[0]);
+      const output = unescapeMd(columns[1]);
+      const codeLines = code.split(/\s{2,}/).filter(l => l.trim());
+      const outputLines = output.split(/\s{2,}/).filter(l => l.trim());
+      let result = codeLines.join('\n');
+      if (outputLines.length > 0 && outputLines[0].trim()) {
+        result += '\n\nOutput:\n' + outputLines.join('\n');
+      }
+      return result;
+    }
+
+    const cleaned = unescapeMd(inner);
+    const parts = cleaned.split(/\s{2,}/).filter(l => l.trim());
+    return parts.join('\n');
+  });
+
+  text = text.replace(/\\=/g, '=');
+  text = text.replace(/\\\[/g, '[');
+  text = text.replace(/\\\]/g, ']');
+  text = text.replace(/\\_/g, '_');
+  text = text.replace(/\\#/g, '#');
+  text = text.replace(/\\\*/g, '*');
+  text = text.replace(/\\-/g, '-');
+  text = text.replace(/\\\|/g, '|');
+  text = text.replace(/\\\\/g, '\\');
+
+  text = text.replace(/^How was this section\?\s*$/gm, '');
+  text = text.replace(/^_thumb_up_\s*$/gm, '');
+  text = text.replace(/^\s*_thumb_down_\s*$/gm, '');
+  text = text.replace(/^Provide section feedback\s*$/gm, '');
+  text = text.replace(/^Activity summary for assignment:.*$/gm, '');
+  text = text.replace(/^\d+\s*\/\s*\d+\s*points\s*$/gm, '');
+  text = text.replace(/^Completion details\s*$/gm, '');
+
+  text = text.replace(/^(\s*)(participation\s+activity)\s*$/gim, function(_match, indent, label) {
+    return indent + '**' + label.toUpperCase() + '**';
+  });
+  text = text.replace(/^(\s*)(challenge\s+activity)\s*$/gim, function(_match, indent, label) {
+    return indent + '**' + label.toUpperCase() + '**';
+  });
+
+  text = text.replace(/^(\d+)\)\s*$/gm, '');
+
+  const editorLineNumsPattern = /(?:^\d\s*\n){3,}/gm;
+  text = text.replace(editorLineNumsPattern, '');
+
+  text = text.replace(/^\s*\|\s*$/gm, '');
+  text = text.replace(/^-\s*$/gm, '');
+
+  const sectionCounts: Record<string, number> = {};
+  const sectionLines = text.split('\n');
+  for (const sl of sectionLines) {
+    const subMatch = sl.match(/^(?:#+\s+)?(\d+\.\d+)\.\d+/);
+    if (subMatch) {
+      const parent = subMatch[1];
+      sectionCounts[parent] = (sectionCounts[parent] || 0) + 1;
+    }
+  }
+
+  let mainSectionNum = '';
+  let maxSCount = 0;
+  for (const [sec, cnt] of Object.entries(sectionCounts)) {
+    if (cnt > maxSCount) {
+      maxSCount = cnt;
+      mainSectionNum = sec;
+    }
+  }
+
+  if (mainSectionNum) {
+    const parts = mainSectionNum.split('.');
+    const major = parts[0];
+    const minor = parseInt(parts[1]);
+    for (const adj of [minor - 1, minor + 1]) {
+      const adjSec = major + '.' + adj;
+      const escaped = adjSec.replace('.', '\\.');
+      text = text.replace(new RegExp('^\\[_arrow_(?:upward|downward)_\\s+' + escaped + '.*?\\]\\([^)]*\\)\\s*$', 'gm'), '');
+      text = text.replace(new RegExp('^' + escaped + '\\s+(?!\\d).*$', 'gm'), '');
+    }
+  }
+
+  return collapseWhitespace(text);
+}
+
+function collapseWhitespace(text: string): string {
   const lines = text.split('\n');
   const result: string[] = [];
   let blankCount = 0;
@@ -232,8 +447,6 @@ export function formatZybooksText(input: string): string {
   }
 
   let final = result.join('\n').trim();
-
   final = final.replace(/\n{3,}/g, '\n\n');
-
   return final;
 }
