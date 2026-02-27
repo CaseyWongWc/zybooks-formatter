@@ -9,12 +9,13 @@ import {
   downloadNotebook,
   generateFilename,
 } from "@/lib/notebook-generator";
-import { Copy, Check, Trash2, FileText, ArrowRight, Download } from "lucide-react";
+import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2 } from "lucide-react";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [copied, setCopied] = useState(false);
+  const [colabLoading, setColabLoading] = useState(false);
   const [pasteMode, setPasteMode] = useState<PasteMode>("regular");
   const { toast } = useToast();
 
@@ -66,6 +67,34 @@ export default function Home() {
         description: "Could not create notebook file.",
         variant: "destructive",
       });
+    }
+  }, [output, toast]);
+
+  const handleOpenInColab = useCallback(async () => {
+    if (!output.trim()) return;
+    setColabLoading(true);
+    try {
+      const notebook = markdownToNotebook(output);
+      const filename = generateFilename(output);
+      const res = await fetch("/api/create-colab-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notebook, filename }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to create gist");
+      }
+      window.open(data.colabUrl, "_blank");
+      toast({ title: "Opening in Colab", description: "Notebook gist created" });
+    } catch (err: any) {
+      toast({
+        title: "Could not open in Colab",
+        description: err.message || "Failed to create GitHub Gist",
+        variant: "destructive",
+      });
+    } finally {
+      setColabLoading(false);
     }
   }, [output, toast]);
 
@@ -202,6 +231,20 @@ export default function Home() {
                   >
                     <Download className="w-4 h-4 mr-1.5" />
                     Download .ipynb
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={handleOpenInColab}
+                    disabled={!output || colabLoading}
+                    data-testid="button-open-colab"
+                  >
+                    {colabLoading ? (
+                      <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                    ) : (
+                      <ExternalLink className="w-4 h-4 mr-1.5" />
+                    )}
+                    {colabLoading ? "Creating..." : "Open in Colab"}
                   </Button>
                 </div>
               </div>
