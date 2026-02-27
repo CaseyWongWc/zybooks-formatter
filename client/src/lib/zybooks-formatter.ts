@@ -1,6 +1,8 @@
 export function formatZybooksText(input: string): string {
   let text = input;
 
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
   text = text.replace(/\[Skip to main content\]\([^)]*\)/g, '');
   text = text.replace(/\[_library_books_ zyBooks catalog\]\([^)]*\)/g, '');
   text = text.replace(/\[_help_ Help\/FAQ\]\([^)]*\)/g, '');
@@ -52,6 +54,16 @@ export function formatZybooksText(input: string): string {
   text = text.replace(/^Participation\s*$/gm, '');
   text = text.replace(/^Due:.*(?:PST|PDT|EST|EDT|CST|CDT|MST|MDT|UTC).*$/gm, '');
   text = text.replace(/^C\d+\s*$/gm, '');
+  text = text.replace(/^C\nChallenge\s*$/gm, '');
+  text = text.replace(/^Challenge\s*$/gm, '');
+
+  text = text.replace(/^Survey\s*$/gm, '');
+  text = text.replace(/^The following questions are part of a zyBooks survey.*$/gm, '');
+  text = text.replace(/^.*Please take a short moment to answer the (?:\[)?student survey(?:\]\([^)]*\))?\.?\s*$/gm, '');
+  text = text.replace(/^.*zyBooks survey.*$/gm, '');
+
+  text = text.replace(/^Construct \d+\.\d+\.\d+:.*$/gm, '');
+  text = text.replace(/^Figure \d+\.\d+\.\d+:.*$/gm, '');
 
   text = text.replace(/^(?:Start)\s*$/gm, '');
   text = text.replace(/^\s*2x speed\s*$/gm, '');
@@ -62,10 +74,19 @@ export function formatZybooksText(input: string): string {
   text = text.replace(/^\s*Activity completed\s*$/gm, '');
   text = text.replace(/^\s*Question completed\s*$/gm, '');
 
+  text = text.replace(/^\s*Check\s*$/gm, '');
+  text = text.replace(/^\s*Show answer\s*$/gm, '');
+  text = text.replace(/^\s*Next\s*$/gm, '');
+  text = text.replace(/^\s*Next level\s*$/gm, '');
+  text = text.replace(/^\s*Click here for example\s*$/gm, '');
+  text = text.replace(/^\s*Type the program's output\s*$/gm, '');
+
+  text = text.replace(/^\d{6,}\.\d+\.\w+\s*$/gm, '');
+
   text = text.replace(/^!\[\]\(blob:https:\/\/learn\.zybooks\.com\/[^)]*\)\s*$/gm, '');
 
   text = text.replace(/^Step \d+:.*$/gm, '');
-  text = text.replace(/^Static Figure:.*$/gm, '');
+  text = text.replace(/^Static [Ff]igure:.*$/gm, '');
 
   text = text.replace(/^(?:Awake\?|1st check|2nd check|3rd check|False|True|Baby in car)\s*$/gm, '');
   text = text.replace(/^Awake\?(?:\d+(?:st|nd|rd|th) check)+(?:False|True)*(?:Baby in car)*\s*$/gm, '');
@@ -93,6 +114,11 @@ export function formatZybooksText(input: string): string {
   text = text.replace(/^.*?Casey Wong.*$/gm, '');
   text = text.replace(/^\s*Search zyBook\s*$/gm, '');
   text = text.replace(/^\s*About this Material\s*$/gm, '');
+
+  text = text.replace(/^\d+\.\d+\s+(?:Counting|LAB:).*$/gm, function(match) {
+    if (/LAB:/.test(match)) return '';
+    return match;
+  });
 
   text = text.replace(/\s*\\>\s*/g, ' ');
 
@@ -152,6 +178,38 @@ export function formatZybooksText(input: string): string {
   text = text.replace(/^-\s*$/gm, '');
 
   text = text.replace(/^\s*\[\d+\.\d+\s+.*?\]\(https:\/\/learn\.zybooks\.com[^)]*\)\s*$/gm, '');
+
+  text = text.replace(/^\s*\[student survey\]\([^)]*\)\s*$/gm, '');
+
+  const sectionCounts: Record<string, number> = {};
+  const sectionLines = text.split('\n');
+  for (const sl of sectionLines) {
+    const subMatch = sl.match(/^(\d+\.\d+)\.\d+/);
+    if (subMatch) {
+      const parent = subMatch[1];
+      sectionCounts[parent] = (sectionCounts[parent] || 0) + 1;
+    }
+  }
+
+  let mainSectionNum = '';
+  let maxCount = 0;
+  for (const [sec, cnt] of Object.entries(sectionCounts)) {
+    if (cnt > maxCount) {
+      maxCount = cnt;
+      mainSectionNum = sec;
+    }
+  }
+
+  if (mainSectionNum) {
+    const parts = mainSectionNum.split('.');
+    const major = parts[0];
+    const minor = parseInt(parts[1]);
+    for (const adj of [minor - 1, minor + 1]) {
+      const adjSec = major + '.' + adj;
+      const escaped = adjSec.replace('.', '\\.');
+      text = text.replace(new RegExp('^' + escaped + '\\s+(?!\\d).*$', 'gm'), '');
+    }
+  }
 
   const lines = text.split('\n');
   const result: string[] = [];

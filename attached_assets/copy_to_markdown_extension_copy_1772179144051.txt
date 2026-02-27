@@ -1,0 +1,753 @@
+[Skip to main content](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/5#main-content)
+
+_menu_
+
+[![zyBooks](https://learn.zybooks.com/zycommon-web/assets/logo.svg)](https://learn.zybooks.com/)
+
+-   [My library](https://learn.zybooks.com/library) \>
+-   [CS 2520: Python for Programmers home](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026) \>
+-   [5.5: For loops](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/5)
+
+[_library\_books_ zyBooks catalog](https://learn.zybooks.com/catalog) [_help_ Help/FAQ](https://support.zybooks.com/)
+
+_account\_circle_ Casey Wong _arrow\_drop\_down_
+
+-   _info_
+    
+    You have unverified email(s). Use My Profile to send another verification email.
+    
+    _close_
+    
+
+-   [_search_ Search zyBook](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/content-explorer)
+-   _info_ About this Material
+    
+-   1) Introduction to Python
+    
+    _expand\_more_
+    
+-   2) Variables and Expressions
+    
+    _expand\_more_
+    
+-   3) Types
+    
+    _expand\_more_
+    
+-   4) Branching
+    
+    _expand\_more_
+    
+-   5) Loops
+    
+    _expand\_less_
+    
+    -   [5.1 Loops (general)
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/1)
+    -   [5.2 While loops
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/2)
+    -   [5.3 More while loop examples
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/3)
+    -   [5.4 Counting
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/4)
+    -   [5.5 For loops
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/5)
+    -   [5.6 range()
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/6)
+    -   [5.7 while vs. for
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/7)
+    -   [5.8 Nested loops
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/8)
+    -   [5.9 Incremental programming
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9)
+    -   [5.10 Break and continue
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/10)
+    -   [5.11 Loop else
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/11)
+    -   [5.12 enumerate()
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/12)
+    -   [5.13 Additional practice: Dice statistics
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/13)
+    -   [5.14 LAB: Convert to reverse binary
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/14)
+    -   [5.15 LAB: Password modifier
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/15)
+    -   [5.16 LAB: Output range with increment of 5
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/16)
+    -   [5.17 LAB: Print string in reverse
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/17)
+    -   [5.18 LAB: Brute force equation solver
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/18)
+    -   [5.19 LAB: Adjust values in a list by normalizing
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/19)
+    -   [_print_ Print chapter
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/print)
+-   6) Functions
+    
+    _expand\_more_
+    
+-   7) Strings
+    
+    _expand\_more_
+    
+-   8) Lists and Dictionaries
+    
+    _expand\_more_
+    
+-   9) Classes
+    
+    _expand\_more_
+    
+-   10) Exceptions
+    
+    _expand\_more_
+    
+-   11) Modules
+    
+    _expand\_more_
+    
+-   12) Files
+    
+    _expand\_more_
+    
+-   13) Inheritance
+    
+    _expand\_more_
+    
+-   14) Recursion
+    
+    _expand\_more_
+    
+-   15) Python for Data Science
+    
+    _expand\_more_
+    
+-   16) Searching and Sorting Algorithms
+    
+    _expand\_more_
+    
+-   17) Artificial Intelligence
+    
+    _expand\_more_
+    
+-   18) Additional Material
+    
+    _expand\_more_
+    
+-   19) Coding Practice Problems
+    
+    _expand\_more_
+    
+-   20) Additional Labs: Introduction to Python
+    
+    _expand\_more_
+    
+-   21) Additional Labs: Variables and Expressions
+    
+    _expand\_more_
+    
+-   22) Additional Labs: Types
+    
+    _expand\_more_
+    
+-   23) Additional Labs: Branching
+    
+    _expand\_more_
+    
+-   24) Additional Labs: Loops
+    
+    _expand\_more_
+    
+-   25) Additional Labs: Functions
+    
+    _expand\_more_
+    
+-   26) Additional Labs: Strings
+    
+    _expand\_more_
+    
+-   27) Additional Labs: Lists and Dictionaries
+    
+    _expand\_more_
+    
+-   28) Additional Labs: Classes
+    
+    _expand\_more_
+    
+-   29) Additional Labs: Exceptions
+    
+    _expand\_more_
+    
+-   30) Additional Labs: Files
+    
+    _expand\_more_
+    
+-   31) Additional Labs: Recursion
+    
+    _expand\_more_
+    
+
+[_arrow\_upward_ 5.4 Counting](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/4)
+
+_assignment_
+
+Students:
+
+Section 5.5 is a part of 1 assignment: C5
+
+Activities:
+
+P
+
+Participation
+
+C
+
+Challenge
+
+Due: 02/28/2026, 11:59 PM PST
+
+# 5.5 For loops
+
+## 
+
+Survey
+
+The following questions are part of a zyBooks survey to help us improve our content so we can offer the best experience for students. The survey can be taken anonymously and takes just 3-5 minutes. Please take a short moment to answer the [student survey](https://docs.google.com/forms/d/1UZzWBYeecA9DBhP8WXClTTfp5WZ3OWKANRDleDBtjZg/viewform).
+
+### Introduction to for loops
+
+A common programming task is to access all of the elements in a container, one by one, so that the elements can be used. Ex: Printing every item in a list. A for loop statement iterates over each element in a container one at a time, assigning a variable to the next element to use in the loop body. Each iteration updates the variable with the next element. The container is typically a list, string, or dictionary. A for loop is made of a for statement, followed by an indented loop body.
+
+## 
+
+Construct 5.5.1: For loop.
+
+for variable in container:
+    \# Loop body: Statements to execute
+    \# for each item in the container
+
+\# Statements to execute after the for loop is complete
+
+Feedback?
+
+participation activity
+
+## 
+
+5.5.1: Iterating over a list using a for loop.
+
+Start
+
+ 2x speed
+
+for list\_name in \["Kai", "Sam", "Alex"\]:  
+    print(f"Hi {list\_name}!")  
+  
+print("Done")  
+
+Static figure: A code block, output console, and the variable name are displayed. Begin Python code: for list\_name in \["Kai", "Sam", "Alex"\]: print(f"Hi {list\_name}!") print("Done") End Python code. Step 1: The first iteration assigns the variable list\_name with "Kai" and prints Hi Kai! to the output. The line of code, print(f"Hi {list\_name}!"), is highlighted and list\_name now contains the text, "Kai". The text, Hi Kai!, is output to the console. Step 2: The second iteration assigns the variable list\_name with "Sam" and prints Hi Sam! The third iteration assigns the variable list\_name with "Alex" and prints Hi Alex! The line of code, for list\_name in \["Kai", "Sam", "Alex"\]:, is highlighted and list\_name now contains the text, "Sam". The line of code, print(f"Hi {list\_name}!"), is highlighted and the text, Hi Sam!, is output to the console. The line of code, for list\_name in \["Kai", "Sam", "Alex"\]:, is highlighted and list\_name now contains the text, "Alex". The line of code, print(f"Hi {list\_name}!"), is highlighted and the text, Hi Alex!, is output to the console. Step 3: All of the elements in the list have been iterated through, so the for loop ends. The program prints Done. The line of code, print("Done") is highlighted. Done is output to the console.
+
+_keyboard\_arrow\_down_
+
+Captions
+
+Feedback?
+
+participation activity
+
+## 
+
+5.5.2: For loops.
+
+1)
+
+Which is a purpose of a for loop?
+
+To make decisions based on user input
+
+To repeatedly perform a task an undefined number of times
+
+To repeatedly perform a task a defined number of times
+
+2)
+
+Which action most closely imitates iterating over a list with a for loop?
+
+Checking off steps in a recipe
+
+Writing a letter
+
+Filling a glass of water
+
+3)
+
+Which prints the following output?  
+
+apple
+banana
+cherry
+
+fruits\_list \= \["apple", "banana", "cherry"\] 
+for fruits\_list in fruit: 
+     print(fruit)
+
+fruits\_list \= \["apple", "banana", "cherry"\] 
+for fruit in fruits\_list: 
+     print(fruit)
+
+fruits\_list \= \["apple", "banana", "cherry"\] 
+for fruit in fruits\_list:
+     print(fruits\_list)
+
+4)
+
+What is the output of the following code?
+
+my\_list \= \[5, 6, 7\]
+for x in my\_list: 
+     if x \== 5: 
+          print("Found element 5")
+
+Found element 5  
+Found element 5  
+Found element 5
+
+Found element 5
+
+5
+
+Feedback?
+
+### For loops with strings and dictionaries
+
+A for loop can iterate over other containers such as strings and dictionaries. A string is a sequence type like a list, so the behavior of the loop is identical. Each iteration assigns the loop variable with the next character in the string. Ex: A for loop iterates over each character in the string "blue" beginning with "b" as the leftmost character, then each following character in the string.
+
+Iterating over a dictionary using a for loop assigns the loop variable with each key in the dictionary in the order the keys were inserted. The key's value can then be accessed using the key.
+
+participation activity
+
+## 
+
+5.5.3: Iterating over a string using a for loop.
+
+Start
+
+ 2x speed
+
+my\_str \= "Yes"  
+  
+for char in my\_str:  
+    print(char)  
+
+Static figure: A code block, output console, and the variable name are displayed. Begin Python code: my\_str = "Yes" for char in my\_string: print(char) End Python code. Step 1: The variable my\_str is set to "Yes". The line of code, my\_str = "Yes" is highlighted. Yes moves to the Python interpreter. Step 2: The loop iterates over "Y", the first character in my\_string. Y is then printed to the output. The line of code, for char in my\_str is highlighted. Y moves to my\_str. The line of code, print(char) is highlighted and Y moves to the output. Step 3: The loop iterates over then prints each remaining character in my\_str. The line of code, for char in my\_str is highlighted. e moves to my\_str. The line of code, print(char) is highlighted and e moves to the output. The line of code, for char in my\_str is highlighted. s moves to my\_str. The line of code, print(char) is highlighted and s moves to the output.
+
+_keyboard\_arrow\_down_
+
+Captions
+
+Feedback?
+
+participation activity
+
+## 
+
+5.5.4: Iterating over a dictionary using a for loop.
+
+Start
+
+ 2x speed
+
+channels \= {  
+    "MTV": 35,  
+    "CNN": 28,  
+    "NBC": 4  
+}  
+  
+for channel\_name in channels:  
+    print(f"{channel\_name} is on channel {channels\[channel\_name\]}")  
+
+Static figure: A code block, output console, and the variable name are displayed. Begin Python code: channels = { "MTV": 35, "CNN": 28, "NBC": 4 } for c in channels: print(f"{c} is on channel {channels\[c\]}") End Python code. Step 1: A dictionary named channels is created. The keys are the names of channels, and the values are the channel numbers. The lines of code, channels = {"MTV": 35, "CNN": 28, "NBC": 4} are highlighted. A box appears next to "MTV", "CNN", and "NBC" with the word keys next to it. A box appears next to 35, 28, and 4 with the word values next to it. Step 2: The key and respective value is printed. The line of code, for c in channels is highlighted. "MTV" moves to c. The line of code, print(f"{c} is on channel {channels\[c\]}") is highlighted. 35 moves to \[c\]. MTV is on channel 35 moves to the output. Step 3: The process repeats for each key in the dictionary. The line of code, for c in channels is highlighted. "CNN" moves to c. The line of code, print(f"{c} is on channel {channels\[c\]}") is highlighted. 28 moves to \[c\]. CNN is on channel 28 moves to the output. The line of code, for c in channels is highlighted. "NBC" moves to c. The line of code, print(f"{c} is on channel {channels\[c\]}") is highlighted. 4 moves to \[c\]. NBC is on channel 4 moves to the output.
+
+_keyboard\_arrow\_down_
+
+Captions
+
+Feedback?
+
+participation activity
+
+## 
+
+5.5.5: For loops with strings and dictionaries.
+
+1)
+
+How does a for loop iterate over a dictionary?
+
+Values
+
+Index
+
+Keys
+
+2)
+
+What is the output of the following code?
+
+my\_string \= "cat"
+
+for character in my\_string:
+    print(character)
+
+c  
+a  
+t
+
+cat
+
+c a t
+
+3)
+
+What is the output of the following code?  
+
+dict \= {"a":1, "b":2}
+key\_str \= ""
+for k in dict:
+    key\_str += k
+print(key\_str)
+
+12
+
+ab
+
+a, b
+
+4)
+
+What is the output of the following code?
+
+for char in "python":
+    if char \== "t":
+        print(char + char, end\="")
+    else:
+        print(char, end\="")
+
+ppyytthoonn
+
+tt
+
+pytthon
+
+Feedback?
+
+participation activity
+
+## 
+
+5.5.6: Creating for loops.
+
+Complete the for loop statement by giving the loop variable and container.
+
+1)
+
+Iterate over the given list using a variable called my\_pet.
+
+for 
+
+ in \["Scooter", "Kobe", "Bella"\]:
+    \# Loop body statements
+
+Check Show answer
+
+2)
+
+Iterate over the list my\_prices using a variable called price.
+
+for 
+
+:
+    \# Loop body statements
+
+Check Show answer
+
+3)
+
+Iterate over the string "911" using a variable called number.
+
+for 
+
+:
+    \# Loop body statements
+
+Check Show answer
+
+Feedback?
+
+### For loop examples
+
+For loops can be used to perform action during each loop iteration. A simple example is printing the value, as above examples demonstrated. The program below uses an additional variable to sum list elements to calculate weekly and average daily revenue.
+
+A for loop may also iterate backward over a sequence, starting at the last element and ending with the first element, by using the reversed() function to reverse the order of the elements.
+
+## 
+
+Figure 5.5.1: For loop example: Calculating shop revenue.
+
+| daily\\_revenues \\= \\[ 2350.25, \\# Monday 1800.50, \\# Tuesday 1795.00, \\# Wednesday 2050.25, \\# Thursday 1985.75, \\# Friday 2005.00, \\# Saturday 1890.50 \\# Sunday \\] total \\= 0 for day in daily\\_revenues: total += day average \\= total / len(daily\\_revenues) print(f"Weekly revenue: ${total:.2f}") print(f"Daily average revenue: ${average:.2f}") | Weekly revenue: $13877.25 Daily average revenue: $1982.46 |
+| --- | --- |
+
+Feedback?
+
+## 
+
+Figure 5.5.2: For loop example: Looping over a sequence in reverse.
+
+The following program first prints a list that is ordered alphabetically, then prints the same list in reverse order.
+
+| names \\= \\[ "Biffle", "Bowyer", "Busch", "Gordon", "Patrick" \\] for name in names: print(name, "\\|", end\\=" ") print("\\\\nPrinting in reverse:") for name in reversed(names): print(name, "\\|", end\\=" ") | Biffle \\| Bowyer \\| Busch \\| Gordon \\| Patrick \\| Printing in reverse: Patrick \\| Gordon \\| Busch \\| Bowyer \\| Biffle \\| |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+Feedback?
+
+participation activity
+
+## 
+
+5.5.7: For loops.
+
+1)
+
+What should be filled in the blank to compute the average number of kids?  
+
+\# Each list item is the number of kids in a family.
+num\_kids \= \[1, 1, 2, 2, 1, 4, 3, 1\]
+
+total \= 0
+for num in num\_kids:
+    total += \_\_\_\_\_
+
+average \= total / len(num\_kids)
+
+num\_kids
+
+num
+
+1
+
+2)
+
+What should be filled in the blank to count the number of below-freezing Celsius temperatures in the list?  
+
+temperatures \= \[30, 20, 2, \-5, \-15, \-8, \-1, 0, 5, 35\]
+
+num\_neg \= 0
+for temp in temperatures:
+    if temp < 0:
+        \_\_\_\_\_
+
+num\_neg += 1
+
+num\_neg = 1
+
+num\_neg -= 1
+
+3)
+
+Which option prints the scores from highest to lowest?  
+
+scores \= \[75, 77, 80, 85, 90, 95, 99\]
+
+for scr in \_\_\_\_\_:
+    print(scr, end\=" ")
+
+scores
+
+sorted(scores)
+
+reversed(scores)
+
+Feedback?
+
+challenge activity
+
+## 
+
+5.5.1: Looping over strings, lists, and dictionaries.
+
+712910.5105864.qx3zqy7
+
+ 
+
+Start Jump to level 1
+
+Type the program's output
+
+| - main.py colors = \\['red', 'pink', 'gold', 'tan'\\] for color in colors: print(color) | Input Output |
+| --- | --- |
+
+1
+
+2
+
+3
+
+4
+
+5
+
+Check
+
+Next
+
+Try again
+
+question\_mark signifies a specific hint for an answer
+
+Show solution
+
+**Done**. Click any level to practice more. Completion is preserved.
+
+✖ ![Correct](https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/utilities/resource/checkmark.png)
+
+Solution
+
+1
+
+2
+
+3
+
+4
+
+5
+
+Feedback?
+
+challenge activity
+
+## 
+
+5.5.2: For loops.
+
+712910.5105864.qx3zqy7
+
+Start
+
+String new\_location is read from input and assigned to the element at index 1 of list location\_list. Complete the for loop so that for each value in location\_list, "Location: " is output, followed by the value on the same line.
+
+**Click here for example** Ex: If the input is `District of Columbia`, then the output is:
+
+```
+List has 4 elements:
+Location: Washington
+Location: District of Columbia
+Location: Maryland
+Location: Pennsylvania
+```
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+location\_list \= \["Washington", "Maine", "Maryland", "Pennsylvania"\]
+
+new\_location \= input()
+
+location\_list\[1\] \= new\_location
+
+print(f"List has {len(location\_list)} elements:")
+
+""" Your code goes here """
+
+print(f"Location: {value}")
+
+הההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההה
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+1
+
+2
+
+3
+
+Check Next level
+
+1
+
+2
+
+3
+
+Feedback?
+
+How was this section?
+
+_thumb\_up_
+
+|
+
+_thumb\_down_
+
+Provide section feedback
+
+Activity summary for assignment: C5
+
+224 / 224 points
+
+Due: 02/28/2026, 11:59 PM PST
+
+_keyboard\_arrow\_down_
+
+Completion details
+
+[_arrow\_downward_ 5.6 Counting using the range() function](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/6)
+
