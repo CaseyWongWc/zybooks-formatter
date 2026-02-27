@@ -65,8 +65,8 @@ export function formatZybooksText(input: string): string {
   text = text.replace(/^Construct \d+\.\d+\.\d+:.*$/gm, '');
   text = text.replace(/^Figure \d+\.\d+\.\d+:.*$/gm, '');
 
-  text = text.replace(/^TITLE\s+.*$/gm, '');
   text = text.replace(/^TITLE\s*$/gm, '');
+  text = text.replace(/^TITLE\s+/gm, '');
 
   text = text.replace(/^(?:Start)\s*$/gm, '');
   text = text.replace(/^\s*2x speed\s*$/gm, '');
