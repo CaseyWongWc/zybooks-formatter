@@ -71,8 +71,8 @@ function formatRegularPaste(input: string): string {
   text = text.replace(/^.*Please take a short moment to answer the (?:\[)?student survey(?:\]\([^)]*\))?\.?\s*$/gm, '');
   text = text.replace(/^.*zyBooks survey.*$/gm, '');
 
-  text = text.replace(/^Construct \d+\.\d+\.\d+:.*$/gm, '');
-  text = text.replace(/^Figure \d+\.\d+\.\d+:.*$/gm, '');
+  text = text.replace(/^(Construct \d+\.\d+\.\d+:.*)$/gm, '**$1**');
+  text = text.replace(/^(Figure \d+\.\d+\.\d+:.*)$/gm, '**$1**');
 
   text = text.replace(/^TITLE\s*$/gm, '');
   text = text.replace(/^TITLE\s+/gm, '');
@@ -278,10 +278,10 @@ function formatMarkdownPaste(input: string): string {
   text = text.replace(/^The following questions are part of a zyBooks survey.*$/gm, '');
   text = text.replace(/^.*Please take a short moment to answer the \[student survey\]\([^)]*\)\.?\s*$/gm, '');
 
-  text = text.replace(/^##\s*\n\s*Construct \d+\.\d+\.\d+:.*$/gm, '');
-  text = text.replace(/^Construct \d+\.\d+\.\d+:.*$/gm, '');
-  text = text.replace(/^##\s*\n\s*Figure \d+\.\d+\.\d+:.*$/gm, '');
-  text = text.replace(/^Figure \d+\.\d+\.\d+:.*$/gm, '');
+  text = text.replace(/^##\s*\n\s*(Construct \d+\.\d+\.\d+:.*)$/gm, '**$1**');
+  text = text.replace(/^(Construct \d+\.\d+\.\d+:.*)$/gm, '**$1**');
+  text = text.replace(/^##\s*\n\s*(Figure \d+\.\d+\.\d+:.*)$/gm, '**$1**');
+  text = text.replace(/^(Figure \d+\.\d+\.\d+:.*)$/gm, '**$1**');
 
   text = text.replace(/^Start\s*$/gm, '');
   text = text.replace(/^Start Jump to level \d+\s*$/gm, '');
@@ -428,7 +428,50 @@ function formatMarkdownPaste(input: string): string {
   return collapseWhitespace(text);
 }
 
+function escapePythonComments(text: string): string {
+  const lines = text.split('\n');
+  const result: string[] = [];
+
+  function findNearby(idx: number, direction: number): string {
+    for (let j = idx + direction; j >= 0 && j < lines.length; j += direction) {
+      if (lines[j].trim() !== '') return lines[j];
+    }
+    return '';
+  }
+
+  const codePattern = /^(?:for |if |while |def |class |print|return |import |from |else:|elif |try:|except |with |raise |pass$)/;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^#\s/.test(line) && !/^#{1,6}\s+\d+\.\d+/.test(line) && !/^##?\s*$/.test(line)) {
+      const prevRaw = findNearby(i, -1);
+      const nextRaw = findNearby(i, 1);
+      const prev = prevRaw.trim();
+      const next = nextRaw.trim();
+      const isNearCode = codePattern.test(prev) ||
+        codePattern.test(next) ||
+        /^\s{2,}/.test(prevRaw) ||
+        /^\s{2,}/.test(nextRaw) ||
+        /^[a-z_]\w*\s*[=+\-*\/\[\(]/.test(prev) ||
+        /^[a-z_]\w*\s*[=+\-*\/\[\(]/.test(next) ||
+        /^#\s/.test(prevRaw) ||
+        /^\\#\s/.test(prevRaw);
+
+      if (isNearCode) {
+        result.push('\\' + line);
+      } else {
+        result.push(line);
+      }
+    } else {
+      result.push(line);
+    }
+  }
+  return result.join('\n');
+}
+
 function collapseWhitespace(text: string): string {
+  text = escapePythonComments(text);
+
   const lines = text.split('\n');
   const result: string[] = [];
   let blankCount = 0;

@@ -54,10 +54,13 @@ The formatter removes:
 The formatter preserves:
 - **PARTICIPATION ACTIVITY** headers (bolded)
 - **CHALLENGE ACTIVITY** headers (bolded)
+- **Construct X.X.X:** labels (bolded)
+- **Figure X.X.X:** labels (bolded)
 - Section titles and subsection headings
 - Educational content and explanations
 - Code examples and exercise prompts
 - Question text and answer choices
+- Python comments starting with `#` at column 0 are escaped (`\#`) when near code context to prevent markdown heading rendering
 
 ## Notebook Generation
 

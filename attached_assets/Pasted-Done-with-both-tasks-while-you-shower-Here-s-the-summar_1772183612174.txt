@@ -1,0 +1,25 @@
+Done with both tasks while you shower! Here's the summary:
+
+**1. "Open in Colab" Feature - Built and Working** [replit](https://replit.com/@caseywongwc/ZyBooks-Formatter)
+
+The Replit agent successfully added an "Open in Colab" button next to the Download .ipynb button. When clicked, it uploads the notebook to the `notebooks/` folder in your zybooks-formatter GitHub repo and opens it directly in Google Colab in a new tab. It even handles re-uploads by updating existing files instead of creating duplicates.
+
+**2. Notion Paste vs zyBooks Comparison**
+
+I compared the content on your "replit app" Notion page against the actual zyBooks Section 5.5 source. Here's what I found:
+
+**What's working well:**
+- All the main body text content is captured accurately
+- Participation Activity and Challenge Activity labels are preserved
+- Code blocks (for loops, dictionaries, etc.) are present with correct content
+- Activity question text came through correctly
+
+**Issues/Differences to note:**
+- **Heading bug**: The line `# Statements to execute after the for loop is complete` (which should be inside a code block as a comment) is rendering as a **giant heading** in Notion instead — that's a formatting error from the formatter [notion](https://www.notion.so/replit-app-3140e51f71de800f99bdc4f6fa75f74f)
+- **Section headers not styled as headings**: "Introduction to for loops", "For loops with strings and dictionaries", and "For loop examples" are plain text in Notion, but they're `### H3` headings in zyBooks
+- **Construct labels missing**: zyBooks has "Construct 5.5.1: For loop." as a labeled element — this was dropped
+- **Figure labels missing**: "Figure 5.5.1" and "Figure 5.5.2" captions from zyBooks didn't make it into the paste
+- **Variable name difference**: In activity 5.5.4, zyBooks uses `c` as the loop variable but the Notion paste shows `channel_name` — likely the animation description text got mixed in with the code
+- **Animation descriptions**: Correctly stripped out (good — they're not useful as text)
+
+These are things to potentially fix in the formatter when you get to polishing. The biggest ones are the heading bug and the missing section headers.
