@@ -1,0 +1,628 @@
+[Skip to main content](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/8#main-content)
+
+_menu_
+
+[![zyBooks](https://learn.zybooks.com/zycommon-web/assets/logo.svg)](https://learn.zybooks.com/)
+
+-   [My library](https://learn.zybooks.com/library) \>
+-   [CS 2520: Python for Programmers home](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026) \>
+-   [5.8: Nested loops](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/8)
+
+[_library\_books_ zyBooks catalog](https://learn.zybooks.com/catalog) [_help_ Help/FAQ](https://support.zybooks.com/)
+
+_account\_circle_ Casey Wong _arrow\_drop\_down_
+
+-   _info_
+    
+    You have unverified email(s). Use My Profile to send another verification email.
+    
+    _close_
+    
+
+-   [_search_ Search zyBook](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/content-explorer)
+-   _info_ About this Material
+    
+-   1) Introduction to Python
+    
+    _expand\_more_
+    
+-   2) Variables and Expressions
+    
+    _expand\_more_
+    
+-   3) Types
+    
+    _expand\_more_
+    
+-   4) Branching
+    
+    _expand\_more_
+    
+-   5) Loops
+    
+    _expand\_less_
+    
+    -   [5.1 Loops (general)
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/1)
+    -   [5.2 While loops
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/2)
+    -   [5.3 More while loop examples
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/3)
+    -   [5.4 Counting
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/4)
+    -   [5.5 For loops
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/5)
+    -   [5.6 range()
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/6)
+    -   [5.7 while vs. for
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/7)
+    -   [5.8 Nested loops
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/8)
+    -   [5.9 Incremental programming
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9)
+    -   [5.10 Break and continue
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/10)
+    -   [5.11 Loop else
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/11)
+    -   [5.12 enumerate()
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/12)
+    -   [5.13 Additional practice: Dice statistics
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/13)
+    -   [5.14 LAB: Convert to reverse binary
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/14)
+    -   [5.15 LAB: Password modifier
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/15)
+    -   [5.16 LAB: Output range with increment of 5
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/16)
+    -   [5.17 LAB: Print string in reverse
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/17)
+    -   [5.18 LAB: Brute force equation solver
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/18)
+    -   [5.19 LAB: Adjust values in a list by normalizing
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/19)
+    -   [_print_ Print chapter
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/print)
+-   6) Functions
+    
+    _expand\_more_
+    
+-   7) Strings
+    
+    _expand\_more_
+    
+-   8) Lists and Dictionaries
+    
+    _expand\_more_
+    
+-   9) Classes
+    
+    _expand\_more_
+    
+-   10) Exceptions
+    
+    _expand\_more_
+    
+-   11) Modules
+    
+    _expand\_more_
+    
+-   12) Files
+    
+    _expand\_more_
+    
+-   13) Inheritance
+    
+    _expand\_more_
+    
+-   14) Recursion
+    
+    _expand\_more_
+    
+-   15) Python for Data Science
+    
+    _expand\_more_
+    
+-   16) Searching and Sorting Algorithms
+    
+    _expand\_more_
+    
+-   17) Artificial Intelligence
+    
+    _expand\_more_
+    
+-   18) Additional Material
+    
+    _expand\_more_
+    
+-   19) Coding Practice Problems
+    
+    _expand\_more_
+    
+-   20) Additional Labs: Introduction to Python
+    
+    _expand\_more_
+    
+-   21) Additional Labs: Variables and Expressions
+    
+    _expand\_more_
+    
+-   22) Additional Labs: Types
+    
+    _expand\_more_
+    
+-   23) Additional Labs: Branching
+    
+    _expand\_more_
+    
+-   24) Additional Labs: Loops
+    
+    _expand\_more_
+    
+-   25) Additional Labs: Functions
+    
+    _expand\_more_
+    
+-   26) Additional Labs: Strings
+    
+    _expand\_more_
+    
+-   27) Additional Labs: Lists and Dictionaries
+    
+    _expand\_more_
+    
+-   28) Additional Labs: Classes
+    
+    _expand\_more_
+    
+-   29) Additional Labs: Exceptions
+    
+    _expand\_more_
+    
+-   30) Additional Labs: Files
+    
+    _expand\_more_
+    
+-   31) Additional Labs: Recursion
+    
+    _expand\_more_
+    
+
+[_arrow\_upward_ 5.7 While vs. for loops](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/7)
+
+_assignment_
+
+Students:
+
+Section 5.8 is a part of 1 assignment: C5
+
+Activities:
+
+P
+
+Participation
+
+C
+
+Challenge
+
+Due: 02/28/2026, 11:59 PM PST
+
+# 5.8 Nested loops
+
+### Nested loops
+
+A nested loop is a loop that appears as part of the body of another loop. The nested loops are commonly referred to as the outer loop and inner loop.
+
+Nested loops have various uses. One use is to generate all combinations of some items. Ex: The following program generates all two-letter .com Internet domain names. Recall that `ord()` converts a one-character string into an integer, and `chr()` converts an integer into a character. Thus, `chr(ord("a") + 1)` results in "b".
+
+## 
+
+Figure 5.8.1: Nested loops example: Two-letter domain name printing program.
+
+| """ Program to print all two-letter domain names. Note that ord() and chr() convert between text and the ASCII or Unicode encoding: \\- ord("a") yields the encoded value of "a", the number 97. \\- ord("a") + 1 adds 1 to the encoded value of "a", giving 98. \\- chr(ord("a") + 1) converts 98 back into a letter, producing "b" """ print("Two-letter domain names:") letter1 \\= "a" letter2 \\= "?" while letter1 <= "z": \\# Outer loop letter2 \\= "a" while letter2 <= "z": \\# Inner loop print(f"{letter1}{letter2}.com") letter2 \\= chr(ord(letter2) + 1) letter1 \\= chr(ord(letter1) + 1) | Two-letter domain names: aa.com ab.com ac.com ad.com ae.com af.com ag.com ah.com ai.com aj.com ak.com al.com am.com an.com ao.com ap.com aq.com ar.com as.com at.com au.com av.com aw.com ax.com ay.com az.com ba.com bb.com ... zy.com zz.com |
+| --- | --- |
+
+Feedback?
+
+_(Forget about buying a two-letter domain name: They are all taken, and each sells for several hundred thousand or millions of dollars. Source: dnjournal.com, 2012.)_
+
+## 
+
+Try 5.8.1: Two-character .com domain names.
+
+_fullscreen_
+
+Full screen
+
+Modify the program to include two-character .com names where the second character can be a letter or a number, e.g., a2.com. Hint: Add a second while loop nested in the outer loop, but following the first inner loop, that iterates through the numbers 0-9.
+
+Model Solution
+
+Feedback?
+
+## 
+
+Try 5.8.2: Nested loop example: Histogram.
+
+_fullscreen_
+
+Full screen
+
+Here is a nested loop example that graphically depicts an integer's magnitude by using asterisks, creating what is commonly called a _histogram_.
+
+Run the program below and observe the output. Modify the program to print one asterisk per 5 units. So if the user enters 40, print 8 asterisks.
+
+Model Solution
+
+Feedback?
+
+participation activity
+
+## 
+
+5.8.1: Nested loops.
+
+1)
+
+Given the following code, how many times will the inner loop body execute?  
+
+for i in range(2):
+    for j in range(3):
+        \# Inner loop body
+
+Check Show answer
+
+2)
+
+Given the following code, how many times will the print statement execute?  
+
+for i in range(5):
+    for j in range(10, 12):
+        print(f"{i}{j}")
+
+Check Show answer
+
+3)
+
+What is the output of the following code?  
+
+c1 \= "a"
+while c1 < "b":
+    c2 \= "a"
+    while c2 <= "c":
+        print(f"{c1}{c2}", end\=" ")
+        c2 \= chr(ord(c2) + 1)
+    c1 \= chr(ord(c1) + 1)
+
+Check Show answer
+
+4)
+
+What is the output of the following code?  
+
+i1 \= 1
+while i1 < 19:
+    i2 \= 3
+    while i2 <= 9:
+        print(f"{i1}{i2}", end\=" ")
+        i2 \= i2 + 3
+    i1 \= i1 + 10
+
+Check Show answer
+
+Feedback?
+
+challenge activity
+
+## 
+
+5.8.1: Enter the output of the nested loop.
+
+712910.5105864.qx3zqy7
+
+ 
+
+Start Jump to level 1
+
+Type the program's output
+
+| - main.py count = 0 for i in range(5): for j in range(1): count = count + 1 print(count) | Input Output |
+| --- | --- |
+
+1
+
+2
+
+3
+
+4
+
+5
+
+Check
+
+Next
+
+Try again
+
+question\_mark signifies a specific hint for an answer
+
+Show solution
+
+**Done**. Click any level to practice more. Completion is preserved.
+
+✖ ![Correct](https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/utilities/resource/checkmark.png)
+
+Solution
+
+1
+
+2
+
+3
+
+4
+
+5
+
+Feedback?
+
+challenge activity
+
+## 
+
+5.8.2: Nested loops: Print rectangle.
+
+_fullscreen_
+
+Full screen
+
+712910.5105864.qx3zqy7
+
+Given num\_rows and num\_cols representing the number of rows and columns, organize the lines of code to create nested loops that print a rectangle as shown in the example.
+
+Ex: If the input is:
+
+`2`  
+`3`
+
+then the output is:
+
+`* * *`  
+`* * *`
+
+_keyboard\_arrow\_down_
+
+How to use this tool
+
+#### Unused
+
+for rows in range(num\_rows):
+
+print("\*", end=" ")
+
+for cols in range(num\_cols):
+
+print()
+
+#### main.py
+
+Load default template...
+
+num\_rows = int(input()) num\_cols = int(input())
+
+Check
+
+Feedback?
+
+challenge activity
+
+## 
+
+5.8.3: Nested loops: Print seats.
+
+_fullscreen_
+
+Full screen
+
+712910.5105864.qx3zqy7
+
+Integers num\_rows and num\_cols are read from input representing the number of rows and columns of a theater's seating plan. Organize the lines of code to create a nested for loop that outputs each seat label.
+
+In the outer for loop:
+
+-   Assign the current column's letter with "A".
+-   In the inner for loop:
+    -   Output the current row number and column letter.
+    -   Increment the current column letter.
+-   End with a newline.
+
+Ex: If the input is:
+
+`2`  
+`3`
+
+then the output is:
+
+`1A 1B 1C`  
+`2A 2B 2C`
+
+_keyboard\_arrow\_down_
+
+How to use this tool
+
+#### Unused
+
+current\_column\_letter = "A"
+
+for current\_row in range(1, num\_rows + 1):
+
+for current\_column in range(1, num\_cols + 1):
+
+print(f"{current\_row}{current\_column\_letter}", end=" ")
+
+current\_column\_letter = chr(ord(current\_column\_letter) + 1) \# Used to increment letters
+
+print()
+
+#### main.py
+
+Load default template...
+
+num\_rows = int(input()) num\_cols = int(input())
+
+Check
+
+Feedback?
+
+challenge activity
+
+## 
+
+5.8.4: Nested loops.
+
+712910.5105864.qx3zqy7
+
+Start
+
+Integers start\_in and end\_in are read from input. The outer while loop executes start\_in times. Complete the inner while loop to execute end\_in times for each iteration of the outer while loop.
+
+Ex: If the input is:
+
+```
+6
+4
+```
+
+then the output is:
+
+```
+Inner loop ran 24 times
+```
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+start\_in \= int(input())
+
+end\_in \= int(input())
+
+count \= 0
+
+i \= 0
+
+while i < start\_in:
+
+j \= 0
+
+while """ Your code goes here """:
+
+count += 1
+
+j += 1
+
+i += 1
+
+print(f"Inner loop ran {count} times")
+
+הההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההה
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+1
+
+2
+
+3
+
+4
+
+Check Next level
+
+1
+
+2
+
+3
+
+4
+
+Feedback?
+
+How was this section?
+
+_thumb\_up_
+
+|
+
+_thumb\_down_
+
+Provide section feedback
+
+Activity summary for assignment: C5
+
+224 / 224 points
+
+Due: 02/28/2026, 11:59 PM PST
+
+_keyboard\_arrow\_down_
+
+Completion details
+
+[_arrow\_downward_ 5.9 Developing programs incrementally](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9)
+

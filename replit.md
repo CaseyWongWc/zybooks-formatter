@@ -44,6 +44,8 @@ The formatter removes:
 - UI controls (Start, 2x speed, Captions, Feedback?, keyboard arrows)
 - Animation/figure descriptions (Step 1:, Static Figure:, Begin/End Python code)
 - Interactive elements (Check, Show answer, Next level, Try again, Show solution)
+- Code editor artifacts (_fullscreen_, fullscreen, Model Solution, How to use this tool, Run program, Submit mode)
+- Unused/main.py headers, "Load default template..." text, "Try X.X.X:" prompts
 - Footer metadata (Activity summary, section feedback, completion details, thumbs up/down)
 - Chapter navigation links and sidebar items
 - Diagram labels and standalone pseudocode from animations
@@ -62,6 +64,7 @@ The formatter preserves:
 - Question text and answer choices
 - Multiple-choice answer choices formatted as bullet lists (`- `) within PA/CA sections
   - Detects three question types: simple (text answers), output (code supplement → output answers), prints (output supplement → code answers)
+  - "How many" questions treated as output type (code is a supplement, not answer choices)
   - Code answer choices wrapped in indented Python code fences
   - Multi-line output answers use continuation indentation
 - Python comments starting with `#` at column 0 are escaped (`\#`) when near code context to prevent markdown heading rendering
@@ -79,7 +82,7 @@ The .ipynb generator:
 ## Known Limitations
 
 - **Fill-in-the-blank inputs**: In participation activities with interactive input boxes (e.g., 5.5.6), the blank fields disappear entirely in the plain text paste with no marker. HTML parsing would solve this since the HTML has `short-answer-input-container` elements with `<input>` tags between code spans.
-- **Code figure tables**: The markdown mode extracts code from pipe tables but presents the code on one long line since the original line breaks are lost in the table format. HTML parsing would preserve line breaks.
+- **Code figure tables**: The markdown mode extracts code from pipe tables using Python statement boundary detection to split code into individual lines, wrapped in ```python code fences. The splitting uses keyword/statement-start heuristics and falls back to whitespace splitting. Complex multi-line strings (docstrings) are kept as single blocks.
 
 ## HTML Structure Analysis (zyBooks Page Source)
 

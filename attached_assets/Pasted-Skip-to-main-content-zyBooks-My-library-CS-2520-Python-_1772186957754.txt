@@ -1,0 +1,287 @@
+Skip to main content
+
+zyBooks
+My library >
+CS 2520: Python for Programmers home >
+5.8: Nested loops
+zyBooks catalog
+Help/FAQ
+Casey Wong
+You have unverified email(s). Use My Profile to send another verification email.
+
+
+5.7 While vs. for loops
+Students:
+Section 5.8 is a part of 1 assignment:
+C5
+Activities:
+P
+Participation
+C
+Challenge
+Due: 02/28/2026, 11:59 PM PST
+5.8 Nested loops
+Nested loops
+A nested loop is a loop that appears as part of the body of another loop. The nested loops are commonly referred to as the outer loop and inner loop.
+
+Nested loops have various uses. One use is to generate all combinations of some items. Ex: The following program generates all two-letter .com Internet domain names. Recall that ord() converts a one-character string into an integer, and chr() converts an integer into a character. Thus, chr(ord("a") + 1) results in "b".
+
+Figure 5.8.1: Nested loops example: Two-letter domain name printing program.
+"""
+Program to print all two-letter domain names.
+
+Note that ord() and chr() convert between text and the ASCII or Unicode encoding:
+-  ord("a") yields the encoded value of "a", the number 97.
+-  ord("a") + 1 adds 1 to the encoded value of "a", giving 98.
+-  chr(ord("a") + 1) converts 98 back into a letter, producing "b"
+"""
+print("Two-letter domain names:")
+
+letter1 = "a"
+letter2 = "?"
+while letter1 <= "z":  # Outer loop
+    letter2 = "a"
+    while letter2 <= "z":  # Inner loop
+        print(f"{letter1}{letter2}.com")
+        letter2 = chr(ord(letter2) + 1)
+    letter1 = chr(ord(letter1) + 1)
+Two-letter domain names:
+aa.com
+ab.com
+ac.com
+ad.com
+ae.com
+af.com
+ag.com
+ah.com
+ai.com
+aj.com
+ak.com
+al.com
+am.com
+an.com
+ao.com
+ap.com
+aq.com
+ar.com
+as.com
+at.com
+au.com
+av.com
+aw.com
+ax.com
+ay.com
+az.com
+ba.com
+bb.com
+...
+zy.com
+zz.com
+
+Feedback?
+(Forget about buying a two-letter domain name: They are all taken, and each sells for several hundred thousand or millions of dollars. Source: dnjournal.com, 2012.)
+
+Try 5.8.1: Two-character .com domain names.
+
+Full screen
+Modify the program to include two-character .com names where the second character can be a letter or a number, e.g., a2.com. Hint: Add a second while loop nested in the outer loop, but following the first inner loop, that iterates through the numbers 0-9.
+
+
+Model Solution
+
+Feedback?
+Try 5.8.2: Nested loop example: Histogram.
+
+Full screen
+Here is a nested loop example that graphically depicts an integer's magnitude by using asterisks, creating what is commonly called a histogram.
+
+Run the program below and observe the output. Modify the program to print one asterisk per 5 units. So if the user enters 40, print 8 asterisks.
+
+
+Model Solution
+
+Feedback?
+participation activity
+5.8.1: Nested loops.
+1)
+Given the following code, how many times will the inner loop body execute?
+for i in range(2):
+    for j in range(3):
+        # Inner loop body
+
+Check
+
+Show answer
+2)
+Given the following code, how many times will the print statement execute?
+for i in range(5):
+    for j in range(10, 12):
+        print(f"{i}{j}")
+
+Check
+
+Show answer
+3)
+What is the output of the following code?
+c1 = "a"
+while c1 < "b":
+    c2 = "a"
+    while c2 <= "c":
+        print(f"{c1}{c2}", end=" ")
+        c2 = chr(ord(c2) + 1)
+    c1 = chr(ord(c1) + 1)
+
+Check
+
+Show answer
+4)
+What is the output of the following code?
+i1 = 1
+while i1 < 19:
+    i2 = 3
+    while i2 <= 9:
+        print(f"{i1}{i2}", end=" ")
+        i2 = i2 + 3
+    i1 = i1 + 10
+
+Check
+
+Show answer
+
+Feedback?
+challenge activity
+5.8.1: Enter the output of the nested loop.
+712910.5105864.qx3zqy7
+Start
+Type the program's output
+
+count = 0
+for i in range(5):
+   for j in range(1):
+      count = count + 1
+print(count)
+5
+
+1
+2
+3
+4
+5
+Check
+Next
+1
+2
+3
+4
+5
+
+Feedback?
+challenge activity
+5.8.2: Nested loops: Print rectangle.
+
+Full screen
+712910.5105864.qx3zqy7
+Given num_rows and num_cols representing the number of rows and columns, organize the lines of code to create nested loops that print a rectangle as shown in the example.
+
+Ex: If the input is:
+
+2
+3
+
+then the output is:
+
+* * *
+* * *
+
+
+How to use this tool
+Unused
+main.py
+
+Load default template...
+    
+    
+
+Check
+
+Feedback?
+challenge activity
+5.8.3: Nested loops: Print seats.
+
+Full screen
+712910.5105864.qx3zqy7
+Integers num_rows and num_cols are read from input representing the number of rows and columns of a theater's seating plan. Organize the lines of code to create a nested for loop that outputs each seat label.
+
+In the outer for loop:
+
+Assign the current column's letter with "A".
+In the inner for loop:
+Output the current row number and column letter.
+Increment the current column letter.
+End with a newline.
+Ex: If the input is:
+
+2
+3
+
+then the output is:
+
+1A 1B 1C
+2A 2B 2C
+
+
+How to use this tool
+Unused
+main.py
+
+Load default template...
+    
+    
+
+Check
+
+Feedback?
+challenge activity
+5.8.4: Nested loops.
+712910.5105864.qx3zqy7
+
+Start
+Integers start_in and end_in are read from input. The outer while loop executes start_in times. Complete the inner while loop to execute end_in times for each iteration of the outer while loop.
+
+Ex: If the input is:
+
+6
+4
+then the output is:
+
+Inner loop ran 24 times
+
+1
+
+2
+
+3
+
+4
+
+Check
+
+Next level
+1
+2
+3
+4
+
+Feedback?
+How was this section?
+
+|
+
+
+Provide section feedback
+Activity summary for assignment: C5
+224 / 224 points
+Due: 02/28/2026, 11:59 PM PST
+
+Completion details
+5.9 Developing programs incrementally

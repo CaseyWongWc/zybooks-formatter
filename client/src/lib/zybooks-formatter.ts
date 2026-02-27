@@ -93,11 +93,16 @@ function formatRegularPaste(input: string): string {
   text = text.replace(/^\s*Click here for example\s*$/gm, '');
   text = text.replace(/^\s*Type the program's output\s*$/gm, '');
   text = text.replace(/^\s*fullscreen\s*$/gm, '');
+  text = text.replace(/^\s*_fullscreen_\s*$/gm, '');
   text = text.replace(/^\s*Full screen\s*$/gm, '');
   text = text.replace(/^\s*Model Solution\s*$/gm, '');
   text = text.replace(/^\s*How to use this tool\s*$/gm, '');
   text = text.replace(/^\s*Run program\s*$/gm, '');
   text = text.replace(/^\s*Submit mode\s*$/gm, '');
+  text = text.replace(/^####?\s*Unused\s*$/gm, '');
+  text = text.replace(/^####?\s*main\.py\s*$/gm, '');
+  text = text.replace(/^\s*Load default template\.{3}\s*$/gm, '');
+  text = text.replace(/^Try \d+\.\d+\.\d+:.*$/gm, '');
 
   text = text.replace(/^\d{6,}\.\d+\.\w+\s*$/gm, '');
 
@@ -318,11 +323,16 @@ function formatMarkdownPaste(input: string): string {
   text = text.replace(/^\s*Solution\s*$/gm, '');
   text = text.replace(/^\s*Input Output\s*$/gm, '');
   text = text.replace(/^\s*fullscreen\s*$/gm, '');
+  text = text.replace(/^\s*_fullscreen_\s*$/gm, '');
   text = text.replace(/^\s*Full screen\s*$/gm, '');
   text = text.replace(/^\s*Model Solution\s*$/gm, '');
   text = text.replace(/^\s*How to use this tool\s*$/gm, '');
   text = text.replace(/^\s*Run program\s*$/gm, '');
   text = text.replace(/^\s*Submit mode\s*$/gm, '');
+  text = text.replace(/^####\s*Unused\s*$/gm, '');
+  text = text.replace(/^####\s*main\.py\s*$/gm, '');
+  text = text.replace(/^\s*Load default template\.{3}\s*$/gm, '');
+  text = text.replace(/^Try \d+\.\d+\.\d+:.*$/gm, '');
 
   text = text.replace(/^\d{6,}\.\d+\.\w+\s*$/gm, '');
   text = text.replace(/^\s*\d{6,}\.\d+\.\w+\s*$/gm, '');
@@ -335,6 +345,16 @@ function formatMarkdownPaste(input: string): string {
 
   text = text.replace(/^[הה]{10,}\s*$/gm, '');
   text = text.replace(/^X{10,}\s*$/gm, '');
+
+  function splitCodeLine(flat: string): string[] {
+    const stmtStart = /(?<=\s)(?=(?:while |for |if |elif |else:|def |class |import |from |return |try:|except |with |raise |pass$|print\(|[a-z_]\w*\s*=(?!=)|"""|# ))/;
+    const parts = flat.split(stmtStart).map(s => s.trim()).filter(s => s.length > 0);
+    if (parts.length <= 1) {
+      const fallback = flat.split(/\s{2,}/).filter(l => l.trim());
+      return fallback.length > 1 ? fallback : [flat];
+    }
+    return parts;
+  }
 
   text = text.replace(/^\| -.*main\.py.*\|.*\|\s*$/gm, '');
   text = text.replace(/^\|\s*---\s*(?:\|\s*---\s*)*\|\s*$/gm, '');
@@ -349,10 +369,19 @@ function formatMarkdownPaste(input: string): string {
 
     function unescapeMd(s: string): string {
       return s
+        .replace(/\\\\=/g, '=')
+        .replace(/\\\\-/g, '-')
+        .replace(/\\\\\[/g, '[')
+        .replace(/\\\\\]/g, ']')
+        .replace(/\\\\\|/g, '|')
+        .replace(/\\\\_/g, '_')
+        .replace(/\\\\#/g, '#')
+        .replace(/\\\\/g, '\\')
         .replace(/\\=/g, '=')
+        .replace(/\\#/g, '#')
+        .replace(/\\-/g, '-')
         .replace(/\\\[/g, '[')
         .replace(/\\\]/g, ']')
-        .replace(/\\\\/g, '\\')
         .replace(/\\\|/g, '|')
         .replace(/\\_/g, '_');
     }
@@ -361,9 +390,9 @@ function formatMarkdownPaste(input: string): string {
     if (columns.length === 2) {
       const code = unescapeMd(columns[0]);
       const output = unescapeMd(columns[1]);
-      const codeLines = code.split(/\s{2,}/).filter(l => l.trim());
+      const codeLines = splitCodeLine(code);
       const outputLines = output.split(/\s{2,}/).filter(l => l.trim());
-      let result = codeLines.join('\n');
+      let result = '```python\n' + codeLines.join('\n') + '\n```';
       if (outputLines.length > 0 && outputLines[0].trim()) {
         result += '\n\nOutput:\n' + outputLines.join('\n');
       }
@@ -372,7 +401,7 @@ function formatMarkdownPaste(input: string): string {
 
     const cleaned = unescapeMd(inner);
     const parts = cleaned.split(/\s{2,}/).filter(l => l.trim());
-    return parts.join('\n');
+    return '```python\n' + parts.join('\n') + '\n```';
   });
 
   text = text.replace(/\\=/g, '=');
@@ -516,7 +545,10 @@ function formatAnswerChoices(text: string): string {
       afterQuestion = true;
       inCodeSupp = false;
       printsOutputConsumed = false;
-      if (/prints?\b/i.test(firstLine)) {
+      if (/how many\b/i.test(firstLine)) {
+        questionType = 'output';
+        inCodeSupp = true;
+      } else if (/prints?\b/i.test(firstLine)) {
         questionType = 'prints';
       } else if (/output/i.test(firstLine)) {
         questionType = 'output';
@@ -577,8 +609,18 @@ function escapePythonComments(text: string): string {
 
   const codePattern = /^(?:for |if |while |def |class |print|return |import |from |else:|elif |try:|except |with |raise |pass$)/;
 
+  let inFence = false;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    if (/^```/.test(line.trim())) {
+      inFence = !inFence;
+      result.push(line);
+      continue;
+    }
+    if (inFence) {
+      result.push(line);
+      continue;
+    }
     if (/^#\s/.test(line) && !/^#{1,6}\s+\d+\.\d+/.test(line) && !/^##?\s*$/.test(line)) {
       const prevRaw = findNearby(i, -1);
       const nextRaw = findNearby(i, 1);
