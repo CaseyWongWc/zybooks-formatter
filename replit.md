@@ -60,6 +60,10 @@ The formatter preserves:
 - Educational content and explanations
 - Code examples and exercise prompts
 - Question text and answer choices
+- Multiple-choice answer choices formatted as bullet lists (`- `) within PA/CA sections
+  - Detects three question types: simple (text answers), output (code supplement → output answers), prints (output supplement → code answers)
+  - Code answer choices wrapped in indented Python code fences
+  - Multi-line output answers use continuation indentation
 - Python comments starting with `#` at column 0 are escaped (`\#`) when near code context to prevent markdown heading rendering
 
 ## Notebook Generation

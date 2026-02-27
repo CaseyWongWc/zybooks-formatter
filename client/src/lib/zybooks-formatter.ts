@@ -223,6 +223,8 @@ function formatRegularPaste(input: string): string {
     }
   }
 
+  text = formatAnswerChoices(text);
+
   return collapseWhitespace(text);
 }
 
@@ -425,7 +427,129 @@ function formatMarkdownPaste(input: string): string {
     }
   }
 
+  text = formatAnswerChoices(text);
+
   return collapseWhitespace(text);
+}
+
+function isCodeLike(text: string): boolean {
+  const lines = text.split('\n');
+  const first = lines[0].trim();
+  return /^(?:for |if |while |def |class |print\(|return |import |from |elif |else:|try:|except |with |raise )/.test(first) ||
+    /^[a-z_]\w*\s*=/.test(first) ||
+    /^[a-z_]\w*\s*\[/.test(first) ||
+    /^\s{2,}/.test(lines[0]) ||
+    (lines.length > 1 && lines.some(l => /^\s{2,}/.test(l)));
+}
+
+function formatAnswerChoices(text: string): string {
+  const paragraphs = text.split(/\n\n+/);
+  const result: string[] = [];
+
+  let inActivity = false;
+  let sectionHasQuestions = false;
+  let afterQuestion = false;
+  let questionType: 'simple' | 'output' | 'prints' = 'simple';
+  let inCodeSupp = false;
+  let printsOutputConsumed = false;
+
+  function scanForQuestions(startIdx: number): boolean {
+    for (let j = startIdx + 1; j < paragraphs.length; j++) {
+      const p = paragraphs[j].trim();
+      if (/^\*\*PARTICIPATION ACTIVITY\*\*/.test(p) || /^\*\*CHALLENGE ACTIVITY\*\*/.test(p) || p.startsWith('### ')) break;
+      const firstLine = p.split('\n')[0].trim();
+      if (/\?\s*$/.test(firstLine)) return true;
+    }
+    return false;
+  }
+
+  for (let i = 0; i < paragraphs.length; i++) {
+    const para = paragraphs[i];
+    const trimmed = para.trim();
+    if (!trimmed) {
+      result.push(para);
+      continue;
+    }
+
+    const firstLine = trimmed.split('\n')[0].trim();
+
+    if (/^\*\*PARTICIPATION ACTIVITY\*\*/.test(trimmed) || /^\*\*CHALLENGE ACTIVITY\*\*/.test(trimmed)) {
+      inActivity = true;
+      afterQuestion = false;
+      inCodeSupp = false;
+      printsOutputConsumed = false;
+      sectionHasQuestions = scanForQuestions(i);
+      result.push(para);
+      continue;
+    }
+
+    if (trimmed.startsWith('### ')) {
+      inActivity = false;
+      afterQuestion = false;
+      result.push(para);
+      continue;
+    }
+
+    if (!inActivity || !sectionHasQuestions) {
+      result.push(para);
+      continue;
+    }
+
+    if (/^\d+\.\d+\.\d+:/.test(firstLine)) {
+      result.push(para);
+      continue;
+    }
+
+    if (/\?\s*$/.test(firstLine)) {
+      afterQuestion = true;
+      inCodeSupp = false;
+      printsOutputConsumed = false;
+      if (/prints?\b/i.test(firstLine)) {
+        questionType = 'prints';
+      } else if (/output/i.test(firstLine)) {
+        questionType = 'output';
+        inCodeSupp = true;
+      } else {
+        questionType = 'simple';
+      }
+      result.push(para);
+      continue;
+    }
+
+    if (!afterQuestion) {
+      result.push(para);
+      continue;
+    }
+
+    if (questionType === 'output' && inCodeSupp) {
+      if (isCodeLike(trimmed)) {
+        result.push(para);
+        continue;
+      }
+      inCodeSupp = false;
+    }
+
+    if (questionType === 'prints' && !printsOutputConsumed) {
+      if (!isCodeLike(trimmed)) {
+        printsOutputConsumed = true;
+        result.push(para);
+        continue;
+      }
+    }
+
+    const paraLines = trimmed.split('\n');
+
+    if (paraLines.length === 1) {
+      result.push('- ' + trimmed);
+    } else if (isCodeLike(trimmed)) {
+      const indentedCode = paraLines.map(l => '  ' + l).join('\n');
+      result.push('- \n  ```python\n' + indentedCode + '\n  ```');
+    } else {
+      result.push('- ' + paraLines[0] + '\n' + paraLines.slice(1).map(l => '  ' + l).join('\n'));
+    }
+  }
+
+  return result.join('\n\n');
 }
 
 function escapePythonComments(text: string): string {
