@@ -48,7 +48,7 @@ The formatter removes:
 - Chapter navigation links and sidebar items
 - Diagram labels and standalone pseudocode from animations
 - Blob image references and checkmark images
-- Code editor line numbers (standalone single digits)
+- Code editor line numbers (sequences of 3+ consecutive single-digit lines)
 - Excess whitespace
 
 The formatter preserves:
@@ -71,8 +71,105 @@ The .ipynb generator:
 
 ## Known Limitations
 
-- **Fill-in-the-blank inputs**: In participation activities with interactive input boxes (e.g., 5.5.6), the blank fields disappear entirely in the plain text paste with no marker. This is a future AI integration task.
-- **Code figure tables**: The markdown mode extracts code from pipe tables but presents the code on one long line since the original line breaks are lost in the table format.
+- **Fill-in-the-blank inputs**: In participation activities with interactive input boxes (e.g., 5.5.6), the blank fields disappear entirely in the plain text paste with no marker. HTML parsing would solve this since the HTML has `short-answer-input-container` elements with `<input>` tags between code spans.
+- **Code figure tables**: The markdown mode extracts code from pipe tables but presents the code on one long line since the original line breaks are lost in the table format. HTML parsing would preserve line breaks.
+
+## HTML Structure Analysis (zyBooks Page Source)
+
+The saved HTML files in `attached_assets/` reveal rich semantic structure that would enable a much more accurate "Paste HTML" mode or browser extension:
+
+### Key CSS Classes & Elements
+- `zybook-section` — Main section container with `canonical_section_guid`
+- `zybook-section-title` (h1) — Section title (e.g., "5.5 For loops")
+- `content-resource` — Base class for all content blocks
+- `html-content-resource` — Text/explanation blocks containing `<h3>`, `<p>` elements
+- `container-content-resource` — Wrapper for figures, constructs, surveys
+- `static-container` — Container for Construct/Figure blocks
+- `static-container-title` — Label text (e.g., "Construct 5.5.1: For loop.", "Figure 5.5.2: ...")
+- `content-tool-content-resource` — Activity containers
+  - Has `participation` or `challenge` class suffix for activity type
+- `activity-title-bar` — Activity header with type label and title
+- `activity-type` — "participation activity" or "challenge activity" text
+- `activity-title` — Activity number and description (e.g., "5.5.1: Iterating over...")
+- `activity-payload` — Activity content container
+- `multiple-choice-content-resource` — Multiple choice activities
+- `multiple-choice-question` / `question-set-question` — Individual questions
+- `question` > `setup` > `label` (number) + `text` (question text)
+- `question-choices` — Radio button group for answer options
+- `short-answer-content-resource` — Fill-in-the-blank activities
+- `short-answer-question` — Fill-in-the-blank question
+- `short-answer-input-container` — The actual `<input>` blank field
+- `zb-feedback` — Feedback button blocks (reliable cell boundary marker)
+
+### Code & Output
+- `div.code > div.highlight > pre` — Syntax-highlighted Python code using `<span>` classes:
+  - `.k` = keyword, `.n` = name, `.ow` = operator word, `.p` = punctuation
+  - `.s2` = string, `.mi` = integer, `.mf` = float, `.c1` = comment
+  - `.nb` = builtin, `.sa` = string affix, `.si` = string interpolation, `.se` = string escape
+  - `.o` = operator, `.bp` = builtin pseudo
+- `div.console > pre` — Program output
+- `div.table > table` — Code figure tables with `<td>` for code and output columns
+- Animation players: `animation-player` with `pre.highlight.text-object` for code display
+- `assistive-text` — Contains "Static figure:" accessibility descriptions (already stripped)
+
+### Structural Pattern
+```
+zybook-section
+  ├─ section-header-row + h1.zybook-section-title
+  ├─ section-content-resources-container
+  │   ├─ container-content-resource (Survey, aside-elaboration)
+  │   ├─ html-content-resource (h3 headers, p text)
+  │   ├─ container-content-resource (Construct/Figure with code tables)
+  │   │   └─ zb-feedback (Feedback?)
+  │   ├─ content-tool-content-resource.participation (Animation activities)
+  │   │   ├─ activity-title-bar
+  │   │   ├─ activity-payload (animation-player or multiple-choice or short-answer)
+  │   │   └─ zb-feedback (Feedback?)
+  │   ├─ content-tool-content-resource.challenge (Challenge activities)
+  │   │   ├─ activity-title-bar
+  │   │   ├─ activity-payload (code editor, test cases)
+  │   │   └─ zb-feedback (Feedback?)
+  │   └─ ... repeating pattern
+```
+
+### Fill-in-the-Blank Resolution
+In HTML, the fill-in-the-blank inputs are fully visible:
+```html
+<pre>
+  <div><span class="k">for</span> </div>
+  <div class="short-answer-input-container">
+    <input class="zb-input" size="7" type="text">
+  </div>
+  <div><span class="ow">in</span> ["Scooter", "Kobe", "Bella"]:</div>
+</pre>
+```
+This means an HTML parser could reconstruct `for [___] in ["Scooter", "Kobe", "Bella"]:` with a visible blank marker.
+
+## Roadmap
+
+### Cell-Splitting Improvement (Notebook Generator)
+Use structural markers for intelligent cell splitting in .ipynb output:
+- "Feedback?" after every content block = most reliable cell boundary
+- Section headers (h3) = major section boundaries
+- "PARTICIPATION ACTIVITY" / "CHALLENGE ACTIVITY" = activity boundaries
+- "Figure X.X.X" / "Construct X.X.X" = code example boundaries
+- Pattern: Header → Text → Feedback? → Figure → Feedback? → Activity → Feedback?
+
+### Paste HTML Mode (Future)
+A third paste mode that parses the actual zyBooks HTML for maximum accuracy:
+- Use class names to identify content types (code, text, questions, activities)
+- Properly extract syntax-highlighted code by stripping `<span>` tags from `div.code`
+- Separate code from output using `div.code` vs `div.console`
+- Reconstruct fill-in-the-blank inputs from `short-answer-input-container`
+- Could power a browser extension that reads the DOM directly
+
+### AI Integration (Future)
+- AI-powered code block detection for ambiguous text pastes
+- Fill-in-the-blank reconstruction for Regular Paste mode
+- OpenAI API integration
+
+### Google Drive Integration (Future)
+- Direct upload of .ipynb to Google Drive / Colab
 
 ## GitHub
 
