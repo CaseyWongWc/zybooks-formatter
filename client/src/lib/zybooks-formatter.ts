@@ -92,6 +92,12 @@ function formatRegularPaste(input: string): string {
   text = text.replace(/^\s*Next level\s*$/gm, '');
   text = text.replace(/^\s*Click here for example\s*$/gm, '');
   text = text.replace(/^\s*Type the program's output\s*$/gm, '');
+  text = text.replace(/^\s*fullscreen\s*$/gm, '');
+  text = text.replace(/^\s*Full screen\s*$/gm, '');
+  text = text.replace(/^\s*Model Solution\s*$/gm, '');
+  text = text.replace(/^\s*How to use this tool\s*$/gm, '');
+  text = text.replace(/^\s*Run program\s*$/gm, '');
+  text = text.replace(/^\s*Submit mode\s*$/gm, '');
 
   text = text.replace(/^\d{6,}\.\d+\.\w+\s*$/gm, '');
 
@@ -311,6 +317,12 @@ function formatMarkdownPaste(input: string): string {
   text = text.replace(/^!\[Correct\]\([^)]*\)\s*$/gm, '');
   text = text.replace(/^\s*Solution\s*$/gm, '');
   text = text.replace(/^\s*Input Output\s*$/gm, '');
+  text = text.replace(/^\s*fullscreen\s*$/gm, '');
+  text = text.replace(/^\s*Full screen\s*$/gm, '');
+  text = text.replace(/^\s*Model Solution\s*$/gm, '');
+  text = text.replace(/^\s*How to use this tool\s*$/gm, '');
+  text = text.replace(/^\s*Run program\s*$/gm, '');
+  text = text.replace(/^\s*Submit mode\s*$/gm, '');
 
   text = text.replace(/^\d{6,}\.\d+\.\w+\s*$/gm, '');
   text = text.replace(/^\s*\d{6,}\.\d+\.\w+\s*$/gm, '');
