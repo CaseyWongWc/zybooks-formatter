@@ -60,7 +60,15 @@ function removeUnwantedElements(doc: Document): void {
     '.show-answer-button', '.zb-explanation',
     '.zb-input-container', 'iframe',
     'style', 'script', 'link',
-    '.resizable-bar'
+    '.resizable-bar', '.question-container',
+    '.segmented-control', '.assistive-text',
+    '.zb-simple-expandable', '.levels-bar',
+    '.check-next-container', '.view-solution-container',
+    '.reset-template-button-container', '.editor-indents',
+    '.ace-editor-container', '.code-editor',
+    '.zyante-progression-start-reset-buttons-container',
+    '.zyante-progression-status-bar',
+    '.zyante-progression-modal-cover > style'
   ];
   selectors.forEach(sel => {
     doc.querySelectorAll(sel).forEach(el => el.remove());
@@ -142,6 +150,12 @@ function walkContentNodes(el: Element, parts: string[]): void {
         const text = extractInlineText(li).trim();
         if (text) parts.push(`- ${text}`);
       });
+    } else if (tag === 'PRE') {
+      const codeChild = child.querySelector('code');
+      if (codeChild) {
+        const codeText = codeChild.textContent?.trim();
+        if (codeText) parts.push('```\n' + codeText + '\n```');
+      }
     } else if (tag === 'TABLE') {
       continue;
     } else if (tag === 'DIV' || tag === 'SECTION' || tag === 'SPAN') {
@@ -174,10 +188,6 @@ function extractInlineText(el: Element): string {
         const alt = child.getAttribute('alt') || '';
         const src = child.getAttribute('src') || '';
         if (src) text += `![${alt}](${src})`;
-      } else if (child.tagName === 'SUB') {
-        text += extractInlineText(child);
-      } else if (child.tagName === 'SUP') {
-        text += extractInlineText(child);
       } else {
         text += extractInlineText(child);
       }
@@ -324,29 +334,44 @@ function processActivity(el: HTMLElement): string | null {
   }
 
   const questions = el.querySelectorAll('.question-set-question');
-  questions.forEach((q, idx) => {
-    const qParts: string[] = [];
-    const labelEl = q.querySelector('.label');
-    const textEl = q.querySelector('.text');
+  if (questions.length > 0) {
+    questions.forEach((q, idx) => {
+      const qBlock = extractQuestion(q as HTMLElement, idx);
+      if (qBlock) parts.push(qBlock);
+    });
+  }
 
-    const label = labelEl?.textContent?.trim() || `${idx + 1})`;
-    qParts.push(label);
-
-    if (textEl) {
-      const qText = extractQuestionText(textEl as HTMLElement);
-      if (qText) qParts.push(qText);
-    }
-
-    parts.push(qParts.join('\n'));
-  });
+  const challengeContent = extractChallengeContent(el);
+  if (challengeContent) parts.push(challengeContent);
 
   const result = parts.join('\n\n');
   return result.trim() || null;
 }
 
+function extractQuestion(q: HTMLElement, idx: number): string | null {
+  const qParts: string[] = [];
+  const labelEl = q.querySelector('.label');
+  const textEl = q.querySelector('.text');
+
+  const label = labelEl?.textContent?.trim() || `${idx + 1})`;
+  qParts.push(label);
+
+  if (textEl) {
+    const qText = extractQuestionText(textEl as HTMLElement);
+    if (qText) qParts.push(qText);
+  }
+
+  const result = qParts.join('\n');
+  return result.trim() || null;
+}
+
 function extractQuestionText(el: HTMLElement): string {
   const parts: string[] = [];
+  collectQuestionContent(el, parts);
+  return parts.join('\n');
+}
 
+function collectQuestionContent(el: HTMLElement, parts: string[]): void {
   for (let i = 0; i < el.childNodes.length; i++) {
     const node = el.childNodes[i];
     if (node.nodeType === Node.TEXT_NODE) {
@@ -354,28 +379,90 @@ function extractQuestionText(el: HTMLElement): string {
       if (text) parts.push(text);
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       const child = node as HTMLElement;
+
       if (child.tagName === 'BR') {
         continue;
       }
 
-      const codeHighlight = child.querySelector('.code .highlight pre, .highlight pre');
-      if (codeHighlight) {
-        const code = extractCodeText(codeHighlight as HTMLElement);
-        if (code.trim()) parts.push('```python\n' + code + '\n```');
-      } else if (child.classList?.contains('code') && child.querySelector('.highlight pre')) {
-        const pre = child.querySelector('.highlight pre') as HTMLElement;
+      if (child.classList?.contains('code') || (child.tagName === 'DIV' && child.querySelector('.code'))) {
+        const pre = child.querySelector('.highlight pre') || child.querySelector('pre');
         if (pre) {
-          const code = extractCodeText(pre);
-          if (code.trim()) parts.push('```python\n' + code + '\n```');
+          const code = extractCodeText(pre as HTMLElement);
+          if (code.trim()) {
+            parts.push('```python\n' + code + '\n```');
+            continue;
+          }
         }
+      }
+
+      if (child.tagName === 'DIV') {
+        collectQuestionContent(child, parts);
       } else {
         const text = extractInlineText(child).trim();
         if (text) parts.push(text);
       }
     }
   }
+}
 
-  return parts.join('\n');
+function extractChallengeContent(el: HTMLElement): string | null {
+  const parts: string[] = [];
+
+  const typeOutputPrompt = el.querySelector('#prompt, p#prompt');
+  if (typeOutputPrompt) {
+    const promptText = typeOutputPrompt.textContent?.trim();
+    if (promptText) parts.push(promptText);
+  }
+
+  const typeOutputCode = el.querySelector('.custom-tool-container .code:not(.highlight), .tool-container .code:not(.highlight)');
+  if (typeOutputCode && !typeOutputCode.querySelector('.highlight')) {
+    const codeText = typeOutputCode.textContent?.trim();
+    if (codeText) {
+      parts.push('```python\n' + codeText + '\n```');
+    }
+  }
+
+  const parsonsInstr = el.querySelector('.reorderable-lists-instructions');
+  if (parsonsInstr) {
+    const instrParts: string[] = [];
+    walkContentNodes(parsonsInstr, instrParts);
+    const instrText = instrParts.join('\n\n').trim();
+    if (instrText) parts.push(instrText);
+
+    const unusedBlocks = el.querySelectorAll('.sortable[data-list-name="unused"] .block');
+    if (unusedBlocks.length > 0) {
+      const codeLines: string[] = [];
+      unusedBlocks.forEach(block => {
+        const lineText = block.textContent?.trim();
+        if (lineText) codeLines.push(lineText);
+      });
+      if (codeLines.length > 0) {
+        parts.push('Available code blocks:\n```python\n' + codeLines.join('\n') + '\n```');
+      }
+    }
+
+    const usedBlocks = el.querySelectorAll('.sortable[data-list-name="used"] .block');
+    if (usedBlocks.length > 0) {
+      const codeLines: string[] = [];
+      usedBlocks.forEach(block => {
+        const lineText = block.textContent?.trim();
+        if (lineText) codeLines.push(lineText);
+      });
+      if (codeLines.length > 0) {
+        parts.push('Starting code:\n```python\n' + codeLines.join('\n') + '\n```');
+      }
+    }
+  }
+
+  const codeWritingPrompt = el.querySelector('.code-writing-prompt');
+  if (codeWritingPrompt) {
+    const promptParts: string[] = [];
+    walkContentNodes(codeWritingPrompt, promptParts);
+    const promptText = promptParts.join('\n\n').trim();
+    if (promptText) parts.push(promptText);
+  }
+
+  return parts.length > 0 ? parts.join('\n\n') : null;
 }
 
 function fallbackTextExtraction(doc: Document): string {

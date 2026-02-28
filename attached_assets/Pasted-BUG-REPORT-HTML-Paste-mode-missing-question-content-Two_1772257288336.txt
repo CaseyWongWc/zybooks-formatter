@@ -1,0 +1,34 @@
+BUG REPORT: HTML Paste mode - missing question content
+
+Two issues found after testing with section 5.8:
+
+1. PARTICIPATION ACTIVITY QUESTIONS ARE MISSING
+The PA questions (e.g., "Given the following code, how many times will the inner loop body execute?") and their embedded code snippets are not being extracted. Currently it just shows "1. List" instead of the actual question text.
+
+Here's the HTML structure for PA questions:
+- Questions are inside: `div.short-answer-content-resource > div.question-set-question.short-answer-question`
+- Each question has: `div.question > div.setup.flex-row`
+- The question number/label: `div.label` (contains "1", "2", "3")
+- The question text: `div.text > div` (contains the actual question like "Given the following code...")
+- Code inside questions: `div.text div.code.no-box > div.highlight > pre` (contains the code snippet with syntax-highlighted spans)
+- Answer input: `input.zb-input` inside `div.short-answer-input-container`
+
+Example from 5.8 HTML:
+```
+div.setup > div.label "1" + div.text "Given the following code, how many times will the inner loop body execute?" + div.code.no-box containing:
+for i in range(2):
+    for j in range(3):
+        # Inner loop body
+```
+
+2. CHALLENGE ACTIVITY CODE/CONTENT MISSING
+Challenge activities show titles (5.8.1, 5.8.2, etc.) but not their question content. This is because:
+- Some CAs use `div.custom-tool-container` with embedded progression tools (levels, type-the-output)
+- Some CAs use `div.content-tool-container` with Parsons problems (drag-and-drop code blocks in `div.two-reorderable-lists`)
+- The instructions ARE in the HTML inside `div.reorderable-lists-instructions` or `div.activity-instructions`
+- Code blocks for Parsons problems are in `div.sortable[data-list-name] > div.block` with hljs-highlighted spans
+- The "Enter output" type CAs have their prompts in `p#prompt` and code in table cells
+
+For CAs, at minimum extract: the instructions text, and for Parsons problems the available code blocks. The user knows CA content varies since questions are randomly generated, but getting the instructions and any visible code would be a big improvement.
+
+Please fix the PA question extraction first since that's the most impactful!
