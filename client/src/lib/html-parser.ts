@@ -384,7 +384,7 @@ function collectQuestionContent(el: HTMLElement, parts: string[]): void {
         continue;
       }
 
-      if (child.classList?.contains('code') || (child.tagName === 'DIV' && child.querySelector('.code'))) {
+      if (child.classList?.contains('code') && child.querySelector('.highlight pre, pre')) {
         const pre = child.querySelector('.highlight pre') || child.querySelector('pre');
         if (pre) {
           const code = extractCodeText(pre as HTMLElement);
