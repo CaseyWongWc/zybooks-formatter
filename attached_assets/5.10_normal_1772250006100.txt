@@ -1,0 +1,220 @@
+Skip to main content
+
+zyBooks
+My library >
+CS 2520: Python for Programmers home >
+5.10: Break and continue
+zyBooks catalog
+Help/FAQ
+Casey Wong
+5.9 Developing programs incrementally
+Students:
+Section 5.10 is a part of 1 assignment:
+C5
+Activities:
+P
+Participation
+C
+Challenge
+Due: 02/28/2026, 11:59 PM PST
+5.10 Break and continue
+Break statements
+A break statement in a loop causes the loop to exit immediately. A break statement can sometimes yield a loop that is easier to understand.
+
+In the example below, the nested for loops generate possible meal options for the number of empanadas and tacos that can be purchased. The inner loop body calculates the cost of the current meal option. If the meal cost is equal to the user's amount of money, the search is over, so the break statement immediately exits the inner loop. The outer loop body also checks if the meal cost and the user's amount of money are equal, and if so, that break statement exits the outer loop.
+
+The program could be written without break statements, but the loops' condition expressions would be more complex and the program would require additional code, making the program harder to understand.
+
+Figure 5.10.1: Break statement.
+empanada_cost = 3
+taco_cost = 4
+
+user_money = int(input("Enter money for meal: "))
+
+max_empanadas = user_money // empanada_cost
+max_tacos = user_money // taco_cost
+
+meal_cost = 0
+for num_tacos in range(max_tacos + 1):
+    for num_empanadas in range(max_empanadas + 1):
+        meal_cost = (num_empanadas * empanada_cost) + (num_tacos * taco_cost)
+
+        # Find first meal option that exactly matches user money
+        if meal_cost == user_money:
+            break
+
+    # Find first meal option that exactly matches user money
+    if meal_cost == user_money:
+        break
+
+if meal_cost == user_money:
+    print(f"${meal_cost} buys {num_empanadas} empanadas and {num_tacos} tacos without change.")
+else:
+    print("You cannot buy a meal without having change left over.")
+Enter money for meal: 20
+$20 buys 4 empanadas and 2 tacos without change.
+...
+Enter money for meal: 31
+$31 buys 9 empanadas and 1 tacos without change.
+
+Feedback?
+participation activity
+5.10.1: Break statements.
+Given the following while loop, what is the value variable z is assigned with for the given values of variables a, b, and c?
+
+mult = 0
+while a < 10:
+    mult = b * a
+    if mult > c:
+        break
+    a = a + 1
+z = a
+1)
+a = 1, b = 1, c = 0
+
+Check
+
+Show answer
+2)
+a = 4, b = 5, c = 20
+
+Check
+
+Show answer
+
+Feedback?
+Continue statements
+A continue statement in a loop causes an immediate jump to the while or for loop header statement. A continue statement can improve the readability of a loop. The example below extends the previous meal finder program to find meal options for which the total number of items purchased is evenly divisible by the number of diners. In addition, the following program will output all possible meal options, instead of reporting the first meal option found.
+
+The program uses two nested for loops to try all possible combinations of tacos and empanadas. If the total number of tacos and empanadas is not exactly divisible by the number of diners (Ex: (num_tacos + num_empanadas) % num_diners != 0), the continue statement will immediately proceed to the next iteration of the for loop.
+
+Break and continue statements can be helpful to avoid excessive indenting/nesting within a loop. However, because someone reading a program could easily overlook a break or continue statement, such statements should be used only when their use is clear to the reader.
+
+Figure 5.10.2: Continue statement.
+empanada_cost = 3
+taco_cost = 4
+
+user_money = int(input("Enter money for meal: "))
+
+num_diners = int(input("How many people are eating: "))
+
+max_empanadas = user_money // empanada_cost
+max_tacos = user_money // taco_cost
+
+meal_cost = 0
+num_options = 0
+for num_tacos in range(max_tacos + 1):
+    for num_empanadas in range(max_empanadas + 1):
+
+        # Total items purchased must be equally divisible by number of diners
+        if (num_tacos + num_empanadas) % num_diners != 0:
+            continue
+
+        meal_cost = (num_empanadas * empanada_cost) + (num_tacos * taco_cost)
+
+        if meal_cost == user_money:
+            print(f"${meal_cost} buys {num_empanadas} empanadas and {num_tacos} tacos without change.")
+            num_options += 1
+
+if num_options == 0:
+    print("You cannot buy a meal without having change left over.")
+Enter money for meal: 60
+How many people are eating: 3
+$60 buys 12 empanadas and 6 tacos without change.
+$60 buys 0 empanadas and 15 tacos without change.
+...
+Enter money for meal: 54
+How many people are eating: 2
+$54 buys 18 empanadas and 0 tacos without change.
+$54 buys 10 empanadas and 6 tacos without change.
+$54 buys 2 empanadas and 12 tacos without change.
+
+Feedback?
+participation activity
+5.10.2: Continue statements.
+Given:
+for i in range(5):
+    if i < 10:
+        continue
+    print(i)
+1)
+The loop will print at least some output.
+2)
+The loop will iterate only once.
+
+Feedback?
+challenge activity
+5.10.1: Enter the output of break and continue.
+712910.5105864.qx3zqy7
+Start
+Type the program's output
+
+stop = int(input())
+
+for n in range(3, 9):
+    print(n)
+
+    if n > stop:
+        print("stop")
+        break
+Input
+6
+Output
+3
+4
+5
+6
+7
+stop
+
+1
+2
+3
+4
+5
+Check
+Next
+1
+2
+3
+4
+5
+
+Feedback?
+challenge activity
+5.10.2: Simon says.
+
+Full screen
+712910.5105864.qx3zqy7
+"Simon Says" is a memory game where "Simon" outputs a sequence of 10 characters (R, G, B, Y) and the user must repeat the sequence. Organize the lines of code to create a for loop that compares the two strings simon_pattern and user_pattern, starting from index 0. For each match, add one point to user_score. Upon a mismatch, exit the loop using a break statement. Assume simon_pattern and user_pattern are always the same length.
+
+Ex: If simon_pattern = "RRGBRYYBGY" and user_pattern = "RRGBBRYBGY", then the output is:
+
+User score: 4
+
+Note: Not all lines of code on the left should be used in the final solution.
+
+
+How to use this tool
+Unused
+main.py
+
+Load default template...
+    
+    
+
+Check
+
+Feedback?
+How was this section?
+
+|
+
+
+Provide section feedback
+Activity summary for assignment: C5
+224 / 224 points
+Due: 02/28/2026, 11:59 PM PST
+
+Completion details
+5.11 Loop else

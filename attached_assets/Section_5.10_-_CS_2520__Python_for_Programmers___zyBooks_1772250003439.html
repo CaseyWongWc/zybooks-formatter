@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/10 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style><!----> <!--?lit$1564703245$-->.osano-cm-window{font-family:Helvetica,Arial,Hiragino Sans GB,STXihei,Microsoft YaHei,WenQuanYi Micro Hei,Hind,MS Gothic,Apple SD Gothic Neo,NanumBarunGothic,sans-serif;font-size:16px;font-smooth:always;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothingz:auto;display:block;left:0;line-height:1;position:absolute;top:0;width:100%;z-index:2147483638;--fade-transition-time:700ms;--slide-transition-time:400ms}.osano-cm-window--context_amp{height:100%}.osano-visually-hidden{height:1px;left:-10000px;margin:-1px;opacity:0;overflow:hidden;position:absolute;width:1px}.osano-cm-button{background-color:var(--osano-button-background-color);border-color:var(--osano-button-foreground-color);border-radius:.25em;border-style:solid;border-width:thin;color:var(--osano-button-foreground-color);cursor:pointer;flex:1 1 auto;font-size:1em;font-weight:700;line-height:1;margin:.125em;min-width:6em;padding:.5em .75em;transition-duration:.2s;transition-property:background-color;transition-timing-function:ease-out}.osano-cm-button:focus,.osano-cm-button:hover{background-color:var(--osano-button-background-hover);outline:none}.osano-cm-button--type_icon{border-radius:50%;height:1em;line-height:0;min-width:1em;width:1em}.osano-cm-button--type_deny{background-color:var(--osano-button-deny-background-color);border-color:var(--osano-button-deny-foreground-color);color:var(--osano-button-deny-foreground-color)}.osano-cm-button--type_deny:focus,.osano-cm-button--type_deny:hover{background-color:var(--osano-button-deny-background-hover)}.osano-cm-close{border-radius:50%;box-sizing:content-box;cursor:pointer;height:20px;margin:.5em;min-height:20px;min-width:20px;order:0;outline:none;overflow:hidden;padding:0;width:20px;stroke-width:1px;background-color:transparent;border:2px solid transparent;display:flex;justify-content:center;line-height:normal;text-decoration:none;transform:rotate(0deg);transition-duration:.2s;transition-property:transform,color,background-color,stroke,stroke-width;transition-timing-function:ease-out;z-index:2}.osano-cm-close:focus,.osano-cm-close:hover{transform:rotate(90deg);stroke-width:2px}.ccpa-opt-out-icon{display:flex;flex:1 1 auto}.ccpa-opt-out-icon svg{max-width:40px}.osano-cm-link{color:var(--osano-link-color);cursor:pointer;text-decoration:underline;transition-duration:.2s;transition-property:color;transition-timing-function:ease-out}.osano-cm-link:active,.osano-cm-link:hover{color:var(--osano-link-color);outline:none}.osano-cm-link:focus{color:var(--osano-link-color-focus);font-weight:700;outline:none}.osano-cm-link--type_feature,.osano-cm-link--type_purpose,.osano-cm-link--type_specialFeature,.osano-cm-link--type_specialPurpose{cursor:help;display:block;-webkit-text-decoration:dashed;text-decoration:dashed}.osano-cm-link--type_denyAll{display:block;text-align:right}[dir=rtl] .osano-cm-link--type_denyAll{text-align:left}.osano-cm-link--type_vendor{display:block}.osano-cm-link-separator:before{content:"|";padding:0 .5em}.osano-cm-vendor-link{font-size:.75em}.osano-cm-list-item{margin:0}.osano-cm-list-item--type_term{border-top-style:solid;border-top-width:1px;font-size:.875rem;font-weight:400;margin-bottom:.25em;margin-top:.5em;padding:.5em .75rem 0;position:relative;top:-1px}.osano-cm-list-item--type_description{font-size:.75rem;font-weight:lighter;padding:0 .75rem}.osano-cm-list{list-style-position:outside;list-style-type:none;margin:0;padding:0}.osano-cm-list__list-item{text-indent:0}.osano-cm-list--type_description{margin:0 -1em}.osano-cm-list:first-of-type .osano-cm-list__list-item:first-of-type{border-top-width:0;margin-top:0;padding-top:0}.osano-cm-toggle{align-items:center;display:flex;flex-direction:row-reverse;justify-content:flex-start;margin:.25em 0;pointer-events:auto;position:relative}.osano-cm-toggle__label{margin:0 .5em 0 0}[dir=rtl] .osano-cm-toggle__label{margin:0 0 0 .5em}.osano-cm-toggle__switch{background-color:var(--osano-toggle-off-background-color);border-radius:14px;border-style:solid;border-width:2px;box-sizing:content-box;color:transparent;display:block;flex-shrink:0;height:18px;line-height:0;margin:0;position:relative;text-indent:-9999px;transition-duration:.2s;transition-property:background-color;transition-timing-function:ease-out;width:40px}.osano-cm-toggle__switch:hover{cursor:pointer}.osano-cm-toggle__switch:after{background-color:var(--osano-toggle-button-off-color);border-color:var(--osano-toggle-button-off-color);border-radius:9px;border-width:0;height:18px;left:0;top:0;width:18px}.osano-cm-toggle__switch:before{border-color:transparent;border-radius:16px;border-width:2px;bottom:-6px;box-sizing:border-box;left:-6px;right:-6px;top:-6px}.osano-cm-toggle__switch:after,.osano-cm-toggle__switch:before{border-style:solid;content:"";margin:0;position:absolute;transform:translateX(0);transition-duration:.3s;transition-property:transform,left,border-color;transition-timing-function:ease-out}.osano-cm-toggle__switch:after:active,.osano-cm-toggle__switch:before:active{transition-duration:.1s}.osano-cm-toggle__switch:after:active{width:26px}.osano-cm-toggle__switch:before:active{width:34px}[dir=rtl] .osano-cm-toggle__switch:after{left:100%;transform:translateX(-100%)}.osano-cm-toggle__input{height:1px;left:-10000px;margin:-1px;opacity:0;overflow:hidden;position:absolute;width:1px}[dir=rtl] .osano-cm-toggle__input{left:0;right:-10000px}.osano-cm-toggle__input:disabled{cursor:default}.osano-cm-toggle--type_checkbox .osano-cm-toggle__switch{border-radius:4px;border-style:solid;border-width:1px;height:22px;width:22px}.osano-cm-toggle--type_checkbox .osano-cm-toggle__switch:after{background-color:transparent!important;border-bottom-width:2px;border-left-width:2px;border-radius:0;content:none;height:6px;left:3px;top:3px;transform:rotate(-45deg);transition-property:color;transition-timing-function:ease-out;width:12px}.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch{border-radius:4px;border-style:solid;border-width:1px;height:22px;width:22px}.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch:after,.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch:before{background-color:transparent!important;border-bottom-width:1px;border-radius:0;border-top-width:1px;content:none;height:0;left:-3px;top:7px;transition-property:color;transition-timing-function:ease-out;width:12px}.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch:after{transform:translate(50%,50%) rotate(-45deg)}.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch:before{transform:translate(50%,50%) rotate(45deg)}.osano-cm-toggle__input:checked+.osano-cm-toggle__switch{background-color:var(--osano-toggle-on-background-color);border-color:var(--osano-toggle-on-background-color)}.osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after{background-color:var(--osano-toggle-button-on-color);border-color:var(--osano-toggle-button-on-color);left:100%;transform:translateX(-100%)}[dir=rtl] .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after{left:0;transform:translateX(0)}.osano-cm-toggle__input:focus+.osano-cm-toggle__switch,.osano-cm-toggle__input:hover+.osano-cm-toggle__switch{background-color:var(--osano-toggle-off-background-hover-focus);border-color:var(--osano-toggle-off-background-hover-focus)}.osano-cm-toggle__input:focus+.osano-cm-toggle__switch:before{border-color:var(--osano-toggle-off-background-hover-focus)}.osano-cm-toggle__input:disabled+.osano-cm-toggle__switch{cursor:default}.osano-cm-toggle--type_checkbox .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after{content:"";left:3px;top:3px;transform:rotate(-45deg)}.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after,.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:before{content:"";left:-1px;top:9px}.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after{transform:translate(50%,50%) rotate(-45deg)}.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:before{transform:translate(50%,50%) rotate(45deg)}.osano-cm-toggle--type_checkbox .osano-cm-toggle__input:disabled+.osano-cm-toggle__switch,.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:disabled+.osano-cm-toggle__switch{opacity:.3}.osano-cm-toggle__input:checked:focus+.osano-cm-toggle__switch,.osano-cm-toggle__input:checked:hover+.osano-cm-toggle__switch{background-color:var(--osano-toggle-on-background-hover-focus);border-color:var(--osano-toggle-on-background-hover-focus)}.osano-cm-toggle__input:checked:focus+.osano-cm-toggle__switch:before{border-color:var(--osano-toggle-on-background-hover-focus)}.osano-cm-toggle__input:disabled+.osano-cm-toggle__switch,.osano-cm-toggle__input:disabled:focus+.osano-cm-toggle__switch,.osano-cm-toggle__input:disabled:hover+.osano-cm-toggle__switch{background-color:var(--osano-toggle-off-background-disabled);border-color:var(--osano-toggle-off-background-disabled)}.osano-cm-toggle__input:disabled+.osano-cm-toggle__switch:after,.osano-cm-toggle__input:disabled:focus+.osano-cm-toggle__switch:after,.osano-cm-toggle__input:disabled:hover+.osano-cm-toggle__switch:after{background-color:var(--osano-toggle-button-off-disabled);border-color:var(--osano-toggle-button-off-disabled)}.osano-cm-toggle__input:disabled+.osano-cm-toggle__switch:before,.osano-cm-toggle__input:disabled:focus+.osano-cm-toggle__switch:before,.osano-cm-toggle__input:disabled:hover+.osano-cm-toggle__switch:before{border-color:transparent}.osano-cm-toggle__input:disabled:checked+.osano-cm-toggle__switch,.osano-cm-toggle__input:disabled:checked:focus+.osano-cm-toggle__switch,.osano-cm-toggle__input:disabled:checked:hover+.osano-cm-toggle__switch{background-color:var(--osano-toggle-on-background-disabled);border-color:var(--osano-toggle-on-background-disabled)}.osano-cm-toggle__input:disabled:checked+.osano-cm-toggle__switch:after,.osano-cm-toggle__input:disabled:checked:focus+.osano-cm-toggle__switch:after,.osano-cm-toggle__input:disabled:checked:hover+.osano-cm-toggle__switch:after{background-color:var(--osano-toggle-button-on-disabled);border-color:var(--osano-toggle-button-on-disabled)}.osano-cm-toggle__input:disabled:checked+.osano-cm-toggle__switch:before,.osano-cm-toggle__input:disabled:checked:focus+.osano-cm-toggle__switch:before,.osano-cm-toggle__input:disabled:checked:hover+.osano-cm-toggle__switch:before{border-color:transparent}.osano-cm-widget{background:none;border:none;bottom:12px;cursor:pointer;height:40px;opacity:.9;outline:none;padding:0;position:fixed;transition:transform .1s linear 0s,opacity .2s linear 0ms,visibility 0ms linear 0ms;visibility:visible;width:40px;z-index:2147483636}.osano-cm-widget--position_right{right:12px}.osano-cm-widget--position_left{left:12px}.osano-cm-widget:focus{outline:solid;outline-offset:.2rem}.osano-cm-widget:focus,.osano-cm-widget:hover{opacity:1;transform:scale(1.1)}.osano-cm-widget--hidden{opacity:0;visibility:hidden}.osano-cm-widget--hidden:focus,.osano-cm-widget--hidden:hover{opacity:0;transform:scale(1)}.osano-cm-widget__outline{fill:var(--osano-widget-fill-color);stroke:var(--osano-widget-outline-color)}.osano-cm-widget__dot{fill:var(--osano-widget-color)}.osano-cm-dialog{align-items:center;background:var(--osano-dialog-background-color);box-sizing:border-box;color:var(--osano-dialog-foreground-color);font-size:1em;line-height:1.25;max-height:100vh;overflow:auto;padding:1.5em;position:fixed;transition-delay:0ms,0ms;transition-duration:.7s,0ms;transition-property:opacity,visibility;visibility:visible;z-index:2147483637}.osano-cm-dialog--hidden{opacity:0;transition-delay:0ms,.7s;visibility:hidden}.osano-cm-dialog--type_bar{box-sizing:border-box;display:flex;flex-direction:column;left:0;right:0}.osano-cm-dialog--type_bar .osano-cm-button{flex:none;margin:.125em auto;width:80%}@media screen and (min-width:768px){.osano-cm-dialog--type_bar{flex-direction:row}.osano-cm-dialog--type_bar .osano-cm-button{flex:1 1 100%;margin:.25em .5em;width:auto}}.osano-cm-dialog--type_box{flex-direction:column;max-height:calc(100vh - 2em);max-width:20em;width:calc(100vw - 2em)}.osano-cm-dialog__close{color:var(--osano-dialog-foreground-color);position:absolute;right:0;top:0;stroke:var(--osano-dialog-foreground-color)}.osano-cm-dialog__close:hover{stroke:var(--osano-dialog-foreground-hover)}.osano-cm-dialog__close:focus{background-color:var(--osano-dialog-foreground-color);border-color:var(--osano-dialog-foreground-color);stroke:var(--osano-dialog-background-color)}.osano-cm-dialog__close:focus:hover{stroke:var(--osano-dialog-background-hover)}.osano-cm-dialog__list{margin:.5em 0 0;padding:0}.osano-cm-dialog__list .osano-cm-item{display:flex;margin-top:0}.osano-cm-dialog__list .osano-cm-item:last-child{margin-bottom:0}.osano-cm-dialog__list .osano-cm-toggle{flex-direction:row}[dir=rtl] .osano-cm-dialog__list .osano-cm-toggle{flex-direction:row-reverse}.osano-cm-dialog__list .osano-cm-label{white-space:nowrap}[dir=ltr] .osano-cm-dialog__list .osano-cm-label{margin-left:.375em}[dir=rtl] .osano-cm-dialog__list .osano-cm-label{margin-right:.375em}.osano-cm-dialog__buttons{display:flex;flex-wrap:wrap}.osano-cm-dialog--type_bar .osano-cm-dialog__content{flex:5;margin-bottom:.25em;width:100%}.osano-cm-dialog--type_box .osano-cm-dialog__content{display:flex;flex-direction:column;flex-grow:.0001;transition:flex-grow 1s linear}.osano-cm-dialog--type_box .osano-cm-link-separator:before{content:"";padding:0}.osano-cm-dialog--type_box .osano-cm-content__link{margin-bottom:.5em}.osano-cm-dialog--type_bar .osano-cm-dialog__list{display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;margin:.75em auto}@media screen and (min-width:376px){.osano-cm-dialog--type_bar .osano-cm-dialog__list{flex-direction:row}}@media screen and (min-width:768px){.osano-cm-dialog--type_bar .osano-cm-dialog__list{margin:.5em 0 0 auto}[dir=rtl] .osano-cm-dialog--type_bar .osano-cm-dialog__list{margin:.5em auto 0 0}}[dir=ltr] .osano-cm-dialog--type_bar .osano-cm-dialog__list .osano-cm-item{margin-right:.5em}[dir=rtl] .osano-cm-dialog--type_bar .osano-cm-dialog__list .osano-cm-item{margin-left:.5em}.osano-cm-dialog--type_bar .osano-cm-dialog__list .osano-cm-label{padding-top:0}.osano-cm-dialog--type_bar .osano-cm-dialog__buttons{flex:1;justify-content:flex-end;margin:0;width:100%}@media screen and (min-width:768px){.osano-cm-dialog--type_bar .osano-cm-dialog__buttons{margin:0 0 0 .5em;max-width:30vw;min-width:16em;position:sticky;top:0;width:auto}[dir=rtl] .osano-cm-dialog--type_bar .osano-cm-dialog__buttons{margin:0 .5em 0 0}}.osano-cm-dialog--type_box .osano-cm-dialog__buttons{margin:.5em 0 0}.osano-cm-dialog--type_bar.osano-cm-dialog--position_top{top:0}.osano-cm-dialog--type_bar.osano-cm-dialog--position_bottom{bottom:0}.osano-cm-dialog--type_box.osano-cm-dialog--position_top-left{left:1em;top:1em}.osano-cm-dialog--type_box.osano-cm-dialog--position_top-right{right:1em;top:1em}.osano-cm-dialog--type_box.osano-cm-dialog--position_bottom-left{bottom:1em;left:1em}.osano-cm-dialog--type_box.osano-cm-dialog--position_bottom-right{bottom:1em;right:1em}.osano-cm-dialog--type_box.osano-cm-dialog--position_center{left:50%;top:50%;transform:translate(-50%,-50%)}.osano-cm-dialog--type_box.osano-cm-dialog--wide{max-width:50em}@media screen and (max-height:800px)and (max-width:1200px){.osano-cm-dialog--type_box.osano-cm-dialog--wide{max-width:calc(100vw - 4em)}}.osano-cm-dialog--type_box.osano-cm-dialog--wide .osano-cm-dialog__list{display:flex;flex-wrap:wrap}.osano-cm-dialog--context_amp{height:100%;position:relative}.osano-cm-content__message{margin-bottom:1em;white-space:pre-line;word-break:break-word}.osano-cm-drawer-links{margin:.5em 0 0}.osano-cm-drawer-links__link{display:block}.osano-cm-storage-policy{display:inline-block}.osano-cm-usage-list{margin:0 0 .5em}.osano-cm-usage-list__list{list-style-position:inside;list-style-type:disc}:export{fadeTransitionTime:.7s;slideTransitionTime:.4s}.osano-cm-info-dialog{background:var(--osano-info-dialog-overlay-color);height:100vh;left:0;position:fixed;top:0;transition-delay:0ms,0ms;transition-duration:.2s,0ms;transition-property:opacity,visibility;visibility:visible;width:100vw;z-index:2147483638}.osano-cm-info-dialog--hidden{opacity:0;transition-delay:0ms,.2s;visibility:hidden}.osano-cm-header{background:var(--osano-info-dialog-background-color);background:linear-gradient(180deg,var(--osano-info-dialog-background-color) 2.5em,var(--osano-clear-dialog-background) 100%);margin:0 0 -1em;padding:1em 0;position:sticky;top:0;z-index:1}.osano-cm-info{animation:delay-overflow .4s;background:var(--osano-info-dialog-background-color);bottom:0;box-shadow:0 0 2px 2px #ccc;box-sizing:border-box;color:var(--osano-info-dialog-foreground-color);max-width:20em;overflow:visible visible;position:fixed;top:0;transition-duration:.4s;transition-property:transform;width:100%}.osano-cm-info--position_left{left:0;transform:translate(-100%)}.osano-cm-info--position_right{right:0;transform:translate(100%)}.osano-cm-info--open{animation:none;overflow:hidden auto;transform:translate(0)}.osano-cm-info--do_not_sell{animation:none;height:-moz-fit-content;height:fit-content;left:50%;max-height:100vh;position:fixed;right:auto;top:50%;transform:translate(-50%,-50%);transition:none}.osano-cm-info--do_not_sell .osano-cm-close{order:-1}.osano-cm-info--do_not_sell .osano-cm-header{box-sizing:content-box;display:block;flex:none}.osano-cm-info-views{align-items:flex-start;display:flex;flex-direction:row;flex-wrap:nowrap;height:100%;transition-duration:.4s;transition-property:transform;width:100%}[dir=rtl] .osano-cm-info-views{flex-direction:row-reverse}.osano-cm-info-views__view{box-sizing:border-box;flex-shrink:0;width:100%}.osano-cm-info-views--position_0>:not(:first-of-type){max-height:100%;overflow:hidden}.osano-cm-info-views--position_1{transform:translateX(-100%)}.osano-cm-info-views--position_1>:not(:nth-of-type(2)){max-height:100%;overflow:hidden}.osano-cm-info-views--position_2{transform:translateX(-200%)}.osano-cm-info-views--position_2>:not(:nth-of-type(3)){max-height:100%;overflow:hidden}.osano-cm-info--do_not_sell .osano-cm-info-views{height:-moz-fit-content;height:fit-content}.osano-cm-view{height:0;padding:0 .75em 1em;transition-delay:.4s;transition-duration:0ms;transition-property:height,visibility;visibility:hidden;width:100%}.osano-cm-view__button{font-size:.875em;margin:1em 0 0;width:100%}.osano-cm-view--active{height:auto;transition-delay:0ms;visibility:visible}.osano-cm-description{font-size:.75em;font-weight:300;line-height:1.375;margin:1em 0 0;white-space:pre-line}.osano-cm-description:first-child{margin:0}.osano-cm-description:last-of-type{margin-bottom:1em}.osano-cm-drawer-toggle .osano-cm-label{font-size:.875em;line-height:1.375em;margin:0 auto 0 0}[dir=rtl] .osano-cm-drawer-toggle .osano-cm-label{margin:0 0 0 auto}.osano-cm-info-dialog-header{align-items:center;background:var(--osano-info-dialog-background-color);background:linear-gradient(180deg,var(--osano-info-dialog-background-color) 2.5em,var(--osano-clear-dialog-background) 100%);display:flex;flex-direction:row-reverse;left:auto;min-height:3.25em;position:sticky;top:0;width:100%;z-index:1}[dir=rtl] .osano-cm-info-dialog-header{flex-direction:row}.osano-cm-info-dialog-header__header{align-items:center;display:flex;flex:1 1 auto;font-size:1em;justify-content:flex-start;margin:0;order:1;padding:1em .75em}.osano-cm-info-dialog-header__description{font-size:.75em;line-height:1.375}.osano-cm-info-dialog-header__close{color:var(--osano-info-dialog-foreground-color);position:relative;stroke:var(--osano-info-dialog-foreground-color)}.osano-cm-info-dialog-header__close:hover{stroke:var(--osano-info-dialog-foreground-hover)}.osano-cm-info-dialog-header__close:focus{background-color:var(--osano-info-dialog-foreground-color);border-color:var(--osano-info-dialog-foreground-color);stroke:var(--osano-info-dialog-background-color)}.osano-cm-info-dialog-header__close:focus:hover{stroke:var(--osano-info-dialog-background-hover)}.osano-cm-back{flex:0 1 auto;margin:0 0 0 .5em;min-width:0;order:2;position:relative;width:auto;z-index:2}[dir=rtl] .osano-cm-back{margin:0 .5em 0 0}.osano-cm-powered-by{align-items:center;display:flex;flex-direction:column;font-weight:700;justify-content:center;margin:1em 0}.osano-cm-powered-by__link{font-size:.625em;outline:none;text-decoration:none}.osano-cm-powered-by__link:focus,.osano-cm-powered-by__link:hover{text-decoration:underline}@keyframes delay-overflow{0%{overflow:hidden auto}}.osano-cm-drawer-iab-button-container{display:flex;gap:.5em;justify-content:center;margin-bottom:2em}.osano-cm-illustrations__list>.osano-cm-list-item--type_description{padding:.2rem 1rem}.osano-cm-drawer-item.osano-cm-description__list li{padding-top:.75em}.osano-cm-tcf-purpose--label{border-bottom:1px solid rgba(0,0,0,.1);display:block;margin-bottom:.5em;padding:.25em 0 .5em}.osano-cm-link.osano-cm-link--type_purpose{font-weight:400}.osano-cm-tcf-purpose--label input{accent-color:var(--osano-toggle-on-background-color);float:right;margin-right:.5em}.osano-cm-opt-out-honored-wrapper{align-items:center;background:none;border:1px solid;border-radius:1em;display:flex;gap:.5em;margin:0 0 1em;max-width:-moz-max-content;max-width:max-content;outline:none;padding:.5em;position:relative}.osano-cm-opt-out-honored-wrapper__label{font-size:.75em;font-style:normal;font-weight:400;letter-spacing:.0625em;line-height:1.25;margin-right:.25em}.osano-cm-opt-out-honored-wrapper__additional-label{color:inherit;font-size:.75em;font-weight:400;line-height:1.5;margin:.5em 0 0}.osano-cm-opt-out-honored-wrapper__tooltip{align-items:flex-start;background:#fff;border-radius:.25em;bottom:calc(100% + 12px);box-shadow:0 1px 10px rgba(0,0,0,.12),0 4px 5px rgba(0,0,0,.14),0 2px 4px rgba(0,0,0,.2);color:#333;display:flex;gap:.5rem;max-width:calc(100vw - 4em);opacity:0;padding:1rem;position:absolute;transition:opacity .2s linear 0ms,visibility .2s linear .2s;visibility:hidden;white-space:normal;width:14rem;z-index:2147483636}.osano-cm-opt-out-honored-wrapper__tooltip:before{background:#fff;bottom:-6px;box-shadow:2px 2px 4px rgba(0,0,0,.1);content:"";height:12px;left:15%;position:absolute;transform:translateX(-50%) rotate(45deg);width:12px}.osano-cm-opt-out-honored-wrapper__tooltip-icon{flex-shrink:0}.osano-cm-opt-out-honored-wrapper__tooltip-icon svg{display:block}.osano-cm-opt-out-honored-wrapper__tooltip-content{display:flex;flex:1;flex-direction:column;gap:.25rem}.osano-cm-opt-out-honored-wrapper__tooltip-title{color:#333;font-size:.875em;font-weight:600;line-height:1.25;margin:.125em 0}.osano-cm-opt-out-honored-wrapper__tooltip-subtitle{color:#666;font-size:.75em;font-weight:400;line-height:1.25;margin:0}.osano-cm-opt-out-honored-wrapper--position_right{bottom:1em;right:.75em}.osano-cm-opt-out-honored-wrapper--position_left{bottom:1em;left:.75em}.osano-cm-opt-out-honored-wrapper--position_left,.osano-cm-opt-out-honored-wrapper--position_right{background:#fff;border-color:#058a5e;color:#058a5e;margin:0;max-width:calc(100vw - 2.5em);opacity:.9;position:fixed;transition:opacity .2s linear 0ms,visibility 0ms linear 0ms;visibility:visible;z-index:2147483636}.osano-cm-opt-out-honored-wrapper--position_left:hover,.osano-cm-opt-out-honored-wrapper--position_right:hover{opacity:1}.osano-cm-opt-out-honored-wrapper--position_right.osano-cm-opt-out-honored-wrapper--has-main-widget{bottom:1em;right:4em}.osano-cm-opt-out-honored-wrapper--position_left.osano-cm-opt-out-honored-wrapper--has-main-widget{bottom:1em;left:4em}.osano-cm-opt-out-honored-wrapper--clickable{cursor:pointer}.osano-cm-opt-out-honored-wrapper--hidden{opacity:0;transition-delay:0ms,.2s;visibility:hidden}.osano-cm-opt-out-honored-wrapper--context_description,.osano-cm-opt-out-honored-wrapper--context_dialog{background:none;border-color:inherit;color:inherit;cursor:default;margin:0 0 .5em;opacity:1;position:static;z-index:auto}.osano-cm-opt-out-honored-wrapper--context_description .osano-cm-opt-out-honored-wrapper__label,.osano-cm-opt-out-honored-wrapper--context_dialog .osano-cm-opt-out-honored-wrapper__label{color:inherit}.osano-cm-opt-out-honored-wrapper--context_description .osano-cm-opt-out-honored-wrapper__tooltip,.osano-cm-opt-out-honored-wrapper--context_dialog .osano-cm-opt-out-honored-wrapper__tooltip{display:none}.osano-cm-opt-out-honored-wrapper--tooltip-active:focus-within .osano-cm-opt-out-honored-wrapper__tooltip,.osano-cm-opt-out-honored-wrapper--tooltip-active:hover .osano-cm-opt-out-honored-wrapper__tooltip{opacity:1;transition-delay:0ms,0ms;visibility:visible}.osano-cm-opt-out-honored-wrapper--clickable:focus{outline:2px solid var(--osano-focus-color,#06c);outline-offset:2px}.osano-cm-dialog .osano-cm-opt-out-honored-wrapper{margin:0 0 .5em}.osano-cm-expansion-panel{border-bottom:1px solid rgba(0,0,0,.1);display:block;font-size:.75em;margin:0 -1.5em 1em;padding:1.5em 1.5em 0}.osano-cm-expansion-panel--expanded{border-bottom:none}.osano-cm-expansion-panel--empty,.osano-cm-expansion-panel--empty:not([open]){border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:0}.osano-cm-expansion-panel__body{background-color:rgba(0,0,0,.1);line-height:1.25;list-style:none;margin:0 -1.5em;max-height:0;overflow:hidden;padding:0 1.5em;transition-delay:0ms,0ms,0ms,.3s;transition-duration:.3s,.3s,.3s,0s;transition-property:max-height,padding-top,padding-bottom,visibility;transition-timing-function:ease-out;visibility:hidden}.osano-cm-expansion-panel__toggle{cursor:pointer;display:block;line-height:1.25;margin:0 auto 1em 0;position:relative}.osano-cm-expansion-panel__toggle,.osano-cm-expansion-panel__toggle:active,.osano-cm-expansion-panel__toggle:hover{color:var(--osano-link-color);outline:none}.osano-cm-expansion-panel__toggle:focus{color:var(--osano-link-color-focus);outline:none}[dir=rtl] .osano-cm-expansion-panel__toggle{margin:0 0 1em auto}.osano-cm-expansion-panel--expanded .osano-cm-expansion-panel__body{max-height:none;padding:1.25em 1.5em 1em;transition-delay:0ms,0ms,0ms,0ms;visibility:visible}.osano-cm-disclosure-item__title{border:0;clear:both;display:block;flex:0 1 30%;font-size:1em;font-weight:700;line-height:1.375;margin:0 0 .5em;padding:0}.osano-cm-disclosure-item__description{flex:0 1 70%;font-size:1em;line-height:1.375;margin:0 0 .5em;overflow:hidden;padding:0;text-overflow:ellipsis;white-space:pre-line}.osano-cm-disclosure{border-bottom:none;display:block;font-size:.75em;margin:0 -1.5em 1em;padding:1.5em 1.5em 0}.osano-cm-disclosure--collapse{border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:1em}.osano-cm-disclosure--empty,.osano-cm-disclosure--empty:not([open]){border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:0}.osano-cm-disclosure__list{background-color:rgba(0,0,0,.1);line-height:1.25;list-style:none;margin:0 -1.5em;padding:1.25em 1.5em 1em}.osano-cm-disclosure__list:empty{border:none;padding:0 1.5em}.osano-cm-disclosure__list:first-of-type{margin-top:1em;padding:1.25em 1.5em 1em}.osano-cm-disclosure__list:first-of-type:after{background-color:var(--osano-link-color)}.osano-cm-disclosure__list:first-of-type:empty{padding:1.75em 1.5em .75em}.osano-cm-disclosure__list:not(:first-of-type):not(:empty){border-top:1px solid rgba(0,0,0,.1)}.osano-cm-disclosure__list:empty+.osano-cm-disclosure__list:not(:empty){border:none;padding:0 1.5em}.osano-cm-disclosure__list:not(:empty)~.osano-cm-disclosure__list:empty+.osano-cm-disclosure__list:not(:empty){border-top:1px solid rgba(0,0,0,.1)}.osano-cm-disclosure__list>.osano-cm-list-item{line-height:1.25}.osano-cm-disclosure__list>.osano-cm-list-item:not(:first-of-type){border-top:1px solid rgba(0,0,0,.1);margin:1em -1.25em 0;padding:1em 1.25em 0}.osano-cm-disclosure__toggle{color:var(--osano-link-color);cursor:pointer;display:block;font-weight:700;line-height:1.25;margin:0 auto 0 0;outline:none;position:relative}.osano-cm-disclosure__toggle:focus,.osano-cm-disclosure__toggle:hover{text-decoration:underline}.osano-cm-disclosure__toggle:active,.osano-cm-disclosure__toggle:hover{color:var(--osano-link-color)}.osano-cm-disclosure__toggle:focus{color:var(--osano-link-color-focus)}[dir=rtl] .osano-cm-disclosure__toggle{margin:0 0 0 auto}.osano-cm-disclosure--loading .osano-cm-disclosure__list{height:0;line-height:0;max-height:0}.osano-cm-disclosure--loading .osano-cm-disclosure__list>*{display:none}.osano-cm-disclosure--loading .osano-cm-disclosure__list:after{animation-duration:1s;animation-iteration-count:infinite;animation-name:osano-load-scale;animation-timing-function:ease-in-out;border-radius:100%;content:"";display:block;height:1em;position:relative;top:-.125em;transform:translateY(-50%);width:1em}.osano-cm-disclosure--collapse .osano-cm-disclosure__list{display:none}.osano-cm-disclosure--collapse .osano-cm-disclosure__list:after{content:none}.osano-cm-disclosure-item{display:flex;flex-wrap:wrap;margin:0}.osano-cm-disclosure-item__title:last-of-type{margin-bottom:0}.osano-cm-disclosure-item__description:hover{word-break:break-word}.osano-cm-disclosure-item__description:last-of-type{margin-bottom:0}@keyframes osano-load-scale{0%{transform:translateY(-50%) scale(0)}to{opacity:0;transform:translateY(-50%) scale(1)}} :root { --osano-button-background-color: <!--?lit$1564703245$-->#0072b3; --osano-button-foreground-color: <!--?lit$1564703245$-->#FFFFFF; --osano-button-deny-background-color: <!--?lit$1564703245$-->#0072b3; --osano-button-deny-foreground-color: <!--?lit$1564703245$-->#FFFFFF; --osano-dialog-background-color: <!--?lit$1564703245$-->#ffffff; --osano-dialog-foreground-color: <!--?lit$1564703245$-->#000000; --osano-info-dialog-background-color: <!--?lit$1564703245$-->#fdfdfd; --osano-info-dialog-foreground-color: <!--?lit$1564703245$-->#000000; --osano-info-dialog-overlay-color: <!--?lit$1564703245$-->rgba(37,37,37,0.45); --osano-link-color: <!--?lit$1564703245$-->#c1560b; --osano-toggle-off-background-color: <!--?lit$1564703245$-->#0072b3; --osano-toggle-button-off-color: <!--?lit$1564703245$-->#FFFFFF; --osano-toggle-on-background-color: <!--?lit$1564703245$-->#0072b3; --osano-toggle-button-on-color: <!--?lit$1564703245$-->#FFFFFF; --osano-widget-color: <!--?lit$1564703245$-->#37cd8f; --osano-widget-fill-color: <!--?lit$1564703245$-->#fff; --osano-widget-outline-color: <!--?lit$1564703245$-->#29246a; --osano-clear-dialog-background: <!--?lit$1564703245$-->rgba(253,253,253,0); --osano-button-background-hover: <!--?lit$1564703245$-->#1486c7; --osano-button-deny-background-hover: <!--?lit$1564703245$-->#1486c7; --osano-dialog-foreground-hover: <!--?lit$1564703245$-->#141414; --osano-dialog-background-hover: <!--?lit$1564703245$-->#ebebeb; --osano-info-dialog-foreground-hover: <!--?lit$1564703245$-->#141414; --osano-info-dialog-background-hover: <!--?lit$1564703245$-->#e9e9e9; --osano-link-color-focus: <!--?lit$1564703245$-->#d56a1f; --osano-toggle-off-background-hover-focus: <!--?lit$1564703245$-->#1486c7; --osano-toggle-on-background-hover-focus: <!--?lit$1564703245$-->#1486c7; --osano-toggle-off-background-disabled: <!--?lit$1564703245$-->#40b2f3; --osano-toggle-button-off-disabled: <!--?lit$1564703245$-->#bfbfbf; --osano-toggle-on-background-disabled: <!--?lit$1564703245$-->#40b2f3; --osano-toggle-button-on-disabled: <!--?lit$1564703245$-->#bfbfbf; } .osano-cm-window { direction: <!--?lit$1564703245$-->ltr; text-align: <!--?lit$1564703245$-->left; } </style>
+        
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <title>Section 5.10 - CS 2520: Python for Programmers | zyBooks</title>
+        <meta content="" name="description">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <link href="https://learn.zybooks.com/assets/favicon.ico" integrity="" rel="icon">
+
+        <meta name="zybooks-web/config/environment" content="%7B%22appName%22%3A%22zybooks-web%22%2C%22environment%22%3A%22production%22%2C%22localRun%22%3Afalse%2C%22locationType%22%3A%22history%22%2C%22modulePrefix%22%3A%22zybooks-web%22%2C%22podModulePrefix%22%3A%22zybooks-web%2Froutes%22%2C%22rootURL%22%3A%22%2F%22%2C%22EmberENV%22%3A%7B%22EXTEND_PROTOTYPES%22%3Afalse%2C%22FEATURES%22%3A%7B%7D%2C%22_APPLICATION_TEMPLATE_WRAPPER%22%3Afalse%2C%22_DEFAULT_ASYNC_OBSERVERS%22%3Atrue%2C%22_JQUERY_INTEGRATION%22%3Afalse%2C%22_TEMPLATE_ONLY_GLIMMER_COMPONENTS%22%3Atrue%7D%2C%22APP%22%3A%7B%22BUILDKEY%22%3A%2243a301c2-799a-402a-f5a8-bffb580debb8%22%2C%22OVERRIDES%22%3A%7B%7D%2C%22IS_RUNNING_TEST_WITHOUT_SERVER_ARGS%22%3Afalse%7D%2C%22moment%22%3A%7B%22includeTimezone%22%3A%22subset%22%7D%2C%22stripe%22%3A%7B%22lazyLoad%22%3Atrue%2C%22publishableKey%22%3A%22pk_live_6WfpM1NZl9sSnKivV9WvGD2H%22%7D%2C%22ember-froala-editor%22%3A%7B%22key%22%3A%22eHE5C-11E3A2D2I2B6C4C1td1CGHNOa1TNSPH1e1J1VLPUUCVd1FC-22C4A3C3C1D4F2C2C3B3A1%3D%3D%22%2C%22imageAllowedTypes%22%3A%5B%22gif%22%2C%22jpeg%22%2C%22jpg%22%2C%22png%22%5D%2C%22imageMaxSize%22%3A10000000%2C%22imageUploadMethod%22%3A%22POST%22%2C%22videoAllowedTypes%22%3A%5B%22mp4%22%5D%2C%22videoMaxSize%22%3A300000000%2C%22videoUploadMethod%22%3A%22POST%22%2C%22videoInsertButtons%22%3A%5B%22videoUpload%22%5D%7D%2C%22%40sentry%2Fember%22%3A%7B%22sentry%22%3A%7B%22environment%22%3A%22production%22%2C%22release%22%3A%224a12e5b6065d22a66de1a7c673c0df010975354f%22%7D%2C%22disableInitialLoadInstrumentation%22%3Afalse%2C%22disablePerformance%22%3Afalse%7D%2C%22ember-cli-content-security-policy%22%3A%7B%22policy%22%3A%22connect-src%20&#39;self&#39;%20https%3A%2F%2F*.zybooks.com%20https%3A%2F%2F*.s3.amazonaws.com%20https%3A%2F%2F*.ingest.us.sentry.io%20https%3A%2F%2Fs3-us-west-2.amazonaws.com%20https%3A%2F%2F*.g.doubleclick.net%20https%3A%2F%2F*.analytics.google.com%20https%3A%2F%2Fanalytics.google.com%20https%3A%2F%2Fcmp.osano.com%20https%3A%2F%2Fapp.hopscotch.club%20https%3A%2F%2Fwidgets.hopscotch.club%20consent.api.osano.com%20tattle.api.osano.com%20cmp.osano.com%20disclosure.api.osano.com%3B%20default-src%20&#39;none&#39;%3B%20font-src%20&#39;self&#39;%20https%3A%2F%2Ffonts.gstatic.com%20https%3A%2F%2F*.zybooks.com%20data%3A%3B%20frame-ancestors%20*%20*.instructure.com%20*.schoology.com%20*.blackboard.com%20*.brightspace.com%20*.desire2learn.com%20*.umassonline.net%20*.mathworks.com%20*.brighthorizons.com%20*.moodlecloud.com%20*.mrooms3.net%20*.straighterline.com%20*.gostudyhall.com%20*.campusedu.com%20*.zybooks.com%20*.vcs.net%20*.mthree.com%20*.mrooms.net%20*.fullsail.com%20*.algonquincollege.com%20classroom.google.com%20learn.dcollege.net%20piazza.com%20*.binus.ac.id%20canvas.juacs.org%20*.riolearn.org%20corallanguage.org%20*.usask.ca%20*.uwaterloo.ca%20*.capu.ca%20*.uleth.ca%20*.wlu.ca%20*.smu.ca%20*.uwo.ca%20*.ontariotechu.ca%20*.willisonline.ca%20*.senecapolytechnic.ca%20*.yorku.ca%20*.uwindsor.ca%20*.concordia.ca%20*.nic.bc.ca%20*.torontomu.ca%20*.camosun.ca%20*.okanagan.bc.ca%20*.ucalgary.ca%20*.elearningontario.ca%20*.sheridancollege.ca%20*.stmarys.ca%20*.uoguelph.ca%20*.umanitoba.ca%20*.capilanou.ca%20*.utoronto.ca%20*.mohawkcollege.ca%20*.ualberta.ca%20*.saskpolytech.ca%20*.mcmaster.ca%20*.learnalberta.ca%20*.ubc.ca%20*.mycreds.ca%20www.fanshaweonline.ca%20www.gradescope.ca%20*.kfupm.edu.sa%20*.pmu.edu.sa%20https%3A%2F%2Feducation.wiley.com%20https%3A%2F%2Feducation-qa.wiley.com%3B%20frame-src%20&#39;self&#39;%20https%3A%2F%2F*.s3.amazonaws.com%20https%3A%2F%2Fplayer.vimeo.com%20https%3A%2F%2Fphet.colorado.edu%20https%3A%2F%2Fheadway-widget.net%20https%3A%2F%2Ftd.doubleclick.net%20https%3A%2F%2F*.codingrooms.com%20https%3A%2F%2F*.mathworks.com%20https%3A%2F%2F*.statuspage.io%20https%3A%2F%2F*.streamlit.app%20https%3A%2F%2Fconnect-js.stripe.com%20https%3A%2F%2Fjs.stripe.com%20https%3A%2F%2F*.youtube.com%20https%3A%2F%2F*.zybooks.com%20https%3A%2F%2Feducation.wiley.com%20https%3A%2F%2Feducation-qa.wiley.com%20https%3A%2F%2Fdrbuc2jl8158i.cloudfront.net%20consent.api.osano.com%20tattle.api.osano.com%20cmp.osano.com%20disclosure.api.osano.com%3B%20img-src%20&#39;self&#39;%20data%3A%20blob%3A%20https%3A%2F%2Fdrive.google.com%20https%3A%2F%2Flh3.googleusercontent.com%20https%3A%2F%2F*.googletagmanager.com%20https%3A%2F%2F*.stripe.com%20https%3A%2F%2F*.zybooks.com%20https%3A%2F%2Fres.cloudinary.com%3B%20media-src%20&#39;self&#39;%20https%3A%2F%2Fres.cloudinary.com%3B%20script-src%20&#39;self&#39;%20&#39;unsafe-inline&#39;%20&#39;unsafe-eval&#39;%20blob%3A%20https%3A%2F%2F*.googletagmanager.com%20https%3A%2F%2Fcdn.headwayapp.co%2Fwidget.js%20https%3A%2F%2F*.codingrooms.com%20https%3A%2F%2F*.statuspage.io%20https%3A%2F%2Fconnect-js.stripe.com%20https%3A%2F%2Fjs.stripe.com%20https%3A%2F%2Fm.stripe.network%20https%3A%2F%2Fcmp.osano.com%20https%3A%2F%2F*.zybooks.com%20https%3A%2F%2Fapp.hopscotch.club%20https%3A%2F%2Fwidgets.hopscotch.club%20consent.api.osano.com%20tattle.api.osano.com%20cmp.osano.com%20disclosure.api.osano.com%3B%20style-src%20&#39;self&#39;%20&#39;unsafe-inline&#39;%20https%3A%2F%2Ffonts.googleapis.com%20https%3A%2F%2Fcdn.headwayapp.co%2Fheadway-animate.css%20https%3A%2F%2F*.sentry.io%20consent.api.osano.com%20tattle.api.osano.com%20cmp.osano.com%20disclosure.api.osano.com%3B%22%2C%22reportOnly%22%3Afalse%7D%2C%22ember-websockets%22%3A%7B%22socketIO%22%3Atrue%7D%7D">
+<script type="text/javascript">if (window.performance && window.performance.mark) {
+  window.performance.mark('@sentry/ember:initial-load-start');
+}
+</script>
+
+        <link href="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/vendor-0f5b501efbe18d8b5011aae709b52aa8.css" integrity="" rel="stylesheet">
+<link rel="stylesheet" href="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/chunk.4741.676343815924319c8995.css" integrity="sha256-+4YF0doQnH6Qp8gKTCJZ7Dw6HqZj5gUkjyQqDcV+zls= sha512-6l1retUW2SlMl33xiQkNtgQun4ugIZlUY90I7b/V1rrfrTwcegd6aQmaQYeP4uJFfyY8P188mWcz+GvO5gNl3A==">
+        <link href="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/zybooks-web-01d583767a55a2083371137954f52bc9.css" integrity="" rel="stylesheet">
+
+        <link href="https://fonts.googleapis.com/" integrity="" rel="preconnect">
+        <link crossorigin="" href="https://fonts.gstatic.com/" integrity="" rel="preconnect">
+        <!-- crossorigin attribute needed to avoid error messages by the dom-to-svg library -->
+        <link crossorigin="" href="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/css2" integrity="" rel="stylesheet">
+        <link crossorigin="" href="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/css" integrity="" rel="stylesheet">
+        <link href="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/basicLightbox.min-69bdb9cd40a5bbcb4587424b1c70f89b.css" integrity="" rel="stylesheet">
+        <script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/osano.js.download"></script>
+        <script integrity="" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/vendor-134977bf3f763a9fefe069347b90e8ff.js.download"></script>
+<script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/chunk.4741.676343815924319c8995.js.download" integrity="sha256-tMYwXWWvsuO3+BC0QS/fyjtjkkRr/wShdnONfHBaPyQ= sha512-KDz0fkkaqlLQW4OZ6GTwBQdO9eeYhAItyg/9jDiZ8+fQmknyPvuU6sjuEQ0awqYcK0QDYGoKgoJ+RCP66yF4bw=="></script>
+<script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/chunk.8044.102e8cc0a7d9e967dcb7.js.download" integrity="sha256-fFsIvKbGkebMgntUC3up8lC2rl/lJ3GxgYwU2JdXHbo= sha512-ZOb60UwREKhvD5gJL6kJ8LaefAJDk0lIUD0oKB5R6H1qGvboYoDjGOnM+dozl2jxodavF8nNDQM0YHtseUPNXQ=="></script>
+<script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/chunk.3524.ea9fae823f5f3a449ad0.js.download" integrity="sha256-I751AnnuLDID714ixYJ4TXddqCznwLLpk7L0tiaAAl8= sha512-rHBFPBvT4yXqVGPcroSjLur2jkENX/2DR8x9nRETVmRGdtz0MO8l1WgtfY2jcSuA/zWCqNJMUjNvfO4dD9zFEA=="></script>
+        <script integrity="" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/zybooks-web-e38a3346de3556e8c7f597e6f539e986.js.download"></script>
+        <script integrity="" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/ace.js.download"></script>
+        <script integrity="" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/string-diff-4bf5ebb4b800cf1705420016e8da5e4e.js.download"></script>
+
+        
+    <script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/tex-mml-svg.js.download"></script><script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/svg.js.download" charset="UTF-8"></script><script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/mathtools.js.download" charset="UTF-8"></script><script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/lazy.js.download" charset="UTF-8"></script><script src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/assistive-mml.js.download" charset="UTF-8"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style>.MJX_LiveRegion {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 1px;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.MJX_LiveRegion_Show {
+  top: 0;
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 0px 0px;
+  opacity: 1;
+  z-index: 202;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 255, 0.2);
+  box-shadow: 0px 5px 20px #888;
+  border: 2px solid #CCCCCC;
+}</style><style>.MJX_LiveRegion {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 1px;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.MJX_LiveRegion_Show {
+  top: 0;
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 0px 0px;
+  opacity: 1;
+  z-index: 202;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 255, 0.2);
+  box-shadow: 0px 5px 20px #888;
+  border: 2px solid #CCCCCC;
+}</style><style>.MJX_HoverRegion {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.MJX_HoverRegion_Show {
+  position: absolute;
+  width: max-content;
+  height: auto;
+  padding: 0px 0px;
+  opacity: 1;
+  z-index: 202;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 255, 0.2);
+  box-shadow: 0px 10px 20px #888;
+  border: 2px solid #CCCCCC;
+}</style><style>.MJX_ToolTip {
+  position: absolute;
+  display: inline-block;
+  height: 1px;
+  width: 1px;
+}
+
+.MJX_ToolTip_Show {
+  width: auto;
+  height: auto;
+  opacity: 1;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0px 0px;
+  border-bottom: 1px dotted black;
+  position: absolute;
+  z-index: 202;
+}</style><style id="MJX-SVG-styles">
+mjx-container[overflow="scroll"][display] {
+  overflow-x: auto;
+  min-width: initial !important;
+}
+
+mjx-container[overflow="truncate"][display] {
+  overflow-x: hidden;
+  min-width: initial !important;
+}
+
+mjx-container[jax="SVG"] {
+  direction: ltr;
+  white-space: nowrap;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: polygon(0 0, 0 1px, 1px 1px, 1px 0);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  justify-content: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+  justify-content: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+  justify-content: right;
+}
+
+mjx-container[jax="SVG"] mjx-break::after {
+  content: " ";
+  white-space: normal;
+  line-height: 0;
+  font-family: MJX-ZERO;
+}
+
+mjx-break[size="0"] {
+  letter-spacing: -0.999em;
+}
+
+mjx-break[size="1"] {
+  letter-spacing: -0.889em;
+}
+
+mjx-break[size="2"] {
+  letter-spacing: -0.833em;
+}
+
+mjx-break[size="3"] {
+  letter-spacing: -0.778em;
+}
+
+mjx-break[size="4"] {
+  letter-spacing: -0.722em;
+}
+
+mjx-break[size="5"] {
+  letter-spacing: -0.667em;
+}
+
+mjx-container[jax="SVG"] mjx-break[newline]::before {
+  white-space: pre;
+  content: "\A";
+}
+
+mjx-break[newline] + svg[width="0.054ex"] {
+  margin-right: -1px;
+}
+
+mjx-break[prebreak] {
+  letter-spacing: -.999em;
+}
+
+@font-face /* zero */ {
+  font-family: MJX-ZERO;
+  src: url(data:application/x-font-woff;charset=utf-8;base64,T1RUTwAJAIAAAwAQQ0ZGIGnFMZkAAARQAAAAlE9TLzJpUWOBAAABAAAAAGBjbWFwAAwAUwAABAQAAAAsaGVhZCFRvpAAAACcAAAANmhoZWEC8AD9AAAA1AAAACRobXR4A+gAAAAABOQAAAAIbWF4cAACUAAAAAD4AAAABm5hbWVNb8+2AAABYAAAAqNwb3N0AAMAAAAABDAAAAAgAAEAAAABAABVWOu4Xw889QADA+gAAAAA3ym+2AAAAADfKb7YAAAAAAPoAAAAAAADAAIAAAAAAAAAAQAAAu79EgAAA+gAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAIAAFAAAAIAAAADA+gB9AAFAAACigK7AAAAjAKKArsAAAHfADEBAgAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABYWFhYAEAAIAAgAu79EgAAAu4C7gAAAAEAAAAAAXcAAAAgACAAAAAAACIBngABAAAAAAAAAAEAQQABAAAAAAABAAsAAAABAAAAAAACAAcAIQABAAAAAAADABUAxgABAAAAAAAEABMANgABAAAAAAAFAAsApQABAAAAAAAGABIAbwABAAAAAAAHAAEAQQABAAAAAAAIAAEAQQABAAAAAAAJAAEAQQABAAAAAAAKAAEAQQABAAAAAAALAAEAQQABAAAAAAAMAAEAQQABAAAAAAANAAEAQQABAAAAAAAOAAEAQQABAAAAAAAQAAsAAAABAAAAAAARAAcAIQADAAEECQAAAAIAXwADAAEECQABABYACwADAAEECQACAA4AKAADAAEECQADACoA2wADAAEECQAEACYASQADAAEECQAFABYAsAADAAEECQAGACQAgQADAAEECQAHAAIAXwADAAEECQAIAAIAXwADAAEECQAJAAIAXwADAAEECQAKAAIAXwADAAEECQALAAIAXwADAAEECQAMAAIAXwADAAEECQANAAIAXwADAAEECQAOAAIAXwADAAEECQAQABYACwADAAEECQARAA4AKG1qeC1sbS16ZXJvAG0AagB4AC0AbABtAC0AegBlAHIAb1JlZ3VsYXIAUgBlAGcAdQBsAGEAcm1qeC1sbS16ZXJvIFJlZ3VsYXIAbQBqAHgALQBsAG0ALQB6AGUAcgBvACAAUgBlAGcAdQBsAGEAcm1qeC1sbS16ZXJvUmVndWxhcgBtAGoAeAAtAGwAbQAtAHoAZQByAG8AUgBlAGcAdQBsAGEAclZlcnNpb24gMC4xAFYAZQByAHMAaQBvAG4AIAAwAC4AMSA6bWp4LWxtLXplcm8gUmVndWxhcgAgADoAbQBqAHgALQBsAG0ALQB6AGUAcgBvACAAUgBlAGcAdQBsAGEAcgAAAAABAAMAAQAAAAwABAAgAAAABAAEAAEAAAAg//8AAAAg////4QABAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAEAQABAQETbWp4LWxtLXplcm9SZWd1bGFyAAEBASf4GwD4HAL4HQP4HgSLi/mC+nwFHQAAAIYPHQAAAIkRix0AAACUEgAFAQEMHyoxNlZlcnNpb24gMC4xbWp4LWxtLXplcm8gUmVndWxhcm1qeC1sbS16ZXJvUmVndWxhcnNwYWNlAAAAAYsAAgEBAwaLDvp8DgAAAAAD6AAA) format("woff");
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  line-height: 0;
+  padding: .2em;
+  border: 1px solid #888;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+
+foreignObject[data-mjx-html] {
+  overflow: visible;
+}
+
+mjx-html {
+  display: inline-block;
+  line-height: normal;
+  text-align: initial;
+}
+
+mjx-html-holder {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+</style><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/codeOutput/js/codeOutput.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/codeOutput.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/utilities/js/utilities.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/utilities.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/progressionTool/js/progressionTool.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/progressionTool.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/segmentedControl/js/segmentedControl.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/segmentedControl.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/fedd6ce0-9b18-4962-be09-a685ba949790/zyFlowchartSDK/js/zyFlowchartSDK.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/zyFlowchartSDK.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/restrictedEditor/js/restrictedEditor.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/restrictedEditor.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/71f3c9da-cb82-4a84-ab9d-317ec6d2e707/vendor/handlebars.1.3.0.min.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/handlebars.1.3.0.min.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/71f3c9da-cb82-4a84-ab9d-317ec6d2e707/vendor/spin.min.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/spin.min.js.download"></script><style type="text/css"></style><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/71f3c9da-cb82-4a84-ab9d-317ec6d2e707/vendor/raphael.min.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/raphael.min.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/71f3c9da-cb82-4a84-ab9d-317ec6d2e707/vendor/alea.min.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/alea.min.js.download"></script></head>
+    <body class="do-not-process-mathjax-2 ember-application" style="overflow: auto;"><div data-nosnippet="" class="osano-cm-window" dir="ltr"><!----> <!--?lit$1564703245$--><div hidden="" class="osano-visually-hidden"> <span id="osano-cm-aria.newWindow"><!--?lit$1564703245$-->Opens in a new window</span> <span id="osano-cm-aria.external"><!--?lit$1564703245$-->Opens an external website</span> <span id="osano-cm-aria.externalNewWindow"><!--?lit$1564703245$-->Opens an external website in a new window</span> </div> <!--?lit$1564703245$--> <div role="dialog" id="82557090-926b-4ae5-8ec5-1155cd524a27" aria-label="Cookie Consent Banner" aria-describedby="82557090-926b-4ae5-8ec5-1155cd524a27__label" class=" osano-cm-window__dialog osano-cm-dialog osano-cm-dialog--hidden osano-cm-dialog--position_bottom osano-cm-dialog--type_bar "> <!--?lit$1564703245$--> <div class=" osano-cm-dialog__content osano-cm-content "> <!--?lit$1564703245$--> <!--?lit$1564703245$--> <span id="82557090-926b-4ae5-8ec5-1155cd524a27__label" class=" osano-cm-content__message osano-cm-message "> <!--?lit$1564703245$-->This website uses various technologies, 
+including third-party cookies and codes, to 
+personalize our website functionalities, measure 
+website usage and performance and provide 
+targeting advertising, information about your 
+website visit may be stored or shared with third 
+parties as identified in our Privacy Policy. To 
+learn more and manage cookies, please refer to 
+our Cookie Statement. <!--?lit$1564703245$--> <!--?lit$1564703245$--> </span>  <!--?lit$1564703245$--> <!--?lit$1564703245$--><!--?lit$1564703245$--><a rel="noopener" tabindex="0" href="https://www.zybooks.com/privacy-policy/" target="_blank" class=" osano-cm-storage-policy osano-cm-content__link osano-cm-link " aria-describedby="osano-cm-aria.newWindow"><!--?lit$1564703245$-->Privacy Policy</a><!--?--><!--?lit$1564703245$--> <!--?lit$1564703245$--> <!--?lit$1564703245$--> </div> <!--?lit$1564703245$--> <div class=" osano-cm-dialog__buttons osano-cm-buttons osano-cm-buttons--disabled "> <!--?lit$1564703245$--><!--?lit$1564703245$--><button class=" osano-cm-accept osano-cm-buttons__button osano-cm-button osano-cm-button--type_accept " tabindex="0"> <!--?lit$1564703245$-->Accept </button><!--?--> <!--?lit$1564703245$--><!--?lit$1564703245$--><button class=" osano-cm-deny osano-cm-buttons__button osano-cm-button osano-cm-button--type_deny " tabindex="0"> <!--?lit$1564703245$-->Deny Non-Essential </button><!--?--> <!--?lit$1564703245$--> <!--?lit$1564703245$--><!--?lit$1564703245$--><button class=" osano-cm-manage osano-cm-buttons__button osano-cm-button osano-cm-button--type_manage " tabindex="0"> <!--?lit$1564703245$-->Manage Preferences </button><!--?--> </div> </div>  <!--?lit$1564703245$--> <!--?lit$1564703245$--> <button id="e4272b91-0b9e-4b4a-9c1c-83a8a4f0cf9c" class="osano-cm-window__widget osano-cm-widget osano-cm-widget--position_right" title="Cookie Preferences" aria-label="Cookie Preferences"> <svg role="img" width="40" height="40" viewBox="0 0 71.85 72.23" xmlns="http://www.w3.org/2000/svg" aria-labelledby="e4272b91-0b9e-4b4a-9c1c-83a8a4f0cf9c"> <path d="m67.6 36.73a6.26 6.26 0 0 1 -3.2-2.8 5.86 5.86 0 0 0 -5.2-3.1h-.3a11 11 0 0 1 -11.4-9.5 6 6 0 0 1 -.1-1.4 9.2 9.2 0 0 1 .4-2.9 8.65 8.65 0 0 0 .2-1.6 5.38 5.38 0 0 0 -1.9-4.3 7.3 7.3 0 0 1 -2.5-5.5 3.91 3.91 0 0 0 -3.5-3.9 36.46 36.46 0 0 0 -15 1.5 33.14 33.14 0 0 0 -22.1 22.7 35.62 35.62 0 0 0 -1.5 10.2 34.07 34.07 0 0 0 4.8 17.6.75.75 0 0 0 .07.12c.11.17 1.22 1.39 2.68 3-.36.47 5.18 6.16 5.65 6.52a34.62 34.62 0 0 0 55.6-21.9 4.38 4.38 0 0 0 -2.7-4.74z" stroke-width="3" class=" osano-cm-widget__outline osano-cm-outline "></path> <path d="m68 41.13a32.37 32.37 0 0 1 -52 20.5l-2-1.56c-2.5-3.28-5.62-7.15-5.81-7.44a32 32 0 0 1 -4.5-16.5 34.3 34.3 0 0 1 1.4-9.6 30.56 30.56 0 0 1 20.61-21.13 33.51 33.51 0 0 1 14.1-1.4 1.83 1.83 0 0 1 1.6 1.8 9.38 9.38 0 0 0 3.3 7.1 3.36 3.36 0 0 1 1.2 2.6 3.37 3.37 0 0 1 -.1 1 12.66 12.66 0 0 0 -.5 3.4 9.65 9.65 0 0 0 .1 1.7 13 13 0 0 0 10.5 11.2 16.05 16.05 0 0 0 3.1.2 3.84 3.84 0 0 1 3.5 2 10 10 0 0 0 4.1 3.83 2 2 0 0 1 1.4 2z" stroke-width="3" class=" osano-cm-widget__outline osano-cm-outline "></path> <g class=" osano-cm-widget__dot osano-cm-dot "> <path d="m26.6 31.43a5.4 5.4 0 1 1 5.4-5.43 5.38 5.38 0 0 1 -5.33 5.43z"></path> <path d="m25.2 53.13a5.4 5.4 0 1 1 5.4-5.4 5.44 5.44 0 0 1 -5.4 5.4z"></path> <path d="m47.9 52.33a5.4 5.4 0 1 1 5.4-5.4 5.32 5.32 0 0 1 -5.24 5.4z"></path> </g> </svg> </button>  <!--?lit$1564703245$--><div role="dialog" aria-modal="true" id="144cb181-1b7a-46f3-9a2c-3ffb81fa5718" aria-labelledby="144cb181-1b7a-46f3-9a2c-3ffb81fa5718__label" aria-hidden="true" class=" osano-cm-window__info-dialog osano-cm-info-dialog osano-cm-info-dialog--hidden "> <!--?lit$1564703245$--><!--?lit$1564703245$--><span tabindex="0" aria-hidden="true" data-focus="first"></span><!--?--> <div role="presentation" class=" osano-cm-info-dialog__info osano-cm-info osano-cm-info--position_right "> <!--?lit$1564703245$--><div role="presentation" class=" osano-cm-info__info-dialog-header osano-cm-info-dialog-header "> <p role="heading" aria-level="1" id="144cb181-1b7a-46f3-9a2c-3ffb81fa5718__label" class=" osano-cm-info-dialog-header__header osano-cm-header "> <!--?lit$1564703245$--> </p> <!--?lit$1564703245$--> <button class=" osano-cm-info-dialog-header__close osano-cm-close "> <!--?lit$1564703245$--><svg width="20px" height="20px" viewBox="0 0 20 20" role="img" aria-labelledby="f0600940-4eca-433a-a6e3-461eff248286"> <title id="f0600940-4eca-433a-a6e3-461eff248286"><!---->Close Cookie Preferences<!----></title> <line role="presentation" x1="2" y1="2" x2="18" y2="18"></line> <line role="presentation" x1="2" y1="18" x2="18" y2="2"></line> </svg> </button> <!--?lit$1564703245$--> </div> <div role="presentation" class=" osano-cm-info__info-views osano-cm-info-views osano-cm-info-views--hidden osano-cm-info-views--position_0 "> <!--?lit$1564703245$--> </div> </div> <!--?lit$1564703245$--><!--?lit$1564703245$--><span tabindex="0" aria-hidden="true" data-focus="last"></span><!--?--> </div> </div>
+        
+
+        <iframe name="__uspapiLocator" style="display: none;" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/saved_resource.html"></iframe>
+
+        <script type="text/javascript">if (window.performance && window.performance.mark) {
+  window.performance.mark('@sentry/ember:initial-load-end');
+}
+</script>
+    
+<iframe id="zybooks-status-iframe" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/frame.html" title="zyBooks Status" aria-hidden="true" style="position: fixed; border: none; box-shadow: rgba(9, 20, 66, 0.25) 0px 20px 32px -8px; z-index: 9999; transition: left 1s, bottom 1s, right 1s; height: 115px; width: 320px; left: -9999px; right: -9999px; bottom: calc(100% - 175px); display: none;"></iframe><a class="skip-link" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/10#main-content">Skip to main content</a>
+
+
+
+<header class="top-toolbar ">
+    <div class="left-buttons">
+        <div class="zb-breadcrumbs ">
+        <button class="zb-button grey   icon-button left         menu-button" aria-expanded="false" aria-label="Menu" type="button">
+            <div>
+                <i aria-label="menu" class="zb-icon material-icons med grey " role="img" aria-hidden="false">
+            menu
+<!----></i>
+            </div>
+<!----><!----></button>
+
+        <div class="logo">
+                <a id="ember4" class="ember-view" href="https://learn.zybooks.com/"><img alt="zyBooks" height="22px" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/logo.svg" width="83px"></a>
+        </div>
+
+            <ul class="bread-crumbs">
+                    <li class="bread-crumb">
+                        <a id="ember148" class="ember-view no-underline" href="https://learn.zybooks.com/library">
+                            My library
+                        </a>
+                            <span aria-hidden="true" class="divider">&gt;</span>
+                    </li>
+                    <li class="bread-crumb">
+                        <a id="ember149" class="ember-view active no-underline" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026">
+                            CS 2520: Python for Programmers home
+                        </a>
+                            <span aria-hidden="true" class="divider">&gt;</span>
+                    </li>
+                    <li class="bread-crumb">
+                        <a id="ember150" class="ember-view active no-underline" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/10">
+                            5.10: Break and continue
+                        </a>
+<!---->                    </li>
+            </ul>
+</div>
+    </div>
+    <div class="right-buttons">
+<!----><!----><!---->                <a id="ember34" class="ember-view zb-button" href="https://learn.zybooks.com/catalog">
+                    <i aria-label="zyBooks catalog" class="zb-icon material-icons med grey " role="img">
+            library_books
+<!----></i>
+                    <span aria-hidden="true" class="font-light ml-2 text-base">
+                        zyBooks catalog
+                    </span>
+                </a>
+                    <a class="no-underline zb-button help-button " href="https://support.zybooks.com/" rel="noopener noreferrer" target="_blank">
+            <i aria-label="Help/FAQ" class="zb-icon material-icons med grey " role="img">
+            help
+<!----></i>
+                <span aria-hidden="true">Help/FAQ</span>
+        </a>
+            
+        <div class="ember-basic-dropdown zb-menu">
+                
+        <div id="ember6" class="ember-view ember-basic-dropdown-trigger
+             ember-basic-dropdown-trigger--in-place
+            
+            
+             toolbar-menu-toggle" tabindex="0" aria-label="Profile for Casey Wong" role="button" data-ebd-id="ember5-trigger" aria-owns="ember-basic-dropdown-content-ember5" aria-controls="ember-basic-dropdown-content-ember5" aria-expanded="false" aria-disabled="false">
+          
+                    <i aria-label="account_circle" class="zb-icon material-icons med grey  mr-2" role="img" aria-hidden="true">
+            account_circle
+<!----></i>
+                    Casey Wong
+                    <i aria-label="arrow_drop_down" class="zb-icon material-icons med grey " role="img" aria-hidden="true">
+            arrow_drop_down
+<!----></i>
+                
+        </div>
+  
+                
+      <div id="ember-basic-dropdown-content-ember5" class="ember-basic-dropdown-content-placeholder" style="display: none;"></div>
+  
+            </div>
+  
+    </div>
+</header>
+
+<!---->
+<!---->
+<div aria-label="zybook page" class="route-container
+        zybook-chapter-section-page
+        no-margin-left
+        
+        " id="main-content" role="main">
+            <ul class="notify-outlet-global notify-outlet" id="global-notify-outlet">
+<!----></ul>
+
+
+    <nav class="zb-nav-menu hide-nav-menu" inert="">
+    <ul class="level-1">
+                <li class="flex-row">
+                        <a id="ember151" class="ember-view flex-row " tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/content-explorer">
+                                    <i aria-label="search" class="zb-icon material-icons med grey  item-bullet" role="img" aria-hidden="true">
+            search
+<!----></i>
+                                                            <span class="self-center">
+                                Search zyBook
+                            </span>
+                        </a>
+                </li>
+                <li class="flex-row">
+                        <button class="list-toggle" tabindex="-1" type="button">
+                            <div class="flex-row">
+                                        <i aria-label="info" class="zb-icon material-icons med grey  item-bullet" role="img" aria-hidden="true">
+            info
+<!----></i>
+                                                                    <span class="self-center list-toggle-title ">
+                                    About this Material
+                                </span>
+                            </div>
+                        </button>
+                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">1)</span>
+                                <span class="list-toggle-title ">
+                                    Introduction to Python
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">2)</span>
+                                <span class="list-toggle-title ">
+                                    Variables and Expressions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">3)</span>
+                                <span class="list-toggle-title ">
+                                    Types
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">4)</span>
+                                <span class="list-toggle-title ">
+                                    Branching
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="true" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">5)</span>
+                                <span class="list-toggle-title ">
+                                    Loops
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_less" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_less
+<!----></i>
+                        </div>
+                    </button>
+
+                        <ul class="level-2">
+                                <li>
+                                    <a id="ember191" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/1">
+                                                <span class="item-bullet">5.1</span>
+                                        <span>
+                                            Loops (general)
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember192" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/2">
+                                                <span class="item-bullet">5.2</span>
+                                        <span>
+                                            While loops
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember193" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/3">
+                                                <span class="item-bullet">5.3</span>
+                                        <span>
+                                            More while loop examples
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember194" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/4">
+                                                <span class="item-bullet">5.4</span>
+                                        <span>
+                                            Counting
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember195" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/5">
+                                                <span class="item-bullet">5.5</span>
+                                        <span>
+                                            For loops
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember196" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/6">
+                                                <span class="item-bullet">5.6</span>
+                                        <span>
+                                            range()
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember197" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/7">
+                                                <span class="item-bullet">5.7</span>
+                                        <span>
+                                            while vs. for
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember198" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/8">
+                                                <span class="item-bullet">5.8</span>
+                                        <span>
+                                            Nested loops
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember199" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9">
+                                                <span class="item-bullet">5.9</span>
+                                        <span>
+                                            Incremental programming
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember200" class="ember-view active" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/10">
+                                                <span class="item-bullet">5.10</span>
+                                        <span>
+                                            Break and continue
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember201" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/11">
+                                                <span class="item-bullet">5.11</span>
+                                        <span>
+                                            Loop else
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember202" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/12">
+                                                <span class="item-bullet">5.12</span>
+                                        <span>
+                                            enumerate()
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember203" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/13">
+                                                <span class="item-bullet">5.13</span>
+                                        <span>
+                                            Additional practice: Dice statistics
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember204" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/14">
+                                                <span class="item-bullet">5.14</span>
+                                        <span>
+                                            LAB: Convert to reverse binary
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember205" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/15">
+                                                <span class="item-bullet">5.15</span>
+                                        <span>
+                                            LAB: Password modifier
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember206" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/16">
+                                                <span class="item-bullet">5.16</span>
+                                        <span>
+                                            LAB: Output range with increment of 5
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember207" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/17">
+                                                <span class="item-bullet">5.17</span>
+                                        <span>
+                                            LAB: Print string in reverse
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember208" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/18">
+                                                <span class="item-bullet">5.18</span>
+                                        <span>
+                                            LAB: Brute force equation solver
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember209" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/19">
+                                                <span class="item-bullet">5.19</span>
+                                        <span>
+                                            LAB: Adjust values in a list by normalizing
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember210" class="ember-view" tabindex="-1" target="_blank" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/print">
+                                                <i aria-label="print" class="zb-icon material-icons med grey  item-bullet" role="img">
+            print
+<!----></i>
+                                                                                    <span>
+                                            Print chapter
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                        </ul>
+                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">6)</span>
+                                <span class="list-toggle-title ">
+                                    Functions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">7)</span>
+                                <span class="list-toggle-title ">
+                                    Strings
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">8)</span>
+                                <span class="list-toggle-title ">
+                                    Lists and Dictionaries
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">9)</span>
+                                <span class="list-toggle-title ">
+                                    Classes
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">10)</span>
+                                <span class="list-toggle-title ">
+                                    Exceptions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">11)</span>
+                                <span class="list-toggle-title ">
+                                    Modules
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">12)</span>
+                                <span class="list-toggle-title ">
+                                    Files
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">13)</span>
+                                <span class="list-toggle-title ">
+                                    Inheritance
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">14)</span>
+                                <span class="list-toggle-title ">
+                                    Recursion
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">15)</span>
+                                <span class="list-toggle-title ">
+                                    Python for Data Science
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">16)</span>
+                                <span class="list-toggle-title ">
+                                    Searching and Sorting Algorithms
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">17)</span>
+                                <span class="list-toggle-title ">
+                                    Artificial Intelligence
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">18)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Material
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">19)</span>
+                                <span class="list-toggle-title ">
+                                    Coding Practice Problems
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">20)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Introduction to Python
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">21)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Variables and Expressions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">22)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Types
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">23)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Branching
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">24)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Loops
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">25)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Functions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">26)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Strings
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">27)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Lists and Dictionaries
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">28)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Classes
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">29)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Exceptions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">30)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Files
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">31)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Recursion
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+    </ul>
+</nav>
+
+    <section class="section-container">
+    
+
+<div>
+
+</div>
+        <nav aria-label="previous section" class="section-nav previous">
+            <a id="ember153" class="ember-view nav-link" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9">
+                <i aria-label="arrow_upward" class="zb-icon material-icons sm secondary " role="img" aria-hidden="true">
+            arrow_upward
+<!----></i>
+                <span class="nav-text previous">
+                    5.9
+                    Developing programs incrementally
+                </span>
+            </a>
+    </nav>
+
+
+    <div aria-label="section content" role="main">
+            <!---->
+<!---->
+<!---->
+<!---->
+    <div class="section-announcement zb-card primary assignment-section-announcement">
+        <div class="icon-container">
+            <i aria-label="assignment" class="zb-icon material-icons xl white " role="img">
+            assignment
+<!----></i>
+        </div>
+
+<!---->
+        <div class="section-announcement-block-content">
+        <span class="announcement-title">Students:</span>
+        <div class="assignment-announcement-content">
+            <div class="title-message">
+                <div class="assignment-title">
+                    <span>
+<!---->                        Section
+                        5.10
+                        is a part of
+                        1 assignment:
+                    </span>
+                        <span class="title-text">C5</span>
+<!---->                </div>
+<!---->                <div class="error">
+<!----><!---->                </div>
+            </div>
+            <div class="flex flex-col items-end">
+                <div class="flex flex-row mb-2">
+                    <span class="mr-1">Activities:</span>
+                        <div aria-hidden="true" class="mx-1 zb-chevron  participation  filled  small" role="img">
+        <span class="zb-chevron-letter">P</span>
+</div>
+                        <span class="mx-1">Participation</span>
+                        <div aria-hidden="true" class="mx-1 zb-chevron  challenge  filled  small" role="img">
+        <span class="zb-chevron-letter">C</span>
+</div>
+                        <span class="mx-1">Challenge</span>
+<!----><!---->                </div>
+                    <div class="assignment-due-date-lms-details in-section col-start-2">
+            <div class="due-date-text body-text  flex items-center">
+                        Due:
+                        02/28/2026, 11:59 PM PST
+            </div>
+<!----><!----></div>
+            </div>
+        </div>
+    </div>
+
+<!----></div>
+
+<!---->
+<!---->
+            <div class="zb-card zybook-section " canonical_section_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3" canonical_section_id="29520443">
+    <div class="zb-card-content ">
+        
+<!---->    <div class="section-header-row">
+<!---->            <div class="section-action-container">
+<!----><!----><!----><!----><!---->
+<!----><!----><!---->            </div>
+    </div>
+<!---->    <div class="flex flex-row items-center">
+        <h1 class="zybook-section-title" id="section-title-29520443">
+            5.10
+            Break and continue
+        </h1>
+<!---->    </div>
+<!---->
+<!---->
+    <!---->
+<!---->
+<!---->
+<!---->
+<!---->
+            <div class="section-content-resources-container">
+                            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_40d6c226-d552-9d7f-580f-db32d5531348python3" content_resource_id="122584509">
+        <div>
+<h3>Break statements</h3>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_c09a278f-df25-464f-9540-c3882a084a58python3" content_resource_id="122584510">
+        <div>
+<p>
+<span data-definition="true">A <span class="term" obeycase="true" data-term="true">break</span> statement in a loop causes the loop to exit immediately.</span> A break statement can sometimes yield a loop that is easier to understand.
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_2fd40f3f-c4e0-4851-b8cf-632ade953559python3" content_resource_id="122584511">
+        <div>
+<p>
+In the example below, the nested for loops generate possible meal options for the number of empanadas and tacos that can be purchased. The inner loop body calculates the cost of the current meal option. If the meal cost is equal to the user's amount of money, the search is over, so the break statement immediately exits the inner loop. The outer loop body also checks if the meal cost and the user's amount of money are equal, and if so, that break statement exits the outer loop.
+</p>
+
+<p>
+The program could be written without break statements, but the loops' condition expressions would be more complex and the program would require additional code, making the program harder to understand.
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="container-content-resource
+        
+        static-container
+        
+        large
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_072d10ea-f947-f8ad-8615-d49397361814python3python3" content_resource_id="122584512">
+        <div class="static-container-header  ">
+                    <h2 class="clear-heading-style flex">
+                        <div class="static-container-title ">
+                                Figure 5.10.1: Break statement.
+                        </div>
+                    </h2>
+            <div class="flex ml-auto justify-end">
+<!----><!---->            </div>
+<!----><!---->        </div>
+
+        <div class="static-container-payload
+                
+                
+                ">
+            <div class="w-full  ">
+<!---->                <div class="content-resource container-content-resource
+        container-content-resource
+        
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_072d10ea-f947-f8ad-8615-d49397361814python3python3" content_resource_id="122584512">
+        <div class="container-resource-payload">
+            <div>
+<div class="table"><table>
+ <tbody><tr>
+  <td>
+  <div class="code"><div class="highlight"><pre><span></span><span class="n">empanada_cost</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">taco_cost</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">user_money</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"Enter money for meal: "</span><span class="p">))</span>
+
+<span class="n">max_empanadas</span> <span class="o">=</span> <span class="n">user_money</span> <span class="o">//</span> <span class="n">empanada_cost</span>
+<span class="n">max_tacos</span> <span class="o">=</span> <span class="n">user_money</span> <span class="o">//</span> <span class="n">taco_cost</span>
+
+<span class="n">meal_cost</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">num_tacos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_tacos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">num_empanadas</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_empanadas</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">meal_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_empanadas</span> <span class="o">*</span> <span class="n">empanada_cost</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">num_tacos</span> <span class="o">*</span> <span class="n">taco_cost</span><span class="p">)</span>
+
+        <span class="c1"># Find first meal option that exactly matches user money</span>
+        <span class="k">if</span> <span class="n">meal_cost</span> <span class="o">==</span> <span class="n">user_money</span><span class="p">:</span>
+<span class="hll">            <span class="k">break</span>
+</span>
+    <span class="c1"># Find first meal option that exactly matches user money</span>
+    <span class="k">if</span> <span class="n">meal_cost</span> <span class="o">==</span> <span class="n">user_money</span><span class="p">:</span>
+<span class="hll">        <span class="k">break</span>
+</span>
+<span class="k">if</span> <span class="n">meal_cost</span> <span class="o">==</span> <span class="n">user_money</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"$</span><span class="si">{</span><span class="n">meal_cost</span><span class="si">}</span><span class="s2"> buys </span><span class="si">{</span><span class="n">num_empanadas</span><span class="si">}</span><span class="s2"> empanadas and </span><span class="si">{</span><span class="n">num_tacos</span><span class="si">}</span><span class="s2"> tacos without change."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"You cannot buy a meal without having change left over."</span><span class="p">)</span>
+</pre></div></div>
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <div class="console"><pre>Enter money for meal: 20
+$20 buys 4 empanadas and 2 tacos without change.
+...
+Enter money for meal: 31
+$31 buys 9 empanadas and 1 tacos without change.</pre></div>
+  </td>
+</tr></tbody></table></div>
+</div><!----><!---->
+        </div>
+</div>
+            </div>
+        </div>
+
+        <div class="zb-feedback resource" id="ember160">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+
+<!----></div>
+
+<!---->
+<!---->                <div class="short-answer-content-resource
+        
+        interactive-activity-container
+        large
+        participation" content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_57267674-2395-72e4-ca3b-53e7c2ac4da8python3" content_resource_id="122584513">
+    <div class="activity-title-bar">
+        <div class="activity-type" role="button">
+            participation
+            activity
+        </div>
+
+        <div class="activity-description ">
+                <h2 class="clear-heading-style flex grow">
+                    <div class="activity-title">
+                        5.10.1:
+                        Break statements.
+                    </div>
+                </h2>
+<!---->                <div class="title-bar-chevron-container">
+<!---->
+<!----><!---->
+<!---->
+<!---->
+<!---->
+<!---->
+                            <div aria-label="Activity completed" class="title-bar-chevron zb-chevron check orange  filled  large" role="img">
+<!----></div>
+                </div>
+        </div>
+    </div>
+    <div class="activity-payload">
+            <div class="activity-instructions">
+                <div>
+<p> Given the following while loop, what is the value variable z is assigned with for the given values of variables a, b, and c?</p>
+<div class="code no-box"><div class="highlight"><pre><span></span><span class="n">mult</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="n">mult</span> <span class="o">=</span> <span class="n">b</span> <span class="o">*</span> <span class="n">a</span>
+    <span class="k">if</span> <span class="n">mult</span> <span class="o">&gt;</span> <span class="n">c</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">a</span>
+</pre></div></div>
+
+</div><!----><!---->
+            </div>
+<!---->        <!----><!---->
+        <div class="content-resource short-answer-payload
+        
+        short-answer-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_57267674-2395-72e4-ca3b-53e7c2ac4da8python3" content_resource_id="122584513">
+            <div class="question-set-question short-answer-question ">
+    <div class="question">
+            <div class="setup flex-row" id="f43c1109-e9a7-4dd5-bbc1-46ecb117236f">
+                    <div class="label">1)</div>
+                    <div class="text"><div>a = 1, b = 1,  c = 0
+</div><!----><!----></div>
+            </div>
+            <div class="question-container">
+                    <div class="input">
+                        <div class="highlight">
+                                <pre><div><!----></div><!----><!----><div class="zb-input-container
+            
+            short-answer-input-container
+            
+            
+            
+            info
+            " id="c2241f3b-65b9-4280-9bc5-b39f50f2e7be"><!----><!----><input aria-labelledby="f43c1109-e9a7-4dd5-bbc1-46ecb117236f" class="zb-input  " autocapitalize="off" size="20" spellcheck="false" type="text"><!----><!----><!----></div><div><!----></div><!----><!----></pre>
+                                                    </div>
+                        <div class="buttons flex-row">
+                            <button class="zb-button primary raised            check-button" type="button">
+<!---->                <span class="title">Check</span>
+<!----></button>
+                            <button class="zb-button secondary             show-answer-button" type="button">
+<!---->                <span class="title">Show answer</span>
+<!----></button>
+                        </div>
+                    </div>
+            </div>
+    </div>
+
+        <div aria-atomic="true" class="zb-explanation
+                
+                " role="alert">
+<!---->        </div>
+        
+    <div class="chevron-container">
+            <div aria-label="Question completed" class="question-chevron zb-chevron check participation  filled  medium" role="img">
+<!----></div>
+    </div>
+
+<!---->
+<!----></div>
+            <div class="question-set-question short-answer-question ">
+    <div class="question">
+            <div class="setup flex-row" id="f90955eb-8b38-4db1-9736-dbf5ca0a3931">
+                    <div class="label">2)</div>
+                    <div class="text"><div>a = 4, b = 5,  c = 20
+</div><!----><!----></div>
+            </div>
+            <div class="question-container">
+                    <div class="input">
+                        <div class="highlight">
+                                <pre><div><!----></div><!----><!----><div class="zb-input-container
+            
+            short-answer-input-container
+            
+            
+            
+            info
+            " id="dac760c8-127c-4fab-98ea-0279847bd566"><!----><!----><input aria-labelledby="f90955eb-8b38-4db1-9736-dbf5ca0a3931" class="zb-input  " autocapitalize="off" size="20" spellcheck="false" type="text"><!----><!----><!----></div><div><!----></div><!----><!----></pre>
+                                                    </div>
+                        <div class="buttons flex-row">
+                            <button class="zb-button primary raised            check-button" type="button">
+<!---->                <span class="title">Check</span>
+<!----></button>
+                            <button class="zb-button secondary             show-answer-button" type="button">
+<!---->                <span class="title">Show answer</span>
+<!----></button>
+                        </div>
+                    </div>
+            </div>
+    </div>
+
+        <div aria-atomic="true" class="zb-explanation
+                
+                " role="alert">
+<!---->        </div>
+        
+    <div class="chevron-container">
+            <div aria-label="Question completed" class="question-chevron zb-chevron check participation  filled  medium" role="img">
+<!----></div>
+    </div>
+
+<!---->
+<!----></div>
+
+<!----></div>
+    </div>
+
+    <div class="flex-row ">
+<!---->
+            <div class="zb-feedback resource" id="ember162">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+    </div>
+</div>
+
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_bd5e1b24-cb7e-a126-5dc1-cb87b147549fpython3" content_resource_id="122584514">
+        <div>
+<h3>Continue statements</h3>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_bc3e7f09-26f3-4e2e-8213-229f611e5f6apython3" content_resource_id="122584515">
+        <div>
+<p>
+<span data-definition="true">A <span class="term" obeycase="true" data-term="true">continue</span> statement in a loop causes an immediate jump to the while or for loop header statement.</span> A continue statement can improve the readability of a loop. The example below extends the previous meal finder program to find meal options for which the total number of items purchased is evenly divisible by the number of diners. In addition, the following program will output all possible meal options, instead of reporting the first meal option found.
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_2303d3d5-62a2-4619-9673-35631393cd16python3" content_resource_id="122584516">
+        <div>
+<p>
+The program uses two nested for loops to try all possible combinations of tacos and empanadas. If the total number of tacos and empanadas is not exactly divisible by the number of diners (Ex: <code style="white-space: nowrap;">(num_tacos + num_empanadas) % num_diners != 0</code>), the continue statement will immediately proceed to the next iteration of the for loop.
+</p>
+
+<p>
+Break and continue statements can be helpful to avoid excessive indenting/nesting within a loop. However, because someone reading a program could easily overlook a break or continue statement, such statements should be used only when their use is clear to the reader.
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="container-content-resource
+        
+        static-container
+        
+        large
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_d1339aa3-2d4c-c909-3c5f-762a4324f63bpython3python3" content_resource_id="122584517">
+        <div class="static-container-header  ">
+                    <h2 class="clear-heading-style flex">
+                        <div class="static-container-title ">
+                                Figure 5.10.2: Continue statement.
+                        </div>
+                    </h2>
+            <div class="flex ml-auto justify-end">
+<!----><!---->            </div>
+<!----><!---->        </div>
+
+        <div class="static-container-payload
+                
+                
+                ">
+            <div class="w-full  ">
+<!---->                <div class="content-resource container-content-resource
+        container-content-resource
+        
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_d1339aa3-2d4c-c909-3c5f-762a4324f63bpython3python3" content_resource_id="122584517">
+        <div class="container-resource-payload">
+            <div>
+<div class="table"><table>
+ <tbody><tr>
+  <td>
+   <div class="code"><div class="highlight"><pre><span></span><span class="n">empanada_cost</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">taco_cost</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">user_money</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"Enter money for meal: "</span><span class="p">))</span>
+
+<span class="n">num_diners</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"How many people are eating: "</span><span class="p">))</span>
+
+<span class="n">max_empanadas</span> <span class="o">=</span> <span class="n">user_money</span> <span class="o">//</span> <span class="n">empanada_cost</span>
+<span class="n">max_tacos</span> <span class="o">=</span> <span class="n">user_money</span> <span class="o">//</span> <span class="n">taco_cost</span>
+
+<span class="n">meal_cost</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">num_options</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">num_tacos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_tacos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">num_empanadas</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_empanadas</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># Total items purchased must be equally divisible by number of diners</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num_tacos</span> <span class="o">+</span> <span class="n">num_empanadas</span><span class="p">)</span> <span class="o">%</span> <span class="n">num_diners</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+<span class="hll">            <span class="k">continue</span>
+</span>
+        <span class="n">meal_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_empanadas</span> <span class="o">*</span> <span class="n">empanada_cost</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">num_tacos</span> <span class="o">*</span> <span class="n">taco_cost</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">meal_cost</span> <span class="o">==</span> <span class="n">user_money</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"$</span><span class="si">{</span><span class="n">meal_cost</span><span class="si">}</span><span class="s2"> buys </span><span class="si">{</span><span class="n">num_empanadas</span><span class="si">}</span><span class="s2"> empanadas and </span><span class="si">{</span><span class="n">num_tacos</span><span class="si">}</span><span class="s2"> tacos without change."</span><span class="p">)</span>
+            <span class="n">num_options</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">if</span> <span class="n">num_options</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"You cannot buy a meal without having change left over."</span><span class="p">)</span>
+</pre></div></div>
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <div class="console"><pre>Enter money for meal: 60
+How many people are eating: 3
+$60 buys 12 empanadas and 6 tacos without change.
+$60 buys 0 empanadas and 15 tacos without change.
+...
+Enter money for meal: 54
+How many people are eating: 2
+$54 buys 18 empanadas and 0 tacos without change.
+$54 buys 10 empanadas and 6 tacos without change.
+$54 buys 2 empanadas and 12 tacos without change.</pre></div>
+  </td>
+ </tr>
+</tbody></table></div>
+</div><!----><!---->
+        </div>
+</div>
+            </div>
+        </div>
+
+        <div class="zb-feedback resource" id="ember176">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+
+<!----></div>
+
+<!---->
+<!---->                <div class="multiple-choice-content-resource
+        
+        interactive-activity-container
+        large
+        participation" content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_8d316d2c-aaf9-8bfa-3653-1a4d211c71a6python3" content_resource_id="122584518">
+    <div class="activity-title-bar">
+        <div class="activity-type" role="button">
+            participation
+            activity
+        </div>
+
+        <div class="activity-description ">
+                <h2 class="clear-heading-style flex grow">
+                    <div class="activity-title">
+                        5.10.2:
+                        Continue statements.
+                    </div>
+                </h2>
+<!---->                <div class="title-bar-chevron-container">
+<!---->
+<!----><!---->
+<!---->
+<!---->
+<!---->
+<!---->
+                            <div aria-label="Activity completed" class="title-bar-chevron zb-chevron check orange  filled  large" role="img">
+<!----></div>
+                </div>
+        </div>
+    </div>
+    <div class="activity-payload">
+            <div class="activity-instructions">
+                <div>
+Given: <br>
+
+
+<div class="code no-box"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div></div>
+
+
+ </div><!----><!---->
+            </div>
+<!---->        <!----><!---->
+        <div class="content-resource multiple-choice-payload
+        multiple-choice-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_8d316d2c-aaf9-8bfa-3653-1a4d211c71a6python3" content_resource_id="122584518">
+            <div class="question-set-question multiple-choice-question ">
+    <div class="question">
+            <div class="setup flex-row">
+                    <div class="label" id="eaacd5b3-b626-4fc2-bb2d-3552f3f34696">1)</div>
+                    <div class="text" id="caa84975-1666-4960-8e4a-6ca044833c74"><div>The loop will print at least some output.  
+</div><!----><!----></div>
+            </div>
+
+                <div aria-labelledby="eaacd5b3-b626-4fc2-bb2d-3552f3f34696 caa84975-1666-4960-8e4a-6ca044833c74" class="question-choices " role="radiogroup">
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="dd4650e5-3921-43e0-85dc-f95621f59e28" name="2-1" type="radio">
+            <label class="ml-2" id="dd4650e5-3921-43e0-85dc-f95621f59e28">
+                    
+                            <div>True</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="e2c5a5e9-85ef-4e36-9201-55a883283f30" name="2-1" type="radio">
+            <label class="ml-2" id="e2c5a5e9-85ef-4e36-9201-55a883283f30">
+                    
+                            <div>False</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                </div>
+    </div>
+        <div aria-atomic="true" aria-live="polite" class="zb-explanation
+                
+                " role="alert">
+<!---->        </div>
+    
+            
+    <div class="chevron-container">
+            <div aria-label="Question completed" class="question-chevron zb-chevron check participation  filled  medium" role="img">
+<!----></div>
+    </div>
+
+
+<!---->
+<!----></div>
+            <div class="question-set-question multiple-choice-question ">
+    <div class="question">
+            <div class="setup flex-row">
+                    <div class="label" id="eb612b6d-555c-4b5f-bfc8-bc1cc2c158e4">2)</div>
+                    <div class="text" id="d9c6d678-b930-4b24-9d3f-e02788a78d3b"><div>The loop will iterate only once. </div><!----><!----></div>
+            </div>
+
+                <div aria-labelledby="eb612b6d-555c-4b5f-bfc8-bc1cc2c158e4 d9c6d678-b930-4b24-9d3f-e02788a78d3b" class="question-choices " role="radiogroup">
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="c6e9c0df-3f59-40c0-8d69-a720992dfa59" name="2-2" type="radio">
+            <label class="ml-2" id="c6e9c0df-3f59-40c0-8d69-a720992dfa59">
+                    
+                            <div>True</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="fb613f84-682c-40ba-a678-a469406b2bb5" name="2-2" type="radio">
+            <label class="ml-2" id="fb613f84-682c-40ba-a678-a469406b2bb5">
+                    
+                            <div>False</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                </div>
+    </div>
+        <div aria-atomic="true" aria-live="polite" class="zb-explanation
+                
+                " role="alert">
+<!---->        </div>
+    
+            
+    <div class="chevron-container">
+            <div aria-label="Question completed" class="question-chevron zb-chevron check participation  filled  medium" role="img">
+<!----></div>
+    </div>
+
+
+<!---->
+<!----></div>
+<!----></div>
+    </div>
+
+    <div class="flex-row ">
+<!---->
+            <div class="zb-feedback resource" id="ember178">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+    </div>
+</div>
+
+<!---->
+<!---->                <div class="custom-content-resource
+        
+        interactive-activity-container
+        large
+        challenge" content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_f8c55fab-bf26-47c9-8a15-1c11f836978bpython3python3" content_resource_id="122584519">
+    <div class="activity-title-bar">
+        <div class="activity-type" role="button">
+            challenge
+            activity
+        </div>
+
+        <div class="activity-description ">
+                <h2 class="clear-heading-style flex grow">
+                    <div class="activity-title">
+                        5.10.1:
+                        Enter the output of break and continue.
+                    </div>
+                </h2>
+<!---->                <div class="title-bar-chevron-container">
+<!---->
+<!----><!---->
+<!---->
+<!---->
+<!---->
+<!---->
+                            <div aria-label="Activity completed" class="title-bar-chevron zb-chevron check blue  filled  large" role="img">
+<!----></div>
+                </div>
+        </div>
+    </div>
+    <div class="activity-payload">
+<!----><!---->            <div class="activity-watermark">712910.5105864.qx3zqy7</div>
+
+        <div class="content-resource custom-resource-payload
+        custom-content-resource
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_f8c55fab-bf26-47c9-8a15-1c11f836978bpython3python3" content_resource_id="122584519">
+<!---->
+    <div class="custom-tool-container
+            
+            
+            ">
+<!---->
+        <div class="custom-tool codeOutput progressionTool" data-theme="base" id="122584519"><style>.zyante-bold{font-family:HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;font-weight:300}.zyante-section-bold{font-family:Helvetica;font-weight:300}.progressionTool{min-width:425px}.progressionTool div.zyante-progression-start-reset-buttons-container{height:45px;margin-bottom:10px}.progressionTool button.zyante-progression-next-button,.progressionTool button.zyante-progression-try-again,.progressionTool button.zyante-progression-show-solution{margin-left:30px}.progressionTool button.zyante-progression-reset-button,.progressionTool button.zyante-progression-show-solution{background-color:#fff;color:#0072b3}.progressionTool button.zyante-progression-reset-button:hover:not(.disabled),.progressionTool button.zyante-progression-show-solution:hover:not(.disabled){background-color:#fff}.progressionTool div.zyante-progression-tool-specific-outlet{margin-bottom:10px}.progressionTool div.zyante-progression-tool-specific-outlet.is-exam{margin-bottom:25px}.progressionTool div.zyante-progression-status-bar{align-items:stretch;background-color:#eee;border:1px solid #0072b3;display:flex;height:30px}.progressionTool div.zyante-progression-status-bar div{align-items:center;color:#999;display:flex;font-size:10px;justify-content:center;width:100%}.progressionTool div.zyante-progression-status-bar div.filled{background-color:#87add2;color:#eee}.progressionTool div.zyante-progression-status-bar div.highlighted{border:0;font-weight:700;font-size:15px;outline:3px solid #576E91;z-index:1}.progressionTool div.zyante-progression-status-bar div.highlighted:not(.filled){color:gray}.progressionTool div.zyante-progression-status-bar div:not(:last-child){border-right:1px dashed #0072b3}.progressionTool div.zyante-progression-status-bar div:not(:last-child).highlighted{border:0}.progressionTool span.zyante-progression-x-mark{color:#bb0404;font-size:18px;font-style:normal}.progressionTool span.zyante-progression-hint{font-size:18px;font-style:italic;font-weight:700}.progressionTool span.hint_symbols{color:#bb0404;font-size:22px}.progressionTool div.specific-hint{align-items:center;display:flex;padding:5px}.progressionTool div.check-next-container{display:flex;margin-top:10px}.progressionTool div.zyante-progression-is-done{align-self:center}.progressionTool div.zyante-progression-explanation-area{margin-top:15px}.progressionTool div.zyante-progression-spinner{display:inline-block;height:40px;margin-left:30px;position:relative;vertical-align:top;width:20px}.progressionTool.progression-started div.zyante-progression-status-bar div{cursor:pointer}.progressionTool div.zyante-progression-solution-area{align-items:center;display:flex;margin-top:25px}.progressionTool div.zyante-progression-solution-area .solution{margin-left:20px}.progressionTool .glow{animation:glow-grey 8s linear infinite}@keyframes glow-grey{0%{box-shadow:inset 0 0 1px 0 #5c5c5c,inset 0 0 1px 0 #5c5c5c;border-color:#5c5c5c}8%{box-shadow:inset 0 0 3px 1px #5c5c5c,inset 0 0 3px 1px #5c5c5c;border-color:#5c5c5c}90%{box-shadow:inset 0 0 3px 1px #5c5c5c,0 0 inset 3px 1px #5c5c5c;border-color:#5c5c5c}92%{box-shadow:inset 0 0 1px 0 #5c5c5c,inset 0 0 1px 0 #5c5c5c;border-color:#5c5c5c}}</style>
+<style>.zyante-bold{font-family:HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;font-weight:300}.zyante-section-bold{font-family:Helvetica;font-weight:300}div.codeOutput{min-width:900px}div.codeOutput .console{line-height:normal;font-size:24px}div.codeOutput textarea.console{-moz-border-radius:5px;border-radius:5px;border:1px solid #000;font-family:"Courier New",monospace;overflow:hidden;padding:8px;resize:none}div.codeOutput textarea.console:not(:disabled){border-color:#333;box-shadow:inset 0 1px 2px rgba(0,0,0,.075),0 0 5px rgba(51,51,51,.5);outline:0}div.codeOutput div.tool-container>p{font-size:18px;padding-bottom:10px;text-align:center}div.codeOutput div.tool-container>table{margin:0 auto}div.codeOutput div.tool-container>table .console-container{min-width:230px;padding-left:15px;text-align:left}div.codeOutput div.tool-container>table span.code-diff-highlight{background-color:#dbedff}div.codeOutput div.tool-container div.segmented-control{margin-bottom:8px}div.codeOutput div.tool-container div.input-container{margin-bottom:15px}div.codeOutput div.tool-container .IO-label{margin-bottom:2px;display:block}div.codeOutput div.tool-container div.input-div{-moz-appearance:textfield-multiline;-webkit-appearance:textarea;-webkit-box-shadow:inset 1px 1px 1px 0 #ccc;-moz-box-shadow:inset 1px 1px 1px 0 #ccc;background-color:#efefef;border:1px solid #ccc;box-shadow:inset 1px 1px 1px 0 #ccc;height:auto;max-height:200px;overflow-y:auto;padding:2px;white-space:pre}div.codeOutput p.explanation-text{display:inline;white-space:pre-line}div.codeOutput table.explanation-table{color:#333;display:inline-table;font-size:16px;margin-top:15px;vertical-align:-50%}div.codeOutput table.explanation-table td{padding-bottom:8px}div.codeOutput table.explanation-table td.explanation-description{text-align:right;padding-right:10px}div.codeOutput table.explanation-table td div.expected-output-container{display:flex}div.codeOutput table.explanation-table td div.expected-output-container div.newline-messaging span.newline-message{font-size:12px}div.codeOutput table.explanation-table td div.output,div.codeOutput table.explanation-table td div.newline-messaging{border-width:1px;box-sizing:border-box;color:#37474f;display:inline-block;font-family:"Courier New",monospace;margin:0;overflow-x:auto;padding:4px 10px;white-space:pre}div.codeOutput table.explanation-table td div.output{background-color:#f5f5f5;border-style:solid;border-color:rgba(189,189,189,.5);border-radius:2px}div.codeOutput table.explanation-table td div.no-result-value{color:#B90B13;font-style:italic}div.codeOutput div.console.character-sizing{border:0;padding:0;width:min-content}</style>
+
+<div class="zyante-progression-modal-cover">
+            <div class="zyante-progression-start-reset-buttons-container">
+                <button class="zyante-progression-start-button button">Start</button>
+                <button class="zyante-progression-reset-button button flat" style="display: none;">Jump to level 1</button>
+            </div>
+
+    <div class="zyante-progression-tool-specific-outlet">
+        <div class="tool-container">
+    
+    <p id="prompt">Type the program's output</p>
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                        <div id="segmented-control-container122584519" class="segmented-control" style="display: none;"><style>.zyante-bold{font-family:HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;font-weight:300}.zyante-section-bold{font-family:Helvetica;font-weight:300}.section-content-container ul.segmented-control,.custom-tool ul.segmented-control{background-color:#fff;display:table;height:26px;list-style-type:none;margin:0 auto;margin-bottom:20px;padding:1px}.section-content-container ul.segmented-control li.segment-item,.custom-tool ul.segmented-control li.segment-item{border:1px solid #0072b3;float:left;height:100%;margin:0;margin-right:-1px}.section-content-container ul.segmented-control li.segment-item span.segment-button,.custom-tool ul.segmented-control li.segment-item span.segment-button{background-color:#fff;color:#0072b3;cursor:pointer;display:block;font-size:12px;line-height:26px;padding:0 5px;text-align:center}.section-content-container ul.segmented-control li.segment-item span.segment-button.segment-button-selected,.custom-tool ul.segmented-control li.segment-item span.segment-button.segment-button-selected{background-color:#0072b3;color:#fff}.section-content-container ul.segmented-control.disabled,.custom-tool ul.segmented-control.disabled{cursor:default}.section-content-container ul.segmented-control.disabled li.segment-item,.custom-tool ul.segmented-control.disabled li.segment-item{border-color:#333;opacity:.5}.section-content-container ul.segmented-control.disabled li.segment-item span.segment-button,.custom-tool ul.segmented-control.disabled li.segment-item span.segment-button{background-color:#fff;color:#333;cursor:default}.section-content-container ul.segmented-control.disabled li.segment-item span.segment-button.segment-button-selected,.custom-tool ul.segmented-control.disabled li.segment-item span.segment-button.segment-button-selected{background-color:#333;color:#fff}</style><ul class="segmented-control">
+        <li class="segment-item">
+           <span class="segment-button arrow-left segment-button-selected" data-index="0" style="width: 1px;">main.py</span>
+       </li>
+</ul>
+</div>
+                        <div class="code" style="width: 176.4px;">stop = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())
+
+<span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>, <span class="hljs-number">9</span>):
+    <span class="hljs-built_in">print</span>(n)
+
+    <span class="hljs-keyword">if</span> n &gt; stop:
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">"stop"</span>)
+        <span class="hljs-keyword">break</span>
+</div>
+                </td>
+                    <td class="console-container">
+                        <div class="IO-container">
+                            <div class="input-container">
+                                <div class="IO-label" id="input-122584519">Input</div>
+                                <div class="input-div" aria-labelledby="input-122584519" style="max-width: 733.6px;">6</div>
+                            </div>
+                            <label class="IO-label" for="output-122584519">Output</label>
+                            <textarea aria-label="Program output" class="console" autocomplete="off" autocorrect="off" autocapitalize="off" id="output-122584519" spellcheck="false" disabled="disabled" style="height: 193.2px; width: 58px;"></textarea>
+                        </div>
+                    </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+    </div>
+
+            <div class="zyante-progression-status-bar" role="list">
+                    <div role="listitem" class="highlighted filled">1</div>
+                    <div role="listitem" class="filled">2</div>
+                    <div role="listitem" class="filled">3</div>
+                    <div role="listitem" class="filled">4</div>
+                    <div role="listitem" class="filled">5</div>
+            </div>
+
+        <div class="check-next-container">
+            <div><button class="zyante-progression-check-button button disabled" disabled="disabled">Check</button></div>
+            <div><button class="zyante-progression-next-button button disabled" disabled="disabled">Next</button></div>
+            <div><button class="zyante-progression-try-again button disabled" disabled="disabled" style="display: none;">Try again</button></div>
+            <div class="zyante-progression-hint-tip specific-hint" style="display: none; padding-left: 5px;"><span class=" hint_symbols material-symbols-outlined" role="img" style="font-size: 18px;">question_mark</span><span style="white-space: normal; font-style: italic;"> signifies a specific hint for an answer</span></div>
+            <div><button class="zyante-progression-show-solution button disabled" disabled="disabled" style="display: none;">Show solution</button></div>
+            <div class="zyante-progression-spinner"></div>
+            <div class="zyante-progression-is-done correct" style="display: none;"><b>Done</b>. Click any level to practice more. Completion is preserved.</div>
+        </div>
+        <div aria-atomic="true" aria-live="polite" class="zyante-progression-explanation-area" id="explanation-122584519" role="alert">
+            <span class="zyante-progression-x-mark" role="img" aria-label="Incorrect" style="display: none;">✖</span>
+            <img class="zyante-progression-checkmark" alt="Correct" src="./Section 5.10 - CS 2520_ Python for Programmers _ zyBooks_files/checkmark.png" style="display: none;">
+            <span class="zyante-progression-explanation"></span>
+        </div>
+        <div class="zyante-progression-solution-area" style="display: none;">
+            <div>Solution</div>
+            <div class="solution"></div>
+        </div>
+</div>
+</div>
+
+<!---->            <div class="chevron-container">
+                            <div aria-label="Question completed" class="question-chevron zb-chevron check challenge  filled  medium" role="img">
+<!----></div>
+                        <div class="completion-text">1</div>
+                            <div aria-label="Question completed" class="question-chevron zb-chevron check challenge  filled  medium" role="img">
+<!----></div>
+                        <div class="completion-text">2</div>
+                            <div aria-label="Question completed" class="question-chevron zb-chevron check challenge  filled  medium" role="img">
+<!----></div>
+                        <div class="completion-text">3</div>
+                            <div aria-label="Question completed" class="question-chevron zb-chevron check challenge  filled  medium" role="img">
+<!----></div>
+                        <div class="completion-text">4</div>
+                            <div aria-label="Question completed" class="question-chevron zb-chevron check challenge  filled  medium" role="img">
+<!----></div>
+                        <div class="completion-text">5</div>
+            </div>
+    </div>
+
+<!---->
+<!---->
+<!---->
+<!---->
+    <div class="view-solution-container view-solution">
+<!----></div>
+
+<!----></div>
+    </div>
+
+    <div class="flex-row ">
+<!---->
+            <div class="zb-feedback resource" id="ember186">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+    </div>
+</div>
+
+<!---->
+<!---->                <div class="content-tool-content-resource
+        
+        interactive-activity-container
+        large
+        challenge" content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_db960e92-59d9-ce6a-6e7c-3d374727aa82python3python3" content_resource_id="122584520">
+    <div class="activity-title-bar">
+        <div class="activity-type" role="button">
+            challenge
+            activity
+        </div>
+
+        <div class="activity-description ">
+                <h2 class="clear-heading-style flex grow">
+                    <div class="activity-title">
+                        5.10.2:
+                        Simon says.
+                    </div>
+                </h2>
+<!---->                <div class="title-bar-chevron-container">
+<!---->
+<!---->                                <button class="zb-button secondary    left       icon-button-with-title " type="button">
+            <div>
+                <i aria-label="fullscreen" class="zb-icon material-icons med secondary " role="img" aria-hidden="true">
+            fullscreen
+<!----></i>
+            </div>
+                <span class="title">Full screen</span>
+<!----></button>
+
+<!---->
+<!---->
+<!---->
+<!---->
+                            <div aria-label="Activity completed" class="title-bar-chevron zb-chevron check blue  filled  large" role="img">
+<!----></div>
+                </div>
+        </div>
+    </div>
+    <div class="activity-payload">
+<!----><!---->            <div class="activity-watermark">712910.5105864.qx3zqy7</div>
+
+        <div class="content-resource content-tool-resource-payload
+        content-tool-content-resource
+        
+        
+        
+        
+        " content_resource_guid="0781ef6c-1230-2398-1c78-6dc56c2cb181python3_db960e92-59d9-ce6a-6e7c-3d374727aa82python3python3" content_resource_id="122584520">
+    <div class="content-tool-container
+            
+            flex-row">
+        <!----><div class="two-reorderable-lists parsons-coding-pa">
+    <div class="reorderable-lists-instructions">
+        <div><p>"Simon Says" is a memory game where "Simon" outputs a sequence of 10 characters (R, G, B, Y) and the user must repeat the sequence. Organize the lines of code to create a for loop that compares the two strings simon_pattern and user_pattern, starting from index 0. For each match, add one point to user_score. Upon a mismatch, exit the loop using a break statement. Assume simon_pattern and user_pattern are always the same length.</p>
+<p>Ex: If <code>simon_pattern = "RRGBRYYBGY"</code> and <code>user_pattern = "RRGBBRYBGY"</code>, then the output is:</p>
+<p><code>User score: 4</code></p>
+<p>Note: Not all lines of code on the left should be used in the final solution.</p></div>
+
+    <div id="ember189" class="ember-view"><div class="zb-simple-expandable">
+    <div class="flex-row align-items-center title-container">
+            <button class="zb-button grey    right  thin-title no-padding    icon-button-with-title  toggle-button" aria-expanded="false" type="button">
+            <div>
+                <i aria-label="keyboard_arrow_down" class="zb-icon material-icons med grey " role="img" aria-hidden="true">
+            keyboard_arrow_down
+<!----></i>
+            </div>
+                <span class="title">How to use this tool</span>
+<!----></button>
+<!---->    </div>
+    <div class="expandable-content">
+        
+<!---->    
+    </div>
+</div></div>
+
+    <div aria-live="assertive" class="assistive-text disable-lazy-typesetting" id="assistive-text-ember188"></div>
+</div>
+    <div class="activity-area ">
+        <div style="">
+            <div>
+                <div class="sortable-label">
+                    <h4>Unused</h4>
+                </div>
+                <div class="sortable-container" style="max-height: 350px; height: 265.775px;">
+                    <div aria-label="Unused" class="sortable" data-list-name="unused" role="listbox" style="max-height: 350px; height: 265.775px;"><div aria-describedby="assistive-text-ember188" aria-disabled="false" aria-selected="false" role="option" tabindex="0" data-block-id="0" class="block moveable" style="">user_score = user_score + <span class="hljs-number">1</span></div><div aria-describedby="assistive-text-ember188" aria-disabled="false" aria-selected="false" role="option" tabindex="0" data-block-id="1" class="block moveable" style=""><span class="hljs-keyword">if</span> simon_pattern[i] == user_pattern[i]:</div><div aria-describedby="assistive-text-ember188" aria-disabled="false" aria-selected="false" role="option" tabindex="0" data-block-id="2" class="block moveable" style=""><span class="hljs-keyword">else</span>:</div><div aria-describedby="assistive-text-ember188" aria-disabled="false" aria-selected="false" role="option" tabindex="0" data-block-id="3" class="block moveable" style=""><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">10</span>):</div><div aria-describedby="assistive-text-ember188" aria-disabled="false" aria-selected="false" role="option" tabindex="0" data-block-id="4" class="block moveable" style=""><span class="hljs-keyword">continue</span></div><div aria-describedby="assistive-text-ember188" aria-disabled="false" aria-selected="false" role="option" tabindex="0" data-block-id="5" class="block moveable" style=""><span class="hljs-keyword">break</span>
+</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="">
+            <div>
+                <div class="sortable-label">
+                        <h4>main.py</h4>
+                    <div class="reset-template-button-container px-2">
+                        <button class="zb-button secondary             reset-template-button shadow" type="button">
+<!---->                <span class="title">Load default template...</span>
+<!----></button>
+                    </div>
+                </div>
+                    <div class="sortable-container " style="height: 265.775px; max-height: 350px;">
+                        <div aria-label="main.py" class="sortable" data-list-name="used" role="listbox" style="min-height: 257.775px; height: 265.775px; max-height: 350px;">
+<!---->                        <div class="editor-indents" aria-hidden="true"><div>    </div><div>    </div></div><div aria-describedby="assistive-text-ember188" aria-disabled="true" aria-selected="false" role="option" tabindex="-1" data-block-id="0" class="block moveable">user_score = <span class="hljs-number">0</span>
+simon_pattern = <span class="hljs-built_in">input</span>()
+user_pattern = <span class="hljs-built_in">input</span>()
+</div><div aria-describedby="assistive-text-ember188" aria-disabled="true" aria-selected="false" role="option" tabindex="-1" data-block-id="1" class="block moveable"><span class="hljs-built_in">print</span>(<span class="hljs-string">f"User score: <span class="hljs-subst">{user_score}</span>"</span>)</div></div>
+                    </div>
+<!---->            </div>
+        </div>
+    </div>
+    <button class="zb-button primary raised            check-button" type="button">
+<!---->                <span class="title">Check</span>
+<!----></button>
+
+    <div aria-live="polite">
+<!---->    </div>
+</div>
+
+<!---->
+<!---->    </div>
+
+    <div class="view-solution-container view-solution">
+<!----></div>
+
+<!---->
+<!----></div>
+    </div>
+
+    <div class="flex-row ">
+<!---->
+            <div class="zb-feedback resource" id="ember187">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+    </div>
+</div>
+
+<!---->
+<!---->
+            </div>
+
+<!---->
+        <div class="zb-feedback " id="ember147">
+        <div class="feedback-control-row">
+<!---->                <div class="section-feedback-controls">
+                    <span class="feedback-prompt">How was this section?</span>
+                    <div class="feedback-thumbs-pill raised shadow flex justify-between px-2 items-center">
+                            <button class="zb-button secondary   icon-button left        " aria-label="Thumbs up" type="button">
+            <div>
+                <i aria-label="thumb_up" class="zb-icon material-icons-outlined med secondary " role="img" aria-hidden="false">
+            thumb_up
+<!----></i>
+            </div>
+<!----><!----></button>
+                        <div aria-hidden="true" class="vertical-divider">|</div>
+                            <button class="zb-button secondary   icon-button left        " aria-label="Thumbs down" type="button">
+            <div>
+                <i aria-label="thumb_down" class="zb-icon material-icons-outlined med secondary " role="img" aria-hidden="false">
+            thumb_down
+<!----></i>
+            </div>
+<!----><!----></button>
+                    </div>
+                    <button class="zb-button secondary             open-feedback" type="button">
+<!---->                <span class="title">Provide section feedback</span>
+<!----></button>
+                </div>
+
+<!---->
+<!---->        </div>
+
+<!----><!----></div>
+
+    </div>
+</div>
+
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+
+            <div class="zb-card assignment-completion-summary-card">
+    <div class="zb-card-content ">
+        
+    <div class="header-row">
+        <div class="assignment-completion-header">
+            Activity summary for assignment:
+                C5
+<!---->        </div>
+        <div class="points-text-submit-button">
+            <span class="points-completed-text">
+                224 / 224 points
+            </span>
+<!---->        </div>
+    </div>
+    <div class="due-date-message-row">
+            <div>
+                <div class="due-date-text">
+                    <div class="assignment-due-date-lms-details in-section">
+            <div class="due-date-text body-text  flex items-center">
+                        Due:
+                        02/28/2026, 11:59 PM PST
+            </div>
+<!----><!----></div>
+                </div>
+<!---->            </div>
+        <div class="submission-messaging-container">
+<!----><!---->        </div>
+    </div>
+        <button class="zb-button secondary    right       icon-button-with-title  expand-sections" type="button">
+            <div>
+                <i aria-label="keyboard_arrow_down" class="zb-icon material-icons med secondary " role="img" aria-hidden="true">
+            keyboard_arrow_down
+<!----></i>
+            </div>
+                <span class="title">Completion details</span>
+<!----></button>
+<!---->
+    </div>
+</div>
+
+<!---->    </div>
+
+<!---->
+        <nav aria-label="next section" class="section-nav next">
+            <a id="ember190" class="ember-view nav-link" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/11">
+                <i aria-label="arrow_downward" class="zb-icon material-icons sm secondary " role="img" aria-hidden="true">
+            arrow_downward
+<!----></i>
+                <span class="nav-text next">
+                    5.11
+                    Loop else
+                </span>
+            </a>
+    </nav>
+
+
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+</section>
+
+<div>
+</div>
+
+<!---->
+<!---->
+<!---->
+
+<!----></div>
+
+
+    <div id="ember-basic-dropdown-wormhole"></div>
+  <div class="disable-lazy-typesetting"></div><div class="MJX_LiveRegion" aria-live="assertive" style="background-color: white;"><div></div></div><div class="MJX_LiveRegion" aria-live="assertive" style="background-color: white;"><div></div></div><div class="MJX_HoverRegion" style="background-color: white;"><div style="line-height: 0;"></div></div><div class="MJX_ToolTip" style="background-color: white;"><div></div></div><div class="MJX_ToolTip" style="background-color: white;"><div></div></div><div class="MJX_ToolTip" style="background-color: white;"><div></div></div></body></html>

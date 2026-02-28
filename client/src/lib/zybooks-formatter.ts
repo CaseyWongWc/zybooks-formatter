@@ -390,7 +390,7 @@ function formatMarkdownPaste(input: string): string {
   }
 
   function splitCodeLine(flat: string): string[] {
-    const stmtStart = /(?<=\s)(?=(?:while |for (?=\w.*\bin\b)|if |elif (?=.*:)|else:|def |class |import |from |return |try:|except |with |raise |pass$|print\(|[a-z_]\w*\s*[+\-*\/]?=(?!=)|"""|# ))/;
+    const stmtStart = /(?<=\s)(?=(?:while |for (?=\w[\w, ]* in\b)|if |elif (?=.*:)|else:|def |class |import |from |return |try:|except |with |raise |pass$|print\(|[a-z_]\w*\s*[+\-*\/]?=(?!=)|"""|# ))/;
     const parts = flat.split(stmtStart).map(s => s.trim()).filter(s => s.length > 0);
     if (parts.length <= 1) {
       const fallback = flat.split(/\s{2,}/).filter(l => l.trim());
@@ -411,7 +411,7 @@ function formatMarkdownPaste(input: string): string {
       if (/^class\s/.test(s)) return true;
       if (/^import\s/.test(s)) return true;
       if (/^from\s/.test(s)) return true;
-      if (/^for\s(?=\w.*\bin\b)/.test(s)) return true;
+      if (/^for\s(?=\w[\w, ]* in\b)/.test(s)) return true;
       if (/^elif\s(?=.*:)/.test(s)) return true;
       return false;
     }
@@ -428,11 +428,50 @@ function formatMarkdownPaste(input: string): string {
   }
 
   function splitOutputLine(flat: string): string[] {
-    const lines = flat.split(/(?<=\S)\s+(?=(?:Enter |Numbers only:|Element \d|Total:|Average:|Result:|Output:|Error:|Warning:|Value:|Count:|Sum:|Score:|Grade:|Name:|Age:|Price:|Quantity:|\.\.\.))/);
+    const lines = flat.split(/(?<=\S)\s+(?=(?:Enter |How many |Numbers only:|Element \d|Total:|Average:|Result:|Output:|Error:|Warning:|Value:|Count:|Sum:|Score:|Grade:|Name:|Age:|Price:|Quantity:|\$\d|You cannot |\.\.\.))/);
     return lines.map(s => s.trim()).filter(s => s.length > 0);
   }
 
+  function unescapeMd(s: string): string {
+    return s
+      .replace(/\\\\=/g, '=')
+      .replace(/\\\\-/g, '-')
+      .replace(/\\\\\[/g, '[')
+      .replace(/\\\\\]/g, ']')
+      .replace(/\\\\\|/g, '|')
+      .replace(/\\\\_/g, '_')
+      .replace(/\\\\#/g, '#')
+      .replace(/\\\\/g, '\\')
+      .replace(/\\=/g, '=')
+      .replace(/\\#/g, '#')
+      .replace(/\\-/g, '-')
+      .replace(/\\\[/g, '[')
+      .replace(/\\\]/g, ']')
+      .replace(/\\\|/g, '|')
+      .replace(/\\_/g, '_');
+  }
+
+  function isCodeContent(s: string): boolean {
+    return s.includes('\\=') || s.includes('\\#') || /\bfor \w+.*\bin\b/.test(s) || /\bprint\s*\(/.test(s) || /\bdef \w/.test(s) || /\b\w+\s*\+=/.test(s) || /\binput\s*\(/.test(s) || /\bwhile\b/.test(s) || /\bif\b.*:/.test(s) || /\brange\s*\(/.test(s);
+  }
+
   text = text.replace(/^\| -.*main\.py.*\|.*\|\s*$/gm, '');
+
+  text = text.replace(/^\|([^|]+)\|\s*\n\|\s*---\s*\|\s*\n\|([^|]+)\|\s*$/gm, function(_match, codeCell, outputCell) {
+    const code = unescapeMd(codeCell.trim());
+    const output = unescapeMd(outputCell.trim());
+    const codeLines = splitCodeLine(code);
+    let outputLines = output.split(/\s{2,}/).filter((l: string) => l.trim());
+    if (outputLines.length <= 1 && output.trim()) {
+      outputLines = splitOutputLine(output.trim());
+    }
+    let result = '```python\n' + codeLines.join('\n') + '\n```';
+    if (outputLines.length > 0 && outputLines[0].trim()) {
+      result += '\n\nOutput:\n' + outputLines.join('\n');
+    }
+    return result;
+  });
+
   text = text.replace(/^\|\s*---\s*(?:\|\s*---\s*)*\|\s*$/gm, '');
 
   text = text.replace(/^\|[^|].*\|\s*$/gm, function(match) {
@@ -440,27 +479,7 @@ function formatMarkdownPaste(input: string): string {
     if (/^\|\s*-\s*main\.py/.test(match)) return '';
 
     const inner = match.replace(/^\|\s*/, '').replace(/\s*\|\s*$/, '');
-    const isCodeTable = inner.includes('\\=') || inner.includes('for ') || inner.includes('print') || inner.includes('def ') || inner.includes('total') || inner.includes('average');
-    if (!isCodeTable) return match;
-
-    function unescapeMd(s: string): string {
-      return s
-        .replace(/\\\\=/g, '=')
-        .replace(/\\\\-/g, '-')
-        .replace(/\\\\\[/g, '[')
-        .replace(/\\\\\]/g, ']')
-        .replace(/\\\\\|/g, '|')
-        .replace(/\\\\_/g, '_')
-        .replace(/\\\\#/g, '#')
-        .replace(/\\\\/g, '\\')
-        .replace(/\\=/g, '=')
-        .replace(/\\#/g, '#')
-        .replace(/\\-/g, '-')
-        .replace(/\\\[/g, '[')
-        .replace(/\\\]/g, ']')
-        .replace(/\\\|/g, '|')
-        .replace(/\\_/g, '_');
-    }
+    if (!isCodeContent(inner)) return match;
 
     const columns = inner.split(/\s*(?<!\\)\|\s*/);
     if (columns.length === 2) {
@@ -479,8 +498,8 @@ function formatMarkdownPaste(input: string): string {
     }
 
     const cleaned = unescapeMd(inner);
-    const parts = cleaned.split(/\s{2,}/).filter(l => l.trim());
-    return '```python\n' + parts.join('\n') + '\n```';
+    const codeLines = splitCodeLine(cleaned);
+    return '```python\n' + codeLines.join('\n') + '\n```';
   });
 
   text = text.replace(/\\=/g, '=');
