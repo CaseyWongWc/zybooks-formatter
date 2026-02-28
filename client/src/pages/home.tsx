@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -9,7 +9,7 @@ import {
   downloadNotebook,
   generateFilename,
 } from "@/lib/notebook-generator";
-import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown, Eye, EyeOff } from "lucide-react";
+import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown, Eye, EyeOff, Bookmark, Zap } from "lucide-react";
 import { SiNotion } from "react-icons/si";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
@@ -26,7 +26,51 @@ export default function Home() {
   const [notionPagesLoading, setNotionPagesLoading] = useState(false);
   const [pasteMode, setPasteMode] = useState<PasteMode>("regular");
   const [showPreviews, setShowPreviews] = useState(false);
+  const [showBookmarklet, setShowBookmarklet] = useState(false);
+  const [bookmarkletPolling, setBookmarkletPolling] = useState(false);
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { toast } = useToast();
+
+  const appUrl = typeof window !== "undefined" ? window.location.origin : "";
+
+  const bookmarkletCode = `javascript:void((function(){var d=document,h=d.documentElement.outerHTML;var x=new XMLHttpRequest();x.open('POST','${appUrl}/api/bookmarklet',true);x.setRequestHeader('Content-Type','application/json');x.onload=function(){if(x.status===200){var b=d.createElement('div');b.style.cssText='position:fixed;top:20px;right:20px;background:#22c55e;color:white;padding:12px 20px;border-radius:8px;font:14px sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,0.3)';b.textContent='Sent to zyBooks Formatter!';d.body.appendChild(b);setTimeout(function(){b.remove()},3000)}else{alert('Error sending to formatter')}};x.onerror=function(){alert('Could not reach zyBooks Formatter app')};x.send(JSON.stringify({html:h}))})())`;
+
+  const startPolling = useCallback(() => {
+    if (pollingRef.current) return;
+    setBookmarkletPolling(true);
+    pollingRef.current = setInterval(async () => {
+      try {
+        const res = await fetch("/api/bookmarklet/pending");
+        const data = await res.json();
+        if (data.html) {
+          setInput(data.html);
+          setPasteMode("html");
+          const formatted = formatZybooksText(data.html, "html");
+          setOutput(formatted);
+          if (pollingRef.current) {
+            clearInterval(pollingRef.current);
+            pollingRef.current = null;
+          }
+          setBookmarkletPolling(false);
+          toast({ title: "zyBooks page received!", description: "Content auto-formatted from bookmarklet. Click 'Start Listening' again for another page." });
+        }
+      } catch {}
+    }, 2000);
+  }, [toast]);
+
+  const stopPolling = useCallback(() => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
+    }
+    setBookmarkletPolling(false);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current);
+    };
+  }, []);
 
   const handleFormat = useCallback(() => {
     if (!input.trim()) {
@@ -217,6 +261,15 @@ export default function Home() {
             <Button
               variant="outline"
               size="sm"
+              onClick={() => setShowBookmarklet(!showBookmarklet)}
+              data-testid="button-toggle-bookmarklet"
+            >
+              <Bookmark className="w-4 h-4 mr-1.5" />
+              Bookmarklet
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               onClick={handleClear}
               disabled={!input && !output}
               data-testid="button-clear"
@@ -227,6 +280,67 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {showBookmarklet && (
+        <div className="border-b bg-muted/30 px-6 py-4" data-testid="panel-bookmarklet">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-start gap-4">
+              <div className="flex-1">
+                <h3 className="text-sm font-semibold mb-2 flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-yellow-500" />
+                  One-Click Import from zyBooks
+                </h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Drag the button below to your bookmarks bar. Then visit any zyBooks section page and click it — the page content will be sent here and auto-formatted.
+                </p>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <a
+                    href={bookmarkletCode}
+                    onClick={(e) => e.preventDefault()}
+                    draggable
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-xs font-medium shadow-sm cursor-grab active:cursor-grabbing hover:opacity-90 transition-opacity no-underline"
+                    title="Drag this to your bookmarks bar"
+                    data-testid="link-bookmarklet"
+                  >
+                    <Bookmark className="w-3.5 h-3.5" />
+                    zyBooks → Formatter
+                  </a>
+                  <span className="text-xs text-muted-foreground">← Drag this to your bookmarks bar</span>
+                </div>
+                <div className="mt-3 flex items-center gap-2">
+                  {bookmarkletPolling ? (
+                    <Button size="sm" variant="outline" onClick={stopPolling} data-testid="button-stop-listening">
+                      <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+                      Listening for zyBooks pages... (click to stop)
+                    </Button>
+                  ) : (
+                    <Button size="sm" variant="default" onClick={startPolling} data-testid="button-start-listening">
+                      <Zap className="w-3.5 h-3.5 mr-1.5" />
+                      Start Listening
+                    </Button>
+                  )}
+                  {bookmarkletPolling && (
+                    <span className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1" data-testid="text-listening-status">
+                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                      Ready to receive
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="hidden md:block text-xs text-muted-foreground bg-background border rounded-md p-3 max-w-xs">
+                <p className="font-medium mb-1">How it works:</p>
+                <ol className="list-decimal list-inside space-y-0.5">
+                  <li>Drag the bookmarklet to your bookmarks bar</li>
+                  <li>Click "Start Listening" here</li>
+                  <li>Go to any zyBooks section page</li>
+                  <li>Click the bookmarklet in your bookmarks bar</li>
+                  <li>Content auto-fills and formats here!</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto flex flex-col h-full gap-4">

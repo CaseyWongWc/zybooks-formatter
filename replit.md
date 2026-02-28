@@ -164,6 +164,16 @@ When in HTML Paste mode, a "Show Previews" toggle button appears below the main 
 - Panels are collapsible via the toggle button; state resets when switching paste modes
 - Security: HTML is sanitized with DOMPurify (strips scripts, iframes, objects, embeds); iframe uses empty sandbox attribute (no same-origin, no scripts)
 
+## Bookmarklet (One-Click Import)
+
+A browser bookmarklet for one-click import from zyBooks pages:
+- **Backend**: `POST /api/bookmarklet` receives HTML (with CORS headers for cross-origin from zyBooks), `GET /api/bookmarklet/pending` returns pending HTML
+- **Frontend**: Collapsible panel in header with draggable bookmarklet link, "Start Listening" polling button, and auto-format on receipt
+- **Bookmarklet code**: Grabs `document.documentElement.outerHTML` from zyBooks page and POSTs to the formatter app; shows green confirmation toast on the zyBooks page
+- **Flow**: User drags bookmarklet to bookmarks bar → clicks "Start Listening" in formatter → navigates to zyBooks section → clicks bookmarklet → content auto-fills and formats
+- Polling auto-stops after receiving HTML to prevent overwriting; single-slot in-memory store with 60-second expiry
+- CORS enabled with preflight OPTIONS handler for cross-origin XHR from zyBooks
+
 ## Roadmap
 
 ### Cell-Splitting Improvement (Notebook Generator)

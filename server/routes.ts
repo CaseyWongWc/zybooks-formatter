@@ -34,10 +34,38 @@ async function getGitHubToken(): Promise<{ token: string; login: string } | null
   return { token, login: userData.login };
 }
 
+let pendingBookmarkletHtml: { html: string; timestamp: number } | null = null;
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  app.options("/api/bookmarklet", (_req, res) => {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Max-Age", "86400");
+    return res.sendStatus(204);
+  });
+
+  app.post("/api/bookmarklet", (req, res) => {
+    res.set("Access-Control-Allow-Origin", "*");
+    const { html } = req.body;
+    if (!html || typeof html !== "string") {
+      return res.status(400).json({ error: "Missing html" });
+    }
+    pendingBookmarkletHtml = { html, timestamp: Date.now() };
+    return res.json({ ok: true });
+  });
+
+  app.get("/api/bookmarklet/pending", (_req, res) => {
+    if (pendingBookmarkletHtml && Date.now() - pendingBookmarkletHtml.timestamp < 60000) {
+      const html = pendingBookmarkletHtml.html;
+      pendingBookmarkletHtml = null;
+      return res.json({ html });
+    }
+    return res.json({ html: null });
+  });
   app.post("/api/create-colab-link", async (req, res) => {
     try {
       const { notebook, filename } = req.body;
