@@ -185,7 +185,7 @@ function formatRegularPaste(input: string): string {
 
   text = text.replace(/^##\s*$/gm, '');
 
-  text = text.replace(/^(\d+)\)\s*$/gm, '');
+  text = mergeQuestionNumbers(text);
 
   text = text.replace(/^Loop\s*$/gm, '');
   text = text.replace(/^Output\s*$/gm, '');
@@ -532,7 +532,7 @@ function formatMarkdownPaste(input: string): string {
     return indent + '**' + label.toUpperCase() + '**';
   });
 
-  text = text.replace(/^(\d+)\)\s*$/gm, '');
+  text = mergeQuestionNumbers(text);
 
   const editorLineNumsPattern = /(?:^\d\s*\n){3,}/gm;
   text = text.replace(editorLineNumsPattern, '');
@@ -747,6 +747,37 @@ function escapePythonComments(text: string): string {
       result.push(line);
     }
   }
+  return result.join('\n');
+}
+
+function mergeQuestionNumbers(text: string): string {
+  const lines = text.split('\n');
+  const result: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (/^\d+\)\s*$/.test(trimmed)) {
+      let nextIdx = i + 1;
+      while (nextIdx < lines.length && lines[nextIdx].trim() === '') {
+        nextIdx++;
+      }
+      if (nextIdx < lines.length) {
+        const nextLine = lines[nextIdx].trim();
+        if (nextLine && !/^\d+\)\s*$/.test(nextLine) && !/^\*\*/.test(nextLine) && !/^#{1,6}\s/.test(nextLine) && !/^```/.test(nextLine)) {
+          result.push(`${trimmed} ${nextLine}`);
+          for (let skip = i + 1; skip < nextIdx; skip++) {
+            // skip blank lines between number and text
+          }
+          i = nextIdx;
+          continue;
+        }
+      }
+      result.push(lines[i]);
+    } else {
+      result.push(lines[i]);
+    }
+  }
+
   return result.join('\n');
 }
 
