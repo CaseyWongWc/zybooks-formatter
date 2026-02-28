@@ -82,6 +82,12 @@ function formatRegularPaste(input: string): string {
   text = text.replace(/^\s*Captions\s*$/gm, '');
   text = text.replace(/^\s*_keyboard_arrow_up_\s*$/gm, '');
   text = text.replace(/^\s*_keyboard_arrow_down_\s*$/gm, '');
+  text = text.replace(/^\s*_keyboard\\?_arrow\\?_up_\s*$/gm, '');
+  text = text.replace(/^\s*_keyboard\\?_arrow\\?_down_\s*$/gm, '');
+  text = text.replace(/^\s*_expand\\?_more_\s*$/gm, '');
+  text = text.replace(/^\s*_expand\\?_less_\s*$/gm, '');
+  text = text.replace(/^\s*_thumb\\?_up_\s*$/gm, '');
+  text = text.replace(/^\s*_thumb\\?_down_\s*$/gm, '');
   text = text.replace(/^\s*Feedback\?\s*$/gm, '');
   text = text.replace(/^\s*Activity completed\s*$/gm, '');
   text = text.replace(/^\s*Question completed\s*$/gm, '');
@@ -99,14 +105,22 @@ function formatRegularPaste(input: string): string {
   text = text.replace(/^\s*How to use this tool\s*$/gm, '');
   text = text.replace(/^\s*Run program\s*$/gm, '');
   text = text.replace(/^\s*Submit mode\s*$/gm, '');
-  text = text.replace(/^####?\s*Unused\s*$/gm, '');
-  text = text.replace(/^####?\s*main\.py\s*$/gm, '');
+  text = text.replace(/^(?:####?\s*)?Unused\s*$/gm, '');
+  text = text.replace(/^(?:####?\s*)?main\.py\s*$/gm, '');
   text = text.replace(/^\s*Load default template\.{3}\s*$/gm, '');
   text = text.replace(/^Try \d+\.\d+\.\d+:.*$/gm, '');
+  text = text.replace(/^question\\?_mark signifies.*$/gm, '');
+  text = text.replace(/^\s*Start Jump to level \d+\s*$/gm, '');
+  text = text.replace(/^\s*Try again\s*$/gm, '');
+  text = text.replace(/^\s*Input Output\s*$/gm, '');
+  text = text.replace(/^\|.*\|\s*$/gm, '');
+  text = text.replace(/^\[_arrow\\?_(?:upward|downward)_.*\]\(.*\)\s*$/gm, '');
+  text = text.replace(/^\[_library\\?_books_.*\]\(.*\)\s*$/gm, '');
 
   text = text.replace(/^\d{6,}\.\d+\.\w+\s*$/gm, '');
 
   text = text.replace(/^!\[\]\(blob:https:\/\/learn\.zybooks\.com\/[^)]*\)\s*$/gm, '');
+  text = text.replace(/^.*!\[(?:Correct|Incorrect)\]\(https:\/\/zytools\.zybooks\.com\/[^)]*\)\s*$/gm, '');
 
   text = text.replace(/^Step \d+[:\s].*$/gm, '');
   text = text.replace(/^Static [Ff]igure[:\s].*$/gm, '');
@@ -134,6 +148,11 @@ function formatRegularPaste(input: string): string {
   text = text.replace(/^Completion details\s*$/gm, '');
   text = text.replace(/^\s*_thumb_up_\s*$/gm, '');
   text = text.replace(/^\s*_thumb_down_\s*$/gm, '');
+  text = text.replace(/^\s*Check\s+(?:Show answer|Next level)\s*$/gm, '');
+  text = text.replace(/^\s*Done\..*Click any level.*$/gm, '');
+
+  text = text.replace(/^[\u05D0-\u05EA]{10,}\s*$/gm, '');
+  text = text.replace(/^X{10,}\s*$/gm, '');
 
   text = text.replace(/^Skip to main content\s*$/gm, '');
   text = text.replace(/^zyBooks\s*$/gm, '');
@@ -142,6 +161,11 @@ function formatRegularPaste(input: string): string {
   text = text.replace(/^.*?Casey Wong.*$/gm, '');
   text = text.replace(/^\s*Search zyBook\s*$/gm, '');
   text = text.replace(/^\s*About this Material\s*$/gm, '');
+
+  text = text.replace(/^\s*-?\s*\[\d+\.\d+\s+[^\]]*?\n\s*\]\(https:\/\/learn\.zybooks\.com\/[^)]*\)\s*$/gm, '');
+  text = text.replace(/^\s*-\s+\[\d+\.\d+\s+.*?\]\(https:\/\/learn\.zybooks\.com\/.*?\)\s*$/gm, '');
+  text = text.replace(/^\s*-?\s*\[_print_\s+Print chapter\s*\n?\s*\]\(.*?\)\s*$/gm, '');
+  text = text.replace(/^\[\]\(https:\/\/learn\.zybooks\.com\/\)\s*$/gm, '');
 
   text = text.replace(/\s*\\>\s*/g, ' ');
 
@@ -235,6 +259,14 @@ function formatRegularPaste(input: string): string {
   }
 
   text = formatAnswerChoices(text);
+
+  text = text.replace(/\\=/g, '=');
+  text = text.replace(/\\_/g, '_');
+  text = text.replace(/\\#/g, '#');
+  text = text.replace(/\\-/g, '-');
+  text = text.replace(/\\\[/g, '[');
+  text = text.replace(/\\\]/g, ']');
+  text = text.replace(/\\\|/g, '|');
 
   return collapseWhitespace(text);
 }
