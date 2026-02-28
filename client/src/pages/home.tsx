@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -9,13 +9,19 @@ import {
   downloadNotebook,
   generateFilename,
 } from "@/lib/notebook-generator";
-import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2 } from "lucide-react";
+import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown } from "lucide-react";
+import { SiNotion } from "react-icons/si";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [copied, setCopied] = useState(false);
   const [colabLoading, setColabLoading] = useState(false);
+  const [notionLoading, setNotionLoading] = useState(false);
+  const [notionModalOpen, setNotionModalOpen] = useState(false);
+  const [notionPages, setNotionPages] = useState<{ id: string; title: string }[]>([]);
+  const [selectedParentPage, setSelectedParentPage] = useState<string>("");
+  const [notionPagesLoading, setNotionPagesLoading] = useState(false);
   const [pasteMode, setPasteMode] = useState<PasteMode>("regular");
   const { toast } = useToast();
 
@@ -97,6 +103,63 @@ export default function Home() {
       setColabLoading(false);
     }
   }, [output, toast]);
+
+  const loadNotionPages = useCallback(async () => {
+    setNotionPagesLoading(true);
+    try {
+      const res = await fetch("/api/notion/pages");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setNotionPages(data.pages || []);
+    } catch (err: any) {
+      toast({
+        title: "Could not load Notion pages",
+        description: err.message,
+        variant: "destructive",
+      });
+    } finally {
+      setNotionPagesLoading(false);
+    }
+  }, [toast]);
+
+  const handleNotionOpen = useCallback(() => {
+    if (!output.trim()) return;
+    setNotionModalOpen(true);
+    loadNotionPages();
+  }, [output, loadNotionPages]);
+
+  const handleSendToNotion = useCallback(async () => {
+    if (!output.trim()) return;
+    setNotionLoading(true);
+    try {
+      const titleMatch = output.match(/^#\s+(.+)$/m);
+      const title = titleMatch ? titleMatch[1].trim() : "zyBooks Section";
+      const res = await fetch("/api/notion/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          markdown: output,
+          title,
+          parentPageId: selectedParentPage || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setNotionModalOpen(false);
+      toast({ title: "Sent to Notion!", description: "Page created successfully." });
+      if (data.pageUrl) {
+        window.open(data.pageUrl, "_blank");
+      }
+    } catch (err: any) {
+      toast({
+        title: "Failed to send to Notion",
+        description: err.message || "Check your Notion connection.",
+        variant: "destructive",
+      });
+    } finally {
+      setNotionLoading(false);
+    }
+  }, [output, selectedParentPage, toast]);
 
   const inputLineCount = input ? input.split("\n").length : 0;
   const outputLineCount = output ? output.split("\n").length : 0;
@@ -246,6 +309,16 @@ export default function Home() {
                     )}
                     {colabLoading ? "Creating..." : "Open in Colab"}
                   </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={handleNotionOpen}
+                    disabled={!output}
+                    data-testid="button-send-notion"
+                  >
+                    <SiNotion className="w-4 h-4 mr-1.5" />
+                    Send to Notion
+                  </Button>
                 </div>
               </div>
               <Textarea
@@ -267,6 +340,77 @@ export default function Home() {
           <span data-testid="text-footer-preserves">Keeps participation &amp; challenge activity headers</span>
         </div>
       </footer>
+
+      {notionModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" data-testid="modal-notion">
+          <div className="bg-background border rounded-lg shadow-lg w-full max-w-md mx-4 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <SiNotion className="w-5 h-5" />
+                <h2 className="text-lg font-semibold">Send to Notion</h2>
+              </div>
+              <button
+                onClick={() => setNotionModalOpen(false)}
+                className="text-muted-foreground hover:text-foreground"
+                data-testid="button-close-notion-modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="mb-4">
+              <label className="text-sm font-medium mb-2 block">Parent Page</label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Choose which Notion page to create the new page under.
+              </p>
+              {notionPagesLoading ? (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground py-2" data-testid="text-notion-loading">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Loading pages...
+                </div>
+              ) : (
+                <select
+                  value={selectedParentPage}
+                  onChange={(e) => setSelectedParentPage(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  data-testid="select-notion-parent"
+                >
+                  <option value="">First available page</option>
+                  {notionPages.map((page) => (
+                    <option key={page.id} value={page.id}>
+                      {page.title}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setNotionModalOpen(false)}
+                data-testid="button-cancel-notion"
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleSendToNotion}
+                disabled={notionLoading}
+                data-testid="button-confirm-notion"
+              >
+                {notionLoading ? (
+                  <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4 mr-1.5" />
+                )}
+                {notionLoading ? "Sending..." : "Send"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

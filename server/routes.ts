@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { sendToNotion, listNotionPages } from "./notion";
 
 async function getGitHubToken(): Promise<{ token: string; login: string } | null> {
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
@@ -96,6 +97,28 @@ export async function registerRoutes(
       return res.json({ colabUrl });
     } catch (err: any) {
       return res.status(500).json({ error: err.message || "Failed to create notebook" });
+    }
+  });
+
+  app.get("/api/notion/pages", async (_req, res) => {
+    try {
+      const pages = await listNotionPages();
+      return res.json({ pages });
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message || "Failed to list Notion pages" });
+    }
+  });
+
+  app.post("/api/notion/send", async (req, res) => {
+    try {
+      const { markdown, title, parentPageId } = req.body;
+      if (!markdown || !title) {
+        return res.status(400).json({ error: "Missing markdown or title" });
+      }
+      const result = await sendToNotion(markdown, title, parentPageId);
+      return res.json(result);
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message || "Failed to send to Notion" });
     }
   });
 

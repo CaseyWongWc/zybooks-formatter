@@ -181,6 +181,17 @@ A third paste mode that parses the actual zyBooks HTML for maximum accuracy:
 ### Google Drive Integration (Future)
 - Direct upload of .ipynb to Google Drive / Colab
 
+## Notion Integration
+
+- Connected via Replit connector (conn_notion_01KBSDYSFRNDYQGDCYTS324AKY)
+- `server/notion.ts` — Notion client module with markdown-to-Notion-blocks converter
+- Permissions: user:read/write, content:read/write, workspace:read/write
+- API routes:
+  - `GET /api/notion/pages` — Lists accessible Notion pages for parent selection
+  - `POST /api/notion/send` — Converts markdown to Notion blocks and creates a new page
+- Markdown-to-Notion conversion supports: headings (H1-H3), paragraphs, code blocks (with language), bullet lists, numbered lists, inline formatting (bold, italic, code)
+- UI: "Send to Notion" button opens a modal to pick parent page, then sends formatted content
+
 ## GitHub
 
 Repository: https://github.com/CaseyWongWc/zybooks-formatter
