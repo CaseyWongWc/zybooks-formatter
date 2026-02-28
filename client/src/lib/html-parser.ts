@@ -349,22 +349,30 @@ function processActivity(el: HTMLElement): string | null {
 }
 
 function extractQuestion(q: HTMLElement, idx: number): string | null {
-  const qParts: string[] = [];
   const labelEl = q.querySelector('.label');
   const textEl = q.querySelector('.text');
 
   const label = labelEl?.textContent?.trim() || `${idx + 1})`;
-  qParts.push(label);
 
+  let questionLine = label;
   if (textEl) {
     const qText = extractQuestionText(textEl as HTMLElement);
-    if (qText) qParts.push(qText);
+    if (qText) {
+      const lines = qText.split('\n');
+      questionLine = `${label} ${lines[0]}`;
+      const remainingLines = lines.slice(1).join('\n');
+      if (remainingLines.trim()) {
+        questionLine += '\n' + remainingLines;
+      }
+    }
   }
 
-  const answerOptions = extractAnswerOptions(q);
-  if (answerOptions) qParts.push(answerOptions);
+  const parts: string[] = [questionLine];
 
-  const result = qParts.join('\n');
+  const answerOptions = extractAnswerOptions(q);
+  if (answerOptions) parts.push(answerOptions);
+
+  const result = parts.join('\n');
   return result.trim() || null;
 }
 
