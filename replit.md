@@ -14,14 +14,15 @@ Single-page tool with input/output textareas. Users paste raw zyBooks content, c
 
 ## Key Files
 
-- `client/src/lib/zybooks-formatter.ts` — Core regex cleanup engine with two paste modes
+- `client/src/lib/zybooks-formatter.ts` — Core regex cleanup engine with three paste modes
+- `client/src/lib/html-parser.ts` — HTML paste mode: DOM-based parser for raw zyBooks page HTML
 - `client/src/lib/notebook-generator.ts` — .ipynb notebook generation (nbformat 4)
 - `client/src/pages/home.tsx` — Main formatter page with input/output textareas and mode toggle
 - `client/src/App.tsx` — App router
 
 ## Paste Modes
 
-The formatter supports two input modes via a UI toggle:
+The formatter supports three input modes via a UI toggle:
 
 ### Regular Paste (default)
 For plain text copied directly from zyBooks (Ctrl+A, Ctrl+C). This is raw text with no markdown structure — line-by-line regex matching.
@@ -165,13 +166,19 @@ Use structural markers for intelligent cell splitting in .ipynb output:
 - "Figure X.X.X" / "Construct X.X.X" = code example boundaries
 - Pattern: Header → Text → Feedback? → Figure → Feedback? → Activity → Feedback?
 
-### Paste HTML Mode (Future)
-A third paste mode that parses the actual zyBooks HTML for maximum accuracy:
-- Use class names to identify content types (code, text, questions, activities)
-- Properly extract syntax-highlighted code by stripping `<span>` tags from `div.code`
-- Separate code from output using `div.code` vs `div.console`
-- Reconstruct fill-in-the-blank inputs from `short-answer-input-container`
-- Could power a browser extension that reads the DOM directly
+### HTML Paste (implemented)
+Parses raw zyBooks page HTML using DOM selectors for maximum accuracy:
+- Uses browser DOMParser API (client-side processing)
+- Strips unwanted elements (nav, toolbar, feedback, watermarks, chevrons, iframes)
+- Extracts section titles from `h1.zybook-section-title`
+- Walks `.section-content-resources-container` children to find content blocks
+- Processes `html-content-resource` blocks for prose text (h2-h4, paragraphs, lists)
+- Processes `static-container` blocks for figures with code tables (code + console output)
+- Processes `interactive-activity-container` blocks for participation/challenge activities
+- Extracts questions from `.question-set-question` with labels and embedded code
+- Inline formatting: bold terms (`span.term`), inline code (`<code>`), emphasis
+- Code extraction: strips `<span>` syntax highlighting from `div.code > div.highlight > pre`
+- Output extraction: reads from `div.console > pre` or second table column
 
 ### AI Integration (Future)
 - AI-powered code block detection for ambiguous text pastes

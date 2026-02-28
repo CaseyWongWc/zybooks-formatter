@@ -1,0 +1,55 @@
+NEW FEATURE REQUEST: HTML Paste Mode
+
+We now have the raw HTML source from a zyBooks section (5.8). This is a game-changer because instead of trying to parse messy plaintext or markdown copies, we can parse the actual DOM structure directly. Here's the key selectors and structure:
+
+**Page Structure:**
+- Section title: `h1.zybook-section-title` (e.g., "5.8 Nested loops")
+- Content is inside `div.section-content-resources-container`
+- Each content block has a `contentresourceid` attribute
+
+**Text Content:**
+- Regular paragraphs: `p` tags inside `div.content-resource.html-content-resource`
+- Subheadings: `h3` tags inside those same divs
+- Bold terms/definitions: `span.term` with `data-term="true"` (e.g., "nested loop", "outer loop")
+- Inline code: `code` tags or monospace styled spans
+
+**Code Blocks:**
+- Code figures: `div.static-container` with `div.static-container-title` (e.g., "Figure 5.8.1: ...")
+- Actual code: `div.highlight > pre` with syntax-highlighted spans (`.k` for keywords, `.n` for names, `.nb` for builtins, `.c1` for comments, `.s2` for strings, `.mi` for integers, `.p` for punctuation, `.o` for operators)
+- Output panels sit alongside code in the figure
+
+**Participation Activities:**
+- Container: `div.interactive-activity-container.participation`
+- Title: `div.activity-title` (e.g., "5.8.1 Nested loops.")
+- Questions: `div.question-set-question.short-answer-question`
+- Question text: `div.text` inside `div.setup`
+- Code in questions: `div.code.no-box > div.highlight > pre`
+- Answer inputs: `input.zb-input` inside `short-answer-input-container`
+
+**Challenge Activities:**
+- Container: `div.interactive-activity-container.challenge`
+- Title: `div.activity-title` (e.g., "5.8.3 Nested loops: Print seats.")
+- Instructions: `div.activity-instructions`
+- Embedded code editors: inside iframes (won't be accessible from HTML)
+
+**Try/Lab Activities:**
+- Container: `div.static-container` with titles starting with "Try"
+- Instructions: `div.activity-instructions` inside the container
+- Also uses iframes for the code editor
+
+**Things to SKIP (not content):**
+- `nav.zb-nav-menu` (sidebar navigation)
+- `header.top-toolbar` (breadcrumbs, profile)
+- `div.osano-cm-window` (cookie banner)
+- `div.zb-feedback` (feedback buttons)
+- `div.assignment-completion-summary-card` (points summary)
+- `div.section-announcement` (assignment info banner)
+- `div.notify-outlet` (notifications)
+- `div.activity-watermark` (watermark IDs)
+- `div.chevron-container` (completion checkmarks)
+- All MathJax/SVG style blocks
+- All script tags
+
+The idea: Add a third paste mode button called "HTML Paste" next to Regular Paste and Copy as Markdown. When the user saves the full HTML of a zyBooks page and pastes it, the formatter parses the HTML DOM directly using these selectors. This would give us the MOST accurate extraction since we're working with the actual structure instead of guessing from plaintext.
+
+The user has the HTML for section 5.8 ready to test with. Can you build this HTML paste mode?

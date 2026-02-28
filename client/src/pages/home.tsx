@@ -230,6 +230,18 @@ export default function Home() {
                     >
                       Copy as Markdown
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setPasteMode("html")}
+                      className={`px-3 py-1.5 transition-colors border-l border-input ${
+                        pasteMode === "html"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background text-muted-foreground hover:bg-muted"
+                      }`}
+                      data-testid="button-mode-html"
+                    >
+                      HTML Paste
+                    </button>
                   </div>
                   <span className="text-xs text-muted-foreground" data-testid="text-input-lines">
                     {inputLineCount} lines
@@ -242,7 +254,9 @@ export default function Home() {
                 placeholder={
                   pasteMode === "regular"
                     ? "Paste your zyBooks content here (Ctrl+A, Ctrl+C from zyBooks)..."
-                    : "Paste content from the 'Copy as Markdown' browser extension..."
+                    : pasteMode === "markdown"
+                    ? "Paste content from the 'Copy as Markdown' browser extension..."
+                    : "Paste raw HTML from zyBooks page source (View Source or Inspect)..."
                 }
                 className="flex-1 min-h-[400px] lg:min-h-[600px] font-mono text-sm resize-none"
                 value={input}
