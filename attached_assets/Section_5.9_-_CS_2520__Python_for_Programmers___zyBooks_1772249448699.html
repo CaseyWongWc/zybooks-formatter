@@ -1,0 +1,3098 @@
+<!DOCTYPE html>
+<!-- saved from url=(0078)https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style><!----> <!--?lit$607861584$-->.osano-cm-window{font-family:Helvetica,Arial,Hiragino Sans GB,STXihei,Microsoft YaHei,WenQuanYi Micro Hei,Hind,MS Gothic,Apple SD Gothic Neo,NanumBarunGothic,sans-serif;font-size:16px;font-smooth:always;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothingz:auto;display:block;left:0;line-height:1;position:absolute;top:0;width:100%;z-index:2147483638;--fade-transition-time:700ms;--slide-transition-time:400ms}.osano-cm-window--context_amp{height:100%}.osano-visually-hidden{height:1px;left:-10000px;margin:-1px;opacity:0;overflow:hidden;position:absolute;width:1px}.osano-cm-button{background-color:var(--osano-button-background-color);border-color:var(--osano-button-foreground-color);border-radius:.25em;border-style:solid;border-width:thin;color:var(--osano-button-foreground-color);cursor:pointer;flex:1 1 auto;font-size:1em;font-weight:700;line-height:1;margin:.125em;min-width:6em;padding:.5em .75em;transition-duration:.2s;transition-property:background-color;transition-timing-function:ease-out}.osano-cm-button:focus,.osano-cm-button:hover{background-color:var(--osano-button-background-hover);outline:none}.osano-cm-button--type_icon{border-radius:50%;height:1em;line-height:0;min-width:1em;width:1em}.osano-cm-button--type_deny{background-color:var(--osano-button-deny-background-color);border-color:var(--osano-button-deny-foreground-color);color:var(--osano-button-deny-foreground-color)}.osano-cm-button--type_deny:focus,.osano-cm-button--type_deny:hover{background-color:var(--osano-button-deny-background-hover)}.osano-cm-close{border-radius:50%;box-sizing:content-box;cursor:pointer;height:20px;margin:.5em;min-height:20px;min-width:20px;order:0;outline:none;overflow:hidden;padding:0;width:20px;stroke-width:1px;background-color:transparent;border:2px solid transparent;display:flex;justify-content:center;line-height:normal;text-decoration:none;transform:rotate(0deg);transition-duration:.2s;transition-property:transform,color,background-color,stroke,stroke-width;transition-timing-function:ease-out;z-index:2}.osano-cm-close:focus,.osano-cm-close:hover{transform:rotate(90deg);stroke-width:2px}.ccpa-opt-out-icon{display:flex;flex:1 1 auto}.ccpa-opt-out-icon svg{max-width:40px}.osano-cm-link{color:var(--osano-link-color);cursor:pointer;text-decoration:underline;transition-duration:.2s;transition-property:color;transition-timing-function:ease-out}.osano-cm-link:active,.osano-cm-link:hover{color:var(--osano-link-color);outline:none}.osano-cm-link:focus{color:var(--osano-link-color-focus);font-weight:700;outline:none}.osano-cm-link--type_feature,.osano-cm-link--type_purpose,.osano-cm-link--type_specialFeature,.osano-cm-link--type_specialPurpose{cursor:help;display:block;-webkit-text-decoration:dashed;text-decoration:dashed}.osano-cm-link--type_denyAll{display:block;text-align:right}[dir=rtl] .osano-cm-link--type_denyAll{text-align:left}.osano-cm-link--type_vendor{display:block}.osano-cm-link-separator:before{content:"|";padding:0 .5em}.osano-cm-vendor-link{font-size:.75em}.osano-cm-list-item{margin:0}.osano-cm-list-item--type_term{border-top-style:solid;border-top-width:1px;font-size:.875rem;font-weight:400;margin-bottom:.25em;margin-top:.5em;padding:.5em .75rem 0;position:relative;top:-1px}.osano-cm-list-item--type_description{font-size:.75rem;font-weight:lighter;padding:0 .75rem}.osano-cm-list{list-style-position:outside;list-style-type:none;margin:0;padding:0}.osano-cm-list__list-item{text-indent:0}.osano-cm-list--type_description{margin:0 -1em}.osano-cm-list:first-of-type .osano-cm-list__list-item:first-of-type{border-top-width:0;margin-top:0;padding-top:0}.osano-cm-toggle{align-items:center;display:flex;flex-direction:row-reverse;justify-content:flex-start;margin:.25em 0;pointer-events:auto;position:relative}.osano-cm-toggle__label{margin:0 .5em 0 0}[dir=rtl] .osano-cm-toggle__label{margin:0 0 0 .5em}.osano-cm-toggle__switch{background-color:var(--osano-toggle-off-background-color);border-radius:14px;border-style:solid;border-width:2px;box-sizing:content-box;color:transparent;display:block;flex-shrink:0;height:18px;line-height:0;margin:0;position:relative;text-indent:-9999px;transition-duration:.2s;transition-property:background-color;transition-timing-function:ease-out;width:40px}.osano-cm-toggle__switch:hover{cursor:pointer}.osano-cm-toggle__switch:after{background-color:var(--osano-toggle-button-off-color);border-color:var(--osano-toggle-button-off-color);border-radius:9px;border-width:0;height:18px;left:0;top:0;width:18px}.osano-cm-toggle__switch:before{border-color:transparent;border-radius:16px;border-width:2px;bottom:-6px;box-sizing:border-box;left:-6px;right:-6px;top:-6px}.osano-cm-toggle__switch:after,.osano-cm-toggle__switch:before{border-style:solid;content:"";margin:0;position:absolute;transform:translateX(0);transition-duration:.3s;transition-property:transform,left,border-color;transition-timing-function:ease-out}.osano-cm-toggle__switch:after:active,.osano-cm-toggle__switch:before:active{transition-duration:.1s}.osano-cm-toggle__switch:after:active{width:26px}.osano-cm-toggle__switch:before:active{width:34px}[dir=rtl] .osano-cm-toggle__switch:after{left:100%;transform:translateX(-100%)}.osano-cm-toggle__input{height:1px;left:-10000px;margin:-1px;opacity:0;overflow:hidden;position:absolute;width:1px}[dir=rtl] .osano-cm-toggle__input{left:0;right:-10000px}.osano-cm-toggle__input:disabled{cursor:default}.osano-cm-toggle--type_checkbox .osano-cm-toggle__switch{border-radius:4px;border-style:solid;border-width:1px;height:22px;width:22px}.osano-cm-toggle--type_checkbox .osano-cm-toggle__switch:after{background-color:transparent!important;border-bottom-width:2px;border-left-width:2px;border-radius:0;content:none;height:6px;left:3px;top:3px;transform:rotate(-45deg);transition-property:color;transition-timing-function:ease-out;width:12px}.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch{border-radius:4px;border-style:solid;border-width:1px;height:22px;width:22px}.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch:after,.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch:before{background-color:transparent!important;border-bottom-width:1px;border-radius:0;border-top-width:1px;content:none;height:0;left:-3px;top:7px;transition-property:color;transition-timing-function:ease-out;width:12px}.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch:after{transform:translate(50%,50%) rotate(-45deg)}.osano-cm-toggle--type_opt-out .osano-cm-toggle__switch:before{transform:translate(50%,50%) rotate(45deg)}.osano-cm-toggle__input:checked+.osano-cm-toggle__switch{background-color:var(--osano-toggle-on-background-color);border-color:var(--osano-toggle-on-background-color)}.osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after{background-color:var(--osano-toggle-button-on-color);border-color:var(--osano-toggle-button-on-color);left:100%;transform:translateX(-100%)}[dir=rtl] .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after{left:0;transform:translateX(0)}.osano-cm-toggle__input:focus+.osano-cm-toggle__switch,.osano-cm-toggle__input:hover+.osano-cm-toggle__switch{background-color:var(--osano-toggle-off-background-hover-focus);border-color:var(--osano-toggle-off-background-hover-focus)}.osano-cm-toggle__input:focus+.osano-cm-toggle__switch:before{border-color:var(--osano-toggle-off-background-hover-focus)}.osano-cm-toggle__input:disabled+.osano-cm-toggle__switch{cursor:default}.osano-cm-toggle--type_checkbox .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after{content:"";left:3px;top:3px;transform:rotate(-45deg)}.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after,.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:before{content:"";left:-1px;top:9px}.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:after{transform:translate(50%,50%) rotate(-45deg)}.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:checked+.osano-cm-toggle__switch:before{transform:translate(50%,50%) rotate(45deg)}.osano-cm-toggle--type_checkbox .osano-cm-toggle__input:disabled+.osano-cm-toggle__switch,.osano-cm-toggle--type_opt-out .osano-cm-toggle__input:disabled+.osano-cm-toggle__switch{opacity:.3}.osano-cm-toggle__input:checked:focus+.osano-cm-toggle__switch,.osano-cm-toggle__input:checked:hover+.osano-cm-toggle__switch{background-color:var(--osano-toggle-on-background-hover-focus);border-color:var(--osano-toggle-on-background-hover-focus)}.osano-cm-toggle__input:checked:focus+.osano-cm-toggle__switch:before{border-color:var(--osano-toggle-on-background-hover-focus)}.osano-cm-toggle__input:disabled+.osano-cm-toggle__switch,.osano-cm-toggle__input:disabled:focus+.osano-cm-toggle__switch,.osano-cm-toggle__input:disabled:hover+.osano-cm-toggle__switch{background-color:var(--osano-toggle-off-background-disabled);border-color:var(--osano-toggle-off-background-disabled)}.osano-cm-toggle__input:disabled+.osano-cm-toggle__switch:after,.osano-cm-toggle__input:disabled:focus+.osano-cm-toggle__switch:after,.osano-cm-toggle__input:disabled:hover+.osano-cm-toggle__switch:after{background-color:var(--osano-toggle-button-off-disabled);border-color:var(--osano-toggle-button-off-disabled)}.osano-cm-toggle__input:disabled+.osano-cm-toggle__switch:before,.osano-cm-toggle__input:disabled:focus+.osano-cm-toggle__switch:before,.osano-cm-toggle__input:disabled:hover+.osano-cm-toggle__switch:before{border-color:transparent}.osano-cm-toggle__input:disabled:checked+.osano-cm-toggle__switch,.osano-cm-toggle__input:disabled:checked:focus+.osano-cm-toggle__switch,.osano-cm-toggle__input:disabled:checked:hover+.osano-cm-toggle__switch{background-color:var(--osano-toggle-on-background-disabled);border-color:var(--osano-toggle-on-background-disabled)}.osano-cm-toggle__input:disabled:checked+.osano-cm-toggle__switch:after,.osano-cm-toggle__input:disabled:checked:focus+.osano-cm-toggle__switch:after,.osano-cm-toggle__input:disabled:checked:hover+.osano-cm-toggle__switch:after{background-color:var(--osano-toggle-button-on-disabled);border-color:var(--osano-toggle-button-on-disabled)}.osano-cm-toggle__input:disabled:checked+.osano-cm-toggle__switch:before,.osano-cm-toggle__input:disabled:checked:focus+.osano-cm-toggle__switch:before,.osano-cm-toggle__input:disabled:checked:hover+.osano-cm-toggle__switch:before{border-color:transparent}.osano-cm-widget{background:none;border:none;bottom:12px;cursor:pointer;height:40px;opacity:.9;outline:none;padding:0;position:fixed;transition:transform .1s linear 0s,opacity .2s linear 0ms,visibility 0ms linear 0ms;visibility:visible;width:40px;z-index:2147483636}.osano-cm-widget--position_right{right:12px}.osano-cm-widget--position_left{left:12px}.osano-cm-widget:focus{outline:solid;outline-offset:.2rem}.osano-cm-widget:focus,.osano-cm-widget:hover{opacity:1;transform:scale(1.1)}.osano-cm-widget--hidden{opacity:0;visibility:hidden}.osano-cm-widget--hidden:focus,.osano-cm-widget--hidden:hover{opacity:0;transform:scale(1)}.osano-cm-widget__outline{fill:var(--osano-widget-fill-color);stroke:var(--osano-widget-outline-color)}.osano-cm-widget__dot{fill:var(--osano-widget-color)}.osano-cm-dialog{align-items:center;background:var(--osano-dialog-background-color);box-sizing:border-box;color:var(--osano-dialog-foreground-color);font-size:1em;line-height:1.25;max-height:100vh;overflow:auto;padding:1.5em;position:fixed;transition-delay:0ms,0ms;transition-duration:.7s,0ms;transition-property:opacity,visibility;visibility:visible;z-index:2147483637}.osano-cm-dialog--hidden{opacity:0;transition-delay:0ms,.7s;visibility:hidden}.osano-cm-dialog--type_bar{box-sizing:border-box;display:flex;flex-direction:column;left:0;right:0}.osano-cm-dialog--type_bar .osano-cm-button{flex:none;margin:.125em auto;width:80%}@media screen and (min-width:768px){.osano-cm-dialog--type_bar{flex-direction:row}.osano-cm-dialog--type_bar .osano-cm-button{flex:1 1 100%;margin:.25em .5em;width:auto}}.osano-cm-dialog--type_box{flex-direction:column;max-height:calc(100vh - 2em);max-width:20em;width:calc(100vw - 2em)}.osano-cm-dialog__close{color:var(--osano-dialog-foreground-color);position:absolute;right:0;top:0;stroke:var(--osano-dialog-foreground-color)}.osano-cm-dialog__close:hover{stroke:var(--osano-dialog-foreground-hover)}.osano-cm-dialog__close:focus{background-color:var(--osano-dialog-foreground-color);border-color:var(--osano-dialog-foreground-color);stroke:var(--osano-dialog-background-color)}.osano-cm-dialog__close:focus:hover{stroke:var(--osano-dialog-background-hover)}.osano-cm-dialog__list{margin:.5em 0 0;padding:0}.osano-cm-dialog__list .osano-cm-item{display:flex;margin-top:0}.osano-cm-dialog__list .osano-cm-item:last-child{margin-bottom:0}.osano-cm-dialog__list .osano-cm-toggle{flex-direction:row}[dir=rtl] .osano-cm-dialog__list .osano-cm-toggle{flex-direction:row-reverse}.osano-cm-dialog__list .osano-cm-label{white-space:nowrap}[dir=ltr] .osano-cm-dialog__list .osano-cm-label{margin-left:.375em}[dir=rtl] .osano-cm-dialog__list .osano-cm-label{margin-right:.375em}.osano-cm-dialog__buttons{display:flex;flex-wrap:wrap}.osano-cm-dialog--type_bar .osano-cm-dialog__content{flex:5;margin-bottom:.25em;width:100%}.osano-cm-dialog--type_box .osano-cm-dialog__content{display:flex;flex-direction:column;flex-grow:.0001;transition:flex-grow 1s linear}.osano-cm-dialog--type_box .osano-cm-link-separator:before{content:"";padding:0}.osano-cm-dialog--type_box .osano-cm-content__link{margin-bottom:.5em}.osano-cm-dialog--type_bar .osano-cm-dialog__list{display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;margin:.75em auto}@media screen and (min-width:376px){.osano-cm-dialog--type_bar .osano-cm-dialog__list{flex-direction:row}}@media screen and (min-width:768px){.osano-cm-dialog--type_bar .osano-cm-dialog__list{margin:.5em 0 0 auto}[dir=rtl] .osano-cm-dialog--type_bar .osano-cm-dialog__list{margin:.5em auto 0 0}}[dir=ltr] .osano-cm-dialog--type_bar .osano-cm-dialog__list .osano-cm-item{margin-right:.5em}[dir=rtl] .osano-cm-dialog--type_bar .osano-cm-dialog__list .osano-cm-item{margin-left:.5em}.osano-cm-dialog--type_bar .osano-cm-dialog__list .osano-cm-label{padding-top:0}.osano-cm-dialog--type_bar .osano-cm-dialog__buttons{flex:1;justify-content:flex-end;margin:0;width:100%}@media screen and (min-width:768px){.osano-cm-dialog--type_bar .osano-cm-dialog__buttons{margin:0 0 0 .5em;max-width:30vw;min-width:16em;position:sticky;top:0;width:auto}[dir=rtl] .osano-cm-dialog--type_bar .osano-cm-dialog__buttons{margin:0 .5em 0 0}}.osano-cm-dialog--type_box .osano-cm-dialog__buttons{margin:.5em 0 0}.osano-cm-dialog--type_bar.osano-cm-dialog--position_top{top:0}.osano-cm-dialog--type_bar.osano-cm-dialog--position_bottom{bottom:0}.osano-cm-dialog--type_box.osano-cm-dialog--position_top-left{left:1em;top:1em}.osano-cm-dialog--type_box.osano-cm-dialog--position_top-right{right:1em;top:1em}.osano-cm-dialog--type_box.osano-cm-dialog--position_bottom-left{bottom:1em;left:1em}.osano-cm-dialog--type_box.osano-cm-dialog--position_bottom-right{bottom:1em;right:1em}.osano-cm-dialog--type_box.osano-cm-dialog--position_center{left:50%;top:50%;transform:translate(-50%,-50%)}.osano-cm-dialog--type_box.osano-cm-dialog--wide{max-width:50em}@media screen and (max-height:800px)and (max-width:1200px){.osano-cm-dialog--type_box.osano-cm-dialog--wide{max-width:calc(100vw - 4em)}}.osano-cm-dialog--type_box.osano-cm-dialog--wide .osano-cm-dialog__list{display:flex;flex-wrap:wrap}.osano-cm-dialog--context_amp{height:100%;position:relative}.osano-cm-content__message{margin-bottom:1em;white-space:pre-line;word-break:break-word}.osano-cm-drawer-links{margin:.5em 0 0}.osano-cm-drawer-links__link{display:block}.osano-cm-storage-policy{display:inline-block}.osano-cm-usage-list{margin:0 0 .5em}.osano-cm-usage-list__list{list-style-position:inside;list-style-type:disc}:export{fadeTransitionTime:.7s;slideTransitionTime:.4s}.osano-cm-info-dialog{background:var(--osano-info-dialog-overlay-color);height:100vh;left:0;position:fixed;top:0;transition-delay:0ms,0ms;transition-duration:.2s,0ms;transition-property:opacity,visibility;visibility:visible;width:100vw;z-index:2147483638}.osano-cm-info-dialog--hidden{opacity:0;transition-delay:0ms,.2s;visibility:hidden}.osano-cm-header{background:var(--osano-info-dialog-background-color);background:linear-gradient(180deg,var(--osano-info-dialog-background-color) 2.5em,var(--osano-clear-dialog-background) 100%);margin:0 0 -1em;padding:1em 0;position:sticky;top:0;z-index:1}.osano-cm-info{animation:delay-overflow .4s;background:var(--osano-info-dialog-background-color);bottom:0;box-shadow:0 0 2px 2px #ccc;box-sizing:border-box;color:var(--osano-info-dialog-foreground-color);max-width:20em;overflow:visible visible;position:fixed;top:0;transition-duration:.4s;transition-property:transform;width:100%}.osano-cm-info--position_left{left:0;transform:translate(-100%)}.osano-cm-info--position_right{right:0;transform:translate(100%)}.osano-cm-info--open{animation:none;overflow:hidden auto;transform:translate(0)}.osano-cm-info--do_not_sell{animation:none;height:-moz-fit-content;height:fit-content;left:50%;max-height:100vh;position:fixed;right:auto;top:50%;transform:translate(-50%,-50%);transition:none}.osano-cm-info--do_not_sell .osano-cm-close{order:-1}.osano-cm-info--do_not_sell .osano-cm-header{box-sizing:content-box;display:block;flex:none}.osano-cm-info-views{align-items:flex-start;display:flex;flex-direction:row;flex-wrap:nowrap;height:100%;transition-duration:.4s;transition-property:transform;width:100%}[dir=rtl] .osano-cm-info-views{flex-direction:row-reverse}.osano-cm-info-views__view{box-sizing:border-box;flex-shrink:0;width:100%}.osano-cm-info-views--position_0>:not(:first-of-type){max-height:100%;overflow:hidden}.osano-cm-info-views--position_1{transform:translateX(-100%)}.osano-cm-info-views--position_1>:not(:nth-of-type(2)){max-height:100%;overflow:hidden}.osano-cm-info-views--position_2{transform:translateX(-200%)}.osano-cm-info-views--position_2>:not(:nth-of-type(3)){max-height:100%;overflow:hidden}.osano-cm-info--do_not_sell .osano-cm-info-views{height:-moz-fit-content;height:fit-content}.osano-cm-view{height:0;padding:0 .75em 1em;transition-delay:.4s;transition-duration:0ms;transition-property:height,visibility;visibility:hidden;width:100%}.osano-cm-view__button{font-size:.875em;margin:1em 0 0;width:100%}.osano-cm-view--active{height:auto;transition-delay:0ms;visibility:visible}.osano-cm-description{font-size:.75em;font-weight:300;line-height:1.375;margin:1em 0 0;white-space:pre-line}.osano-cm-description:first-child{margin:0}.osano-cm-description:last-of-type{margin-bottom:1em}.osano-cm-drawer-toggle .osano-cm-label{font-size:.875em;line-height:1.375em;margin:0 auto 0 0}[dir=rtl] .osano-cm-drawer-toggle .osano-cm-label{margin:0 0 0 auto}.osano-cm-info-dialog-header{align-items:center;background:var(--osano-info-dialog-background-color);background:linear-gradient(180deg,var(--osano-info-dialog-background-color) 2.5em,var(--osano-clear-dialog-background) 100%);display:flex;flex-direction:row-reverse;left:auto;min-height:3.25em;position:sticky;top:0;width:100%;z-index:1}[dir=rtl] .osano-cm-info-dialog-header{flex-direction:row}.osano-cm-info-dialog-header__header{align-items:center;display:flex;flex:1 1 auto;font-size:1em;justify-content:flex-start;margin:0;order:1;padding:1em .75em}.osano-cm-info-dialog-header__description{font-size:.75em;line-height:1.375}.osano-cm-info-dialog-header__close{color:var(--osano-info-dialog-foreground-color);position:relative;stroke:var(--osano-info-dialog-foreground-color)}.osano-cm-info-dialog-header__close:hover{stroke:var(--osano-info-dialog-foreground-hover)}.osano-cm-info-dialog-header__close:focus{background-color:var(--osano-info-dialog-foreground-color);border-color:var(--osano-info-dialog-foreground-color);stroke:var(--osano-info-dialog-background-color)}.osano-cm-info-dialog-header__close:focus:hover{stroke:var(--osano-info-dialog-background-hover)}.osano-cm-back{flex:0 1 auto;margin:0 0 0 .5em;min-width:0;order:2;position:relative;width:auto;z-index:2}[dir=rtl] .osano-cm-back{margin:0 .5em 0 0}.osano-cm-powered-by{align-items:center;display:flex;flex-direction:column;font-weight:700;justify-content:center;margin:1em 0}.osano-cm-powered-by__link{font-size:.625em;outline:none;text-decoration:none}.osano-cm-powered-by__link:focus,.osano-cm-powered-by__link:hover{text-decoration:underline}@keyframes delay-overflow{0%{overflow:hidden auto}}.osano-cm-drawer-iab-button-container{display:flex;gap:.5em;justify-content:center;margin-bottom:2em}.osano-cm-illustrations__list>.osano-cm-list-item--type_description{padding:.2rem 1rem}.osano-cm-drawer-item.osano-cm-description__list li{padding-top:.75em}.osano-cm-tcf-purpose--label{border-bottom:1px solid rgba(0,0,0,.1);display:block;margin-bottom:.5em;padding:.25em 0 .5em}.osano-cm-link.osano-cm-link--type_purpose{font-weight:400}.osano-cm-tcf-purpose--label input{accent-color:var(--osano-toggle-on-background-color);float:right;margin-right:.5em}.osano-cm-opt-out-honored-wrapper{align-items:center;background:none;border:1px solid;border-radius:1em;display:flex;gap:.5em;margin:0 0 1em;max-width:-moz-max-content;max-width:max-content;outline:none;padding:.5em;position:relative}.osano-cm-opt-out-honored-wrapper__label{font-size:.75em;font-style:normal;font-weight:400;letter-spacing:.0625em;line-height:1.25;margin-right:.25em}.osano-cm-opt-out-honored-wrapper__additional-label{color:inherit;font-size:.75em;font-weight:400;line-height:1.5;margin:.5em 0 0}.osano-cm-opt-out-honored-wrapper__tooltip{align-items:flex-start;background:#fff;border-radius:.25em;bottom:calc(100% + 12px);box-shadow:0 1px 10px rgba(0,0,0,.12),0 4px 5px rgba(0,0,0,.14),0 2px 4px rgba(0,0,0,.2);color:#333;display:flex;gap:.5rem;max-width:calc(100vw - 4em);opacity:0;padding:1rem;position:absolute;transition:opacity .2s linear 0ms,visibility .2s linear .2s;visibility:hidden;white-space:normal;width:14rem;z-index:2147483636}.osano-cm-opt-out-honored-wrapper__tooltip:before{background:#fff;bottom:-6px;box-shadow:2px 2px 4px rgba(0,0,0,.1);content:"";height:12px;left:15%;position:absolute;transform:translateX(-50%) rotate(45deg);width:12px}.osano-cm-opt-out-honored-wrapper__tooltip-icon{flex-shrink:0}.osano-cm-opt-out-honored-wrapper__tooltip-icon svg{display:block}.osano-cm-opt-out-honored-wrapper__tooltip-content{display:flex;flex:1;flex-direction:column;gap:.25rem}.osano-cm-opt-out-honored-wrapper__tooltip-title{color:#333;font-size:.875em;font-weight:600;line-height:1.25;margin:.125em 0}.osano-cm-opt-out-honored-wrapper__tooltip-subtitle{color:#666;font-size:.75em;font-weight:400;line-height:1.25;margin:0}.osano-cm-opt-out-honored-wrapper--position_right{bottom:1em;right:.75em}.osano-cm-opt-out-honored-wrapper--position_left{bottom:1em;left:.75em}.osano-cm-opt-out-honored-wrapper--position_left,.osano-cm-opt-out-honored-wrapper--position_right{background:#fff;border-color:#058a5e;color:#058a5e;margin:0;max-width:calc(100vw - 2.5em);opacity:.9;position:fixed;transition:opacity .2s linear 0ms,visibility 0ms linear 0ms;visibility:visible;z-index:2147483636}.osano-cm-opt-out-honored-wrapper--position_left:hover,.osano-cm-opt-out-honored-wrapper--position_right:hover{opacity:1}.osano-cm-opt-out-honored-wrapper--position_right.osano-cm-opt-out-honored-wrapper--has-main-widget{bottom:1em;right:4em}.osano-cm-opt-out-honored-wrapper--position_left.osano-cm-opt-out-honored-wrapper--has-main-widget{bottom:1em;left:4em}.osano-cm-opt-out-honored-wrapper--clickable{cursor:pointer}.osano-cm-opt-out-honored-wrapper--hidden{opacity:0;transition-delay:0ms,.2s;visibility:hidden}.osano-cm-opt-out-honored-wrapper--context_description,.osano-cm-opt-out-honored-wrapper--context_dialog{background:none;border-color:inherit;color:inherit;cursor:default;margin:0 0 .5em;opacity:1;position:static;z-index:auto}.osano-cm-opt-out-honored-wrapper--context_description .osano-cm-opt-out-honored-wrapper__label,.osano-cm-opt-out-honored-wrapper--context_dialog .osano-cm-opt-out-honored-wrapper__label{color:inherit}.osano-cm-opt-out-honored-wrapper--context_description .osano-cm-opt-out-honored-wrapper__tooltip,.osano-cm-opt-out-honored-wrapper--context_dialog .osano-cm-opt-out-honored-wrapper__tooltip{display:none}.osano-cm-opt-out-honored-wrapper--tooltip-active:focus-within .osano-cm-opt-out-honored-wrapper__tooltip,.osano-cm-opt-out-honored-wrapper--tooltip-active:hover .osano-cm-opt-out-honored-wrapper__tooltip{opacity:1;transition-delay:0ms,0ms;visibility:visible}.osano-cm-opt-out-honored-wrapper--clickable:focus{outline:2px solid var(--osano-focus-color,#06c);outline-offset:2px}.osano-cm-dialog .osano-cm-opt-out-honored-wrapper{margin:0 0 .5em}.osano-cm-expansion-panel{border-bottom:1px solid rgba(0,0,0,.1);display:block;font-size:.75em;margin:0 -1.5em 1em;padding:1.5em 1.5em 0}.osano-cm-expansion-panel--expanded{border-bottom:none}.osano-cm-expansion-panel--empty,.osano-cm-expansion-panel--empty:not([open]){border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:0}.osano-cm-expansion-panel__body{background-color:rgba(0,0,0,.1);line-height:1.25;list-style:none;margin:0 -1.5em;max-height:0;overflow:hidden;padding:0 1.5em;transition-delay:0ms,0ms,0ms,.3s;transition-duration:.3s,.3s,.3s,0s;transition-property:max-height,padding-top,padding-bottom,visibility;transition-timing-function:ease-out;visibility:hidden}.osano-cm-expansion-panel__toggle{cursor:pointer;display:block;line-height:1.25;margin:0 auto 1em 0;position:relative}.osano-cm-expansion-panel__toggle,.osano-cm-expansion-panel__toggle:active,.osano-cm-expansion-panel__toggle:hover{color:var(--osano-link-color);outline:none}.osano-cm-expansion-panel__toggle:focus{color:var(--osano-link-color-focus);outline:none}[dir=rtl] .osano-cm-expansion-panel__toggle{margin:0 0 1em auto}.osano-cm-expansion-panel--expanded .osano-cm-expansion-panel__body{max-height:none;padding:1.25em 1.5em 1em;transition-delay:0ms,0ms,0ms,0ms;visibility:visible}.osano-cm-disclosure-item__title{border:0;clear:both;display:block;flex:0 1 30%;font-size:1em;font-weight:700;line-height:1.375;margin:0 0 .5em;padding:0}.osano-cm-disclosure-item__description{flex:0 1 70%;font-size:1em;line-height:1.375;margin:0 0 .5em;overflow:hidden;padding:0;text-overflow:ellipsis;white-space:pre-line}.osano-cm-disclosure{border-bottom:none;display:block;font-size:.75em;margin:0 -1.5em 1em;padding:1.5em 1.5em 0}.osano-cm-disclosure--collapse{border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:1em}.osano-cm-disclosure--empty,.osano-cm-disclosure--empty:not([open]){border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:0}.osano-cm-disclosure__list{background-color:rgba(0,0,0,.1);line-height:1.25;list-style:none;margin:0 -1.5em;padding:1.25em 1.5em 1em}.osano-cm-disclosure__list:empty{border:none;padding:0 1.5em}.osano-cm-disclosure__list:first-of-type{margin-top:1em;padding:1.25em 1.5em 1em}.osano-cm-disclosure__list:first-of-type:after{background-color:var(--osano-link-color)}.osano-cm-disclosure__list:first-of-type:empty{padding:1.75em 1.5em .75em}.osano-cm-disclosure__list:not(:first-of-type):not(:empty){border-top:1px solid rgba(0,0,0,.1)}.osano-cm-disclosure__list:empty+.osano-cm-disclosure__list:not(:empty){border:none;padding:0 1.5em}.osano-cm-disclosure__list:not(:empty)~.osano-cm-disclosure__list:empty+.osano-cm-disclosure__list:not(:empty){border-top:1px solid rgba(0,0,0,.1)}.osano-cm-disclosure__list>.osano-cm-list-item{line-height:1.25}.osano-cm-disclosure__list>.osano-cm-list-item:not(:first-of-type){border-top:1px solid rgba(0,0,0,.1);margin:1em -1.25em 0;padding:1em 1.25em 0}.osano-cm-disclosure__toggle{color:var(--osano-link-color);cursor:pointer;display:block;font-weight:700;line-height:1.25;margin:0 auto 0 0;outline:none;position:relative}.osano-cm-disclosure__toggle:focus,.osano-cm-disclosure__toggle:hover{text-decoration:underline}.osano-cm-disclosure__toggle:active,.osano-cm-disclosure__toggle:hover{color:var(--osano-link-color)}.osano-cm-disclosure__toggle:focus{color:var(--osano-link-color-focus)}[dir=rtl] .osano-cm-disclosure__toggle{margin:0 0 0 auto}.osano-cm-disclosure--loading .osano-cm-disclosure__list{height:0;line-height:0;max-height:0}.osano-cm-disclosure--loading .osano-cm-disclosure__list>*{display:none}.osano-cm-disclosure--loading .osano-cm-disclosure__list:after{animation-duration:1s;animation-iteration-count:infinite;animation-name:osano-load-scale;animation-timing-function:ease-in-out;border-radius:100%;content:"";display:block;height:1em;position:relative;top:-.125em;transform:translateY(-50%);width:1em}.osano-cm-disclosure--collapse .osano-cm-disclosure__list{display:none}.osano-cm-disclosure--collapse .osano-cm-disclosure__list:after{content:none}.osano-cm-disclosure-item{display:flex;flex-wrap:wrap;margin:0}.osano-cm-disclosure-item__title:last-of-type{margin-bottom:0}.osano-cm-disclosure-item__description:hover{word-break:break-word}.osano-cm-disclosure-item__description:last-of-type{margin-bottom:0}@keyframes osano-load-scale{0%{transform:translateY(-50%) scale(0)}to{opacity:0;transform:translateY(-50%) scale(1)}} :root { --osano-button-background-color: <!--?lit$607861584$-->#0072b3; --osano-button-foreground-color: <!--?lit$607861584$-->#FFFFFF; --osano-button-deny-background-color: <!--?lit$607861584$-->#0072b3; --osano-button-deny-foreground-color: <!--?lit$607861584$-->#FFFFFF; --osano-dialog-background-color: <!--?lit$607861584$-->#ffffff; --osano-dialog-foreground-color: <!--?lit$607861584$-->#000000; --osano-info-dialog-background-color: <!--?lit$607861584$-->#fdfdfd; --osano-info-dialog-foreground-color: <!--?lit$607861584$-->#000000; --osano-info-dialog-overlay-color: <!--?lit$607861584$-->rgba(37,37,37,0.45); --osano-link-color: <!--?lit$607861584$-->#c1560b; --osano-toggle-off-background-color: <!--?lit$607861584$-->#0072b3; --osano-toggle-button-off-color: <!--?lit$607861584$-->#FFFFFF; --osano-toggle-on-background-color: <!--?lit$607861584$-->#0072b3; --osano-toggle-button-on-color: <!--?lit$607861584$-->#FFFFFF; --osano-widget-color: <!--?lit$607861584$-->#37cd8f; --osano-widget-fill-color: <!--?lit$607861584$-->#fff; --osano-widget-outline-color: <!--?lit$607861584$-->#29246a; --osano-clear-dialog-background: <!--?lit$607861584$-->rgba(253,253,253,0); --osano-button-background-hover: <!--?lit$607861584$-->#1486c7; --osano-button-deny-background-hover: <!--?lit$607861584$-->#1486c7; --osano-dialog-foreground-hover: <!--?lit$607861584$-->#141414; --osano-dialog-background-hover: <!--?lit$607861584$-->#ebebeb; --osano-info-dialog-foreground-hover: <!--?lit$607861584$-->#141414; --osano-info-dialog-background-hover: <!--?lit$607861584$-->#e9e9e9; --osano-link-color-focus: <!--?lit$607861584$-->#d56a1f; --osano-toggle-off-background-hover-focus: <!--?lit$607861584$-->#1486c7; --osano-toggle-on-background-hover-focus: <!--?lit$607861584$-->#1486c7; --osano-toggle-off-background-disabled: <!--?lit$607861584$-->#40b2f3; --osano-toggle-button-off-disabled: <!--?lit$607861584$-->#bfbfbf; --osano-toggle-on-background-disabled: <!--?lit$607861584$-->#40b2f3; --osano-toggle-button-on-disabled: <!--?lit$607861584$-->#bfbfbf; } .osano-cm-window { direction: <!--?lit$607861584$-->ltr; text-align: <!--?lit$607861584$-->left; } </style><style id="ace-zyautumn">undefined
+/*# sourceURL=ace/css/ace-zyautumn */</style><style id="error_marker.css">
+    .error_widget_wrapper {
+        background: inherit;
+        color: inherit;
+        border:none
+    }
+    .error_widget {
+        border-top: solid 2px;
+        border-bottom: solid 2px;
+        margin: 5px 0;
+        padding: 10px 40px;
+        white-space: pre-wrap;
+    }
+    .error_widget.ace_error, .error_widget_arrow.ace_error{
+        border-color: #ff5a5a
+    }
+    .error_widget.ace_warning, .error_widget_arrow.ace_warning{
+        border-color: #F1D817
+    }
+    .error_widget.ace_info, .error_widget_arrow.ace_info{
+        border-color: #5a5a5a
+    }
+    .error_widget.ace_ok, .error_widget_arrow.ace_ok{
+        border-color: #5aaa5a
+    }
+    .error_widget_arrow {
+        position: absolute;
+        border: solid 5px;
+        border-top-color: transparent!important;
+        border-right-color: transparent!important;
+        border-left-color: transparent!important;
+        top: -5px;
+    }
+
+/*# sourceURL=ace/css/error_marker.css */</style><style id="ace-tm">.ace-tm .ace_gutter {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.ace-tm .ace_print-margin {
+  width: 1px;
+  background: #e8e8e8;
+}
+
+.ace-tm .ace_fold {
+    background-color: #6B72E6;
+}
+
+.ace-tm {
+  background-color: #FFFFFF;
+  color: black;
+}
+
+.ace-tm .ace_cursor {
+  color: black;
+}
+        
+.ace-tm .ace_invisible {
+  color: rgb(191, 191, 191);
+}
+
+.ace-tm .ace_storage,
+.ace-tm .ace_keyword {
+  color: blue;
+}
+
+.ace-tm .ace_constant {
+  color: rgb(197, 6, 11);
+}
+
+.ace-tm .ace_constant.ace_buildin {
+  color: rgb(88, 72, 246);
+}
+
+.ace-tm .ace_constant.ace_language {
+  color: rgb(88, 92, 246);
+}
+
+.ace-tm .ace_constant.ace_library {
+  color: rgb(6, 150, 14);
+}
+
+.ace-tm .ace_invalid {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: red;
+}
+
+.ace-tm .ace_support.ace_function {
+  color: rgb(60, 76, 114);
+}
+
+.ace-tm .ace_support.ace_constant {
+  color: rgb(6, 150, 14);
+}
+
+.ace-tm .ace_support.ace_type,
+.ace-tm .ace_support.ace_class {
+  color: rgb(109, 121, 222);
+}
+
+.ace-tm .ace_keyword.ace_operator {
+  color: rgb(104, 118, 135);
+}
+
+.ace-tm .ace_string {
+  color: rgb(3, 106, 7);
+}
+
+.ace-tm .ace_comment {
+  color: rgb(76, 136, 107);
+}
+
+.ace-tm .ace_comment.ace_doc {
+  color: rgb(0, 102, 255);
+}
+
+.ace-tm .ace_comment.ace_doc.ace_tag {
+  color: rgb(128, 159, 191);
+}
+
+.ace-tm .ace_constant.ace_numeric {
+  color: rgb(0, 0, 205);
+}
+
+.ace-tm .ace_variable {
+  color: rgb(49, 132, 149);
+}
+
+.ace-tm .ace_xml-pe {
+  color: rgb(104, 104, 91);
+}
+
+.ace-tm .ace_entity.ace_name.ace_function {
+  color: #0000A2;
+}
+
+
+.ace-tm .ace_heading {
+  color: rgb(12, 7, 255);
+}
+
+.ace-tm .ace_list {
+  color:rgb(185, 6, 144);
+}
+
+.ace-tm .ace_meta.ace_tag {
+  color:rgb(0, 22, 142);
+}
+
+.ace-tm .ace_string.ace_regex {
+  color: rgb(255, 0, 0)
+}
+
+.ace-tm .ace_marker-layer .ace_selection {
+  background: rgb(181, 213, 255);
+}
+.ace-tm.ace_multiselect .ace_selection.ace_start {
+  box-shadow: 0 0 3px 0px white;
+}
+.ace-tm .ace_marker-layer .ace_step {
+  background: rgb(252, 255, 0);
+}
+
+.ace-tm .ace_marker-layer .ace_stack {
+  background: rgb(164, 229, 101);
+}
+
+.ace-tm .ace_marker-layer .ace_bracket {
+  margin: -1px 0 0 -1px;
+  border: 1px solid rgb(192, 192, 192);
+}
+
+.ace-tm .ace_marker-layer .ace_active-line {
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.ace-tm .ace_gutter-active-line {
+    background-color : #dcdcdc;
+}
+
+.ace-tm .ace_marker-layer .ace_selected-word {
+  background: rgb(250, 250, 255);
+  border: 1px solid rgb(200, 200, 250);
+}
+
+.ace-tm .ace_indent-guide {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;
+}
+
+.ace-tm .ace_indent-guide-active {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAZSURBVHjaYvj///9/hivKyv8BAAAA//8DACLqBhbvk+/eAAAAAElFTkSuQmCC") right repeat-y;
+}
+
+/*# sourceURL=ace/css/ace-tm */</style><style id="ace_editor.css">
+.ace_br1 {border-top-left-radius    : 3px;}
+.ace_br2 {border-top-right-radius   : 3px;}
+.ace_br3 {border-top-left-radius    : 3px; border-top-right-radius:    3px;}
+.ace_br4 {border-bottom-right-radius: 3px;}
+.ace_br5 {border-top-left-radius    : 3px; border-bottom-right-radius: 3px;}
+.ace_br6 {border-top-right-radius   : 3px; border-bottom-right-radius: 3px;}
+.ace_br7 {border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px;}
+.ace_br8 {border-bottom-left-radius : 3px;}
+.ace_br9 {border-top-left-radius    : 3px; border-bottom-left-radius:  3px;}
+.ace_br10{border-top-right-radius   : 3px; border-bottom-left-radius:  3px;}
+.ace_br11{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-left-radius:  3px;}
+.ace_br12{border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}
+.ace_br13{border-top-left-radius    : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}
+.ace_br14{border-top-right-radius   : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}
+.ace_br15{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}
+
+
+.ace_editor {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Source Code Pro', 'source-code-pro', monospace;
+    direction: ltr;
+    text-align: left;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    forced-color-adjust: none;
+}
+
+.ace_scroller {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    background-color: inherit;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: text;
+}
+
+.ace_content {
+    position: absolute;
+    box-sizing: border-box;
+    min-width: 100%;
+    contain: style size layout;
+    font-variant-ligatures: no-common-ligatures;
+}
+.ace_invisible {
+    font-variant-ligatures: none;
+}
+
+.ace_keyboard-focus:focus {
+    box-shadow: inset 0 0 0 2px #5E9ED6;
+    outline: none;
+}
+
+.ace_dragging .ace_scroller:before{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    background: rgba(250, 250, 250, 0.01);
+    z-index: 1000;
+}
+.ace_dragging.ace_dark .ace_scroller:before{
+    background: rgba(0, 0, 0, 0.01);
+}
+
+.ace_gutter {
+    position: absolute;
+    overflow : hidden;
+    width: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    cursor: default;
+    z-index: 4;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    contain: style size layout;
+}
+
+.ace_gutter-active-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.ace_scroller.ace_scroll-left:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-shadow: 17px 0 16px -16px rgba(0, 0, 0, 0.4) inset;
+    pointer-events: none;
+}
+
+.ace_gutter-cell, .ace_gutter-cell_svg-icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-left: 19px;
+    padding-right: 6px;
+    background-repeat: no-repeat;
+}
+
+.ace_gutter-cell_svg-icons .ace_gutter_annotation {
+    margin-left: -14px;
+    float: left;
+}
+
+.ace_gutter-cell .ace_gutter_annotation {
+    margin-left: -19px;
+    float: left;
+}
+
+.ace_gutter-cell.ace_error, .ace_icon.ace_error, .ace_icon.ace_error_fold, .ace_gutter-cell.ace_security, .ace_icon.ace_security, .ace_icon.ace_security_fold {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABOFBMVEX/////////QRswFAb/Ui4wFAYwFAYwFAaWGAfDRymzOSH/PxswFAb/SiUwFAYwFAbUPRvjQiDllog5HhHdRybsTi3/Tyv9Tir+Syj/UC3////XurebMBIwFAb/RSHbPx/gUzfdwL3kzMivKBAwFAbbvbnhPx66NhowFAYwFAaZJg8wFAaxKBDZurf/RB6mMxb/SCMwFAYwFAbxQB3+RB4wFAb/Qhy4Oh+4QifbNRcwFAYwFAYwFAb/QRzdNhgwFAYwFAbav7v/Uy7oaE68MBK5LxLewr/r2NXewLswFAaxJw4wFAbkPRy2PyYwFAaxKhLm1tMwFAazPiQwFAaUGAb/QBrfOx3bvrv/VC/maE4wFAbRPBq6MRO8Qynew8Dp2tjfwb0wFAbx6eju5+by6uns4uH9/f36+vr/GkHjAAAAYnRSTlMAGt+64rnWu/bo8eAA4InH3+DwoN7j4eLi4xP99Nfg4+b+/u9B/eDs1MD1mO7+4PHg2MXa347g7vDizMLN4eG+Pv7i5evs/v79yu7S3/DV7/498Yv24eH+4ufQ3Ozu/v7+y13sRqwAAADLSURBVHjaZc/XDsFgGIBhtDrshlitmk2IrbHFqL2pvXf/+78DPokj7+Fz9qpU/9UXJIlhmPaTaQ6QPaz0mm+5gwkgovcV6GZzd5JtCQwgsxoHOvJO15kleRLAnMgHFIESUEPmawB9ngmelTtipwwfASilxOLyiV5UVUyVAfbG0cCPHig+GBkzAENHS0AstVF6bacZIOzgLmxsHbt2OecNgJC83JERmePUYq8ARGkJx6XtFsdddBQgZE2nPR6CICZhawjA4Fb/chv+399kfR+MMMDGOQAAAABJRU5ErkJggg==");
+    background-repeat: no-repeat;
+    background-position: 2px center;
+}
+
+.ace_gutter-cell.ace_warning, .ace_icon.ace_warning, .ace_icon.ace_warning_fold {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAmVBMVEX///8AAAD///8AAAAAAABPSzb/5sAAAAB/blH/73z/ulkAAAAAAAD85pkAAAAAAAACAgP/vGz/rkDerGbGrV7/pkQICAf////e0IsAAAD/oED/qTvhrnUAAAD/yHD/njcAAADuv2r/nz//oTj/p064oGf/zHAAAAA9Nir/tFIAAAD/tlTiuWf/tkIAAACynXEAAAAAAAAtIRW7zBpBAAAAM3RSTlMAABR1m7RXO8Ln31Z36zT+neXe5OzooRDfn+TZ4p3h2hTf4t3k3ucyrN1K5+Xaks52Sfs9CXgrAAAAjklEQVR42o3PbQ+CIBQFYEwboPhSYgoYunIqqLn6/z8uYdH8Vmdnu9vz4WwXgN/xTPRD2+sgOcZjsge/whXZgUaYYvT8QnuJaUrjrHUQreGczuEafQCO/SJTufTbroWsPgsllVhq3wJEk2jUSzX3CUEDJC84707djRc5MTAQxoLgupWRwW6UB5fS++NV8AbOZgnsC7BpEAAAAABJRU5ErkJggg==");
+    background-repeat: no-repeat;
+    background-position: 2px center;
+}
+
+.ace_gutter-cell.ace_info, .ace_icon.ace_info, .ace_gutter-cell.ace_hint, .ace_icon.ace_hint {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAJ0Uk5TAAB2k804AAAAPklEQVQY02NgIB68QuO3tiLznjAwpKTgNyDbMegwisCHZUETUZV0ZqOquBpXj2rtnpSJT1AEnnRmL2OgGgAAIKkRQap2htgAAAAASUVORK5CYII=");
+    background-repeat: no-repeat;
+    background-position: 2px center;
+}
+
+.ace_dark .ace_gutter-cell.ace_info, .ace_dark .ace_icon.ace_info, .ace_dark .ace_gutter-cell.ace_hint, .ace_dark .ace_icon.ace_hint {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJFBMVEUAAAChoaGAgIAqKiq+vr6tra1ZWVmUlJSbm5s8PDxubm56enrdgzg3AAAAAXRSTlMAQObYZgAAAClJREFUeNpjYMAPdsMYHegyJZFQBlsUlMFVCWUYKkAZMxZAGdxlDMQBAG+TBP4B6RyJAAAAAElFTkSuQmCC");
+}
+
+.ace_icon_svg.ace_error {
+    -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAxNiI+CjxnIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlPSJyZWQiIHNoYXBlLXJlbmRlcmluZz0iZ2VvbWV0cmljUHJlY2lzaW9uIj4KPGNpcmNsZSBmaWxsPSJub25lIiBjeD0iOCIgY3k9IjgiIHI9IjciIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPGxpbmUgeDE9IjExIiB5MT0iNSIgeDI9IjUiIHkyPSIxMSIvPgo8bGluZSB4MT0iMTEiIHkxPSIxMSIgeDI9IjUiIHkyPSI1Ii8+CjwvZz4KPC9zdmc+");
+    background-color: crimson;
+}
+.ace_icon_svg.ace_security {
+    -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAgMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8ZyBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZT0iZGFya29yYW5nZSIgZmlsbD0ibm9uZSIgc2hhcGUtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iPgogICAgICAgIDxwYXRoIGNsYXNzPSJzdHJva2UtbGluZWpvaW4tcm91bmQiIGQ9Ik04IDE0LjgzMDdDOCAxNC44MzA3IDIgMTIuOTA0NyAyIDguMDg5OTJWMy4yNjU0OEM1LjMxIDMuMjY1NDggNy45ODk5OSAxLjM0OTE4IDcuOTg5OTkgMS4zNDkxOEM3Ljk4OTk5IDEuMzQ5MTggMTAuNjkgMy4yNjU0OCAxNCAzLjI2NTQ4VjguMDg5OTJDMTQgMTIuOTA0NyA4IDE0LjgzMDcgOCAxNC44MzA3WiIvPgogICAgICAgIDxwYXRoIGQ9Ik0yIDguMDg5OTJWMy4yNjU0OEM1LjMxIDMuMjY1NDggNy45ODk5OSAxLjM0OTE4IDcuOTg5OTkgMS4zNDkxOCIvPgogICAgICAgIDxwYXRoIGQ9Ik0xMy45OSA4LjA4OTkyVjMuMjY1NDhDMTAuNjggMy4yNjU0OCA4IDEuMzQ5MTggOCAxLjM0OTE4Ii8+CiAgICAgICAgPHBhdGggY2xhc3M9InN0cm9rZS1saW5lam9pbi1yb3VuZCIgZD0iTTggNFY5Ii8+CiAgICAgICAgPHBhdGggY2xhc3M9InN0cm9rZS1saW5lam9pbi1yb3VuZCIgZD0iTTggMTBWMTIiLz4KICAgIDwvZz4KPC9zdmc+");
+    background-color: crimson;
+}
+.ace_icon_svg.ace_warning {
+    -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAxNiI+CjxnIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlPSJkYXJrb3JhbmdlIiBzaGFwZS1yZW5kZXJpbmc9Imdlb21ldHJpY1ByZWNpc2lvbiI+Cjxwb2x5Z29uIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGZpbGw9Im5vbmUiIHBvaW50cz0iOCAxIDE1IDE1IDEgMTUgOCAxIi8+CjxyZWN0IHg9IjgiIHk9IjEyIiB3aWR0aD0iMC4wMSIgaGVpZ2h0PSIwLjAxIi8+CjxsaW5lIHgxPSI4IiB5MT0iNiIgeDI9IjgiIHkyPSIxMCIvPgo8L2c+Cjwvc3ZnPg==");
+    background-color: darkorange;
+}
+.ace_icon_svg.ace_info {
+    -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAxNiI+CjxnIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlPSJibHVlIiBzaGFwZS1yZW5kZXJpbmc9Imdlb21ldHJpY1ByZWNpc2lvbiI+CjxjaXJjbGUgZmlsbD0ibm9uZSIgY3g9IjgiIGN5PSI4IiByPSI3IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjxwb2x5bGluZSBwb2ludHM9IjggMTEgOCA4Ii8+Cjxwb2x5bGluZSBwb2ludHM9IjkgOCA2IDgiLz4KPGxpbmUgeDE9IjEwIiB5MT0iMTEiIHgyPSI2IiB5Mj0iMTEiLz4KPHJlY3QgeD0iOCIgeT0iNSIgd2lkdGg9IjAuMDEiIGhlaWdodD0iMC4wMSIvPgo8L2c+Cjwvc3ZnPg==");
+    background-color: royalblue;
+}
+.ace_icon_svg.ace_hint {
+    -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAgMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8ZyBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZT0ic2lsdmVyIiBmaWxsPSJub25lIiBzaGFwZS1yZW5kZXJpbmc9Imdlb21ldHJpY1ByZWNpc2lvbiI+CiAgICAgICAgPHBhdGggY2xhc3M9InN0cm9rZS1saW5lam9pbi1yb3VuZCIgZD0iTTYgMTRIMTAiLz4KICAgICAgICA8cGF0aCBkPSJNOCAxMUg5QzkgOS40NzAwMiAxMiA4LjU0MDAyIDEyIDUuNzYwMDJDMTIuMDIgNC40MDAwMiAxMS4zOSAzLjM2MDAyIDEwLjQzIDIuNjcwMDJDOSAxLjY0MDAyIDcuMDAwMDEgMS42NDAwMiA1LjU3MDAxIDIuNjcwMDJDNC42MTAwMSAzLjM2MDAyIDMuOTggNC40MDAwMiA0IDUuNzYwMDJDNCA4LjU0MDAyIDcuMDAwMDEgOS40NzAwMiA3LjAwMDAxIDExSDhaIi8+CiAgICA8L2c+Cjwvc3ZnPg==");
+    background-color: silver;
+}
+
+.ace_icon_svg.ace_error_fold {
+    -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAxNiIgZmlsbD0ibm9uZSI+CiAgPHBhdGggZD0ibSAxOC45Mjk4NTEsNy44Mjk4MDc2IGMgMC4xNDYzNTMsNi4zMzc0NjA0IC02LjMyMzE0Nyw3Ljc3Nzg0NDQgLTcuNDc3OTEyLDcuNzc3ODQ0NCAtMi4xMDcyNzI2LC0wLjEyODc1IDUuMTE3Njc4LDAuMzU2MjQ5IDUuMDUxNjk4LC03Ljg3MDA2MTggLTAuNjA0NjcyLC04LjAwMzk3MzQ5IC03LjA3NzI3MDYsLTcuNTYzMTE4OSAtNC44NTczLC03LjQzMDM5NTU2IDEuNjA2LC0wLjExNTE0MjI1IDYuODk3NDg1LDEuMjYyNTQ1OTYgNy4yODM1MTQsNy41MjI2MTI5NiB6IiBmaWxsPSJjcmltc29uIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0ibSA4LjExNDc1NjIsMi4wNTI5ODI4IGMgMy4zNDkxNjk4LDAgNi4wNjQxMzI4LDIuNjc2ODYyNyA2LjA2NDEzMjgsNS45Nzg5NTMgMCwzLjMwMjExMjIgLTIuNzE0OTYzLDUuOTc4OTIwMiAtNi4wNjQxMzI4LDUuOTc4OTIwMiAtMy4zNDkxNDczLDAgLTYuMDY0MTc3MiwtMi42NzY4MDggLTYuMDY0MTc3MiwtNS45Nzg5MjAyIDAuMDA1MzksLTMuMjk5ODg2MSAyLjcxNzI2NTYsLTUuOTczNjQwOCA2LjA2NDE3NzIsLTUuOTc4OTUzIHogbSAwLC0xLjczNTgyNzE5IGMgLTQuMzIxNDgzNiwwIC03LjgyNDc0MDM4LDMuNDU0MDE4NDkgLTcuODI0NzQwMzgsNy43MTQ3ODAxOSAwLDQuMjYwNzI4MiAzLjUwMzI1Njc4LDcuNzE0NzQ1MiA3LjgyNDc0MDM4LDcuNzE0NzQ1MiA0LjMyMTQ0OTgsMCA3LjgyNDY5OTgsLTMuNDU0MDE3IDcuODI0Njk5OCwtNy43MTQ3NDUyIDAsLTIuMDQ2MDkxNCAtMC44MjQzOTIsLTQuMDA4MzY3MiAtMi4yOTE3NTYsLTUuNDU1MTc0NiBDIDEyLjE4MDIyNSwxLjEyOTk2NDggMTAuMTkwMDEzLDAuMzE3MTU1NjEgOC4xMTQ3NTYyLDAuMzE3MTU1NjEgWiBNIDYuOTM3NDU2Myw4LjI0MDU5ODUgNC42NzE4Njg1LDEwLjQ4NTg1MiA2LjAwODY4MTQsMTEuODc2NzI4IDguMzE3MDAzNSw5LjYwMDc5MTEgMTAuNjI1MzM3LDExLjg3NjcyOCAxMS45NjIxMzgsMTAuNDg1ODUyIDkuNjk2NTUwOCw4LjI0MDU5ODUgMTEuOTYyMTM4LDYuMDA2ODA2NiAxMC41NzMyNDYsNC42Mzc0MzM1IDguMzE3MDAzNSw2Ljg3MzQyOTcgNi4wNjA3NjA3LDQuNjM3NDMzNSA0LjY3MTg2ODUsNi4wMDY4MDY2IFoiIGZpbGw9ImNyaW1zb24iIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=");
+    background-color: crimson;
+}
+.ace_icon_svg.ace_security_fold {
+    -webkit-mask-image: url("data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTcgMTQiIGZpbGw9Im5vbmUiPgogICAgPHBhdGggZD0iTTEwLjAwMDEgMTMuNjk5MkMxMC4wMDAxIDEzLjY5OTIgMTEuOTI0MSAxMy40NzYzIDEzIDEyLjY5OTJDMTQuNDEzOSAxMS42NzgxIDE2IDEwLjUgMTYuMTI1MSA2LjgxMTI2VjIuNTg5ODdDMTYuMTI1MSAyLjU0NzY4IDE2LjEyMjEgMi41MDYxOSAxNi4xMTY0IDIuNDY1NTlWMS43MTQ4NUgxNS4yNDE0TDE1LjIzMDcgMS43MTQ4NEwxNC42MjUxIDEuNjk5MjJWNi44MTEyM0MxNC42MjUxIDguNTEwNjEgMTQuNjI1MSA5LjQ2NDYxIDEyLjc4MjQgMTEuNzIxQzEyLjE1ODYgMTIuNDg0OCAxMC4wMDAxIDEzLjY5OTIgMTAuMDAwMSAxMy42OTkyWiIgZmlsbD0iY3JpbXNvbiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTcuMzM2MDkgMC4zNjc0NzVDNy4wMzIxNCAwLjE1MjY1MiA2LjYyNTQ4IDAuMTUzNjE0IDYuMzIyNTMgMC4zNjk5OTdMNi4zMDg2OSAwLjM3OTU1NEM2LjI5NTUzIDAuMzg4NTg4IDYuMjczODggMC40MDMyNjYgNi4yNDQxNyAwLjQyMjc4OUM2LjE4NDcxIDAuNDYxODYgNi4wOTMyMSAwLjUyMDE3MSA1Ljk3MzEzIDAuNTkxMzczQzUuNzMyNTEgMC43MzQwNTkgNS4zNzk5IDAuOTI2ODY0IDQuOTQyNzkgMS4xMjAwOUM0LjA2MTQ0IDEuNTA5NyAyLjg3NTQxIDEuODgzNzcgMS41ODk4NCAxLjg4Mzc3SDAuNzE0ODQ0VjIuNzU4NzdWNi45ODAxNUMwLjcxNDg0NCA5LjQ5Mzc0IDIuMjg4NjYgMTEuMTk3MyAzLjcwMjU0IDEyLjIxODVDNC40MTg0NSAxMi43MzU1IDUuMTI4NzQgMTMuMTA1MyA1LjY1NzMzIDEzLjM0NTdDNS45MjI4NCAxMy40NjY0IDYuMTQ1NjYgMTMuNTU1OSA2LjMwNDY1IDEzLjYxNjFDNi4zODQyMyAxMy42NDYyIDYuNDQ4MDUgMTMuNjY5IDYuNDkzNDkgMTMuNjg0OEM2LjUxNjIyIDEzLjY5MjcgNi41MzQzOCAxMy42OTg5IDYuNTQ3NjQgMTMuNzAzM0w2LjU2MzgyIDEzLjcwODdMNi41NjkwOCAxMy43MTA0TDYuNTcwOTkgMTMuNzExTDYuODM5ODQgMTMuNzUzM0w2LjU3MjQyIDEzLjcxMTVDNi43NDYzMyAxMy43NjczIDYuOTMzMzUgMTMuNzY3MyA3LjEwNzI3IDEzLjcxMTVMNy4xMDg3IDEzLjcxMUw3LjExMDYxIDEzLjcxMDRMNy4xMTU4NyAxMy43MDg3TDcuMTMyMDUgMTMuNzAzM0M3LjE0NTMxIDEzLjY5ODkgNy4xNjM0NiAxMy42OTI3IDcuMTg2MTkgMTMuNjg0OEM3LjIzMTY0IDEzLjY2OSA3LjI5NTQ2IDEzLjY0NjIgNy4zNzUwMyAxMy42MTYxQzcuNTM0MDMgMTMuNTU1OSA3Ljc1Njg1IDEzLjQ2NjQgOC4wMjIzNiAxMy4zNDU3QzguNTUwOTUgMTMuMTA1MyA5LjI2MTIzIDEyLjczNTUgOS45NzcxNSAxMi4yMTg1QzExLjM5MSAxMS4xOTczIDEyLjk2NDggOS40OTM3NyAxMi45NjQ4IDYuOTgwMThWMi43NTg4QzEyLjk2NDggMi43MTY2IDEyLjk2MTkgMi42NzUxMSAxMi45NTYxIDIuNjM0NTFWMS44ODM3N0gxMi4wODExQzEyLjA3NzUgMS44ODM3NyAxMi4wNzQgMS44ODM3NyAxMi4wNzA0IDEuODgzNzdDMTAuNzk3OSAxLjg4MDA0IDkuNjE5NjIgMS41MTEwMiA4LjczODk0IDEuMTI0ODZDOC43MzUzNCAxLjEyMzI3IDguNzMxNzQgMS4xMjE2OCA4LjcyODE0IDEuMTIwMDlDOC4yOTEwMyAwLjkyNjg2NCA3LjkzODQyIDAuNzM0MDU5IDcuNjk3NzkgMC41OTEzNzNDNy41Nzc3MiAwLjUyMDE3MSA3LjQ4NjIyIDAuNDYxODYgNy40MjY3NiAwLjQyMjc4OUM3LjM5NzA1IDAuNDAzMjY2IDcuMzc1MzkgMC4zODg1ODggNy4zNjIyNCAwLjM3OTU1NEw3LjM0ODk2IDAuMzcwMzVDNy4zNDg5NiAwLjM3MDM1IDcuMzQ4NDcgMC4zNzAwMiA3LjM0NTYzIDAuMzc0MDU0TDcuMzM3NzkgMC4zNjg2NTlMNy4zMzYwOSAwLjM2NzQ3NVpNOC4wMzQ3MSAyLjcyNjkxQzguODYwNCAzLjA5MDYzIDkuOTYwNjYgMy40NjMwOSAxMS4yMDYxIDMuNTg5MDdWNi45ODAxNUgxMS4yMTQ4QzExLjIxNDggOC42Nzk1MyAxMC4xNjM3IDkuOTI1MDcgOC45NTI1NCAxMC43OTk4QzguMzU1OTUgMTEuMjMwNiA3Ljc1Mzc0IDExLjU0NTQgNy4yOTc5NiAxMS43NTI3QzcuMTE2NzEgMTEuODM1MSA2Ljk2MDYyIDExLjg5OTYgNi44Mzk4NCAxMS45NDY5QzYuNzE5MDYgMTEuODk5NiA2LjU2Mjk3IDExLjgzNTEgNi4zODE3MyAxMS43NTI3QzUuOTI1OTUgMTEuNTQ1NCA1LjMyMzczIDExLjIzMDYgNC43MjcxNSAxMC43OTk4QzMuNTE2MDMgOS45MjUwNyAyLjQ2NDg0IDguNjc5NTUgMi40NjQ4NCA2Ljk4MDE4VjMuNTg5MDlDMy43MTczOCAzLjQ2MjM5IDQuODIzMDggMy4wODYzOSA1LjY1MDMzIDIuNzIwNzFDNi4xNDIyOCAyLjUwMzI0IDYuNTQ0ODUgMi4yODUzNyA2LjgzMjU0IDIuMTE2MjRDNy4xMjE4MSAyLjI4NTM1IDcuNTI3IDIuNTAzNTIgOC4wMjE5NiAyLjcyMTMxQzguMDI2MiAyLjcyMzE3IDguMDMwNDUgMi43MjUwNCA4LjAzNDcxIDIuNzI2OTFaTTUuOTY0ODQgMy40MDE0N1Y3Ljc3NjQ3SDcuNzE0ODRWMy40MDE0N0g1Ljk2NDg0Wk01Ljk2NDg0IDEwLjQwMTVWOC42NTE0N0g3LjcxNDg0VjEwLjQwMTVINS45NjQ4NFoiIGZpbGw9ImNyaW1zb24iIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=");
+    background-color: crimson;
+}
+.ace_icon_svg.ace_warning_fold {
+    -webkit-mask-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyMCAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNC43NzY5IDE0LjczMzdMOC42NTE5MiAyLjQ4MzY5QzguMzI5NDYgMS44Mzg3NyA3LjQwOTEzIDEuODM4NzcgNy4wODY2NyAyLjQ4MzY5TDAuOTYxNjY5IDE0LjczMzdDMC42NzA3NzUgMTUuMzE1NSAxLjA5MzgzIDE2IDEuNzQ0MjkgMTZIMTMuOTk0M0MxNC42NDQ4IDE2IDE1LjA2NzggMTUuMzE1NSAxNC43NzY5IDE0LjczMzdaTTMuMTYwMDcgMTQuMjVMNy44NjkyOSA0LjgzMTU2TDEyLjU3ODUgMTQuMjVIMy4xNjAwN1pNOC43NDQyOSAxMS42MjVWMTMuMzc1SDYuOTk0MjlWMTEuNjI1SDguNzQ0MjlaTTYuOTk0MjkgMTAuNzVWNy4yNUg4Ljc0NDI5VjEwLjc1SDYuOTk0MjlaIiBmaWxsPSIjRUM3MjExIi8+CjxwYXRoIGQ9Ik0xMS4xOTkxIDIuOTUyMzhDMTAuODgwOSAyLjMxNDY3IDEwLjM1MzcgMS44MDUyNiA5LjcwNTUgMS41MDlMMTEuMDQxIDEuMDY5NzhDMTEuNjg4MyAwLjk0OTgxNCAxMi4zMzcgMS4yNzI2MyAxMi42MzE3IDEuODYxNDFMMTcuNjEzNiAxMS44MTYxQzE4LjM1MjcgMTMuMjkyOSAxNy41OTM4IDE1LjA4MDQgMTYuMDE4IDE1LjU3NDVDMTYuNDA0NCAxNC40NTA3IDE2LjMyMzEgMTMuMjE4OCAxNS43OTI0IDEyLjE1NTVMMTEuMTk5MSAyLjk1MjM4WiIgZmlsbD0iI0VDNzIxMSIvPgo8L3N2Zz4=");
+    background-color: darkorange;
+}
+
+.ace_scrollbar {
+    contain: strict;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 6;
+}
+
+.ace_scrollbar-inner {
+    position: absolute;
+    cursor: text;
+    left: 0;
+    top: 0;
+}
+
+.ace_scrollbar-v{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    top: 0;
+}
+
+.ace_scrollbar-h {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    left: 0;
+}
+
+.ace_print-margin {
+    position: absolute;
+    height: 100%;
+}
+
+.ace_text-input {
+    position: absolute;
+    z-index: 0;
+    width: 0.5em;
+    height: 1em;
+    opacity: 0;
+    background: transparent;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    resize: none;
+    outline: none;
+    overflow: hidden;
+    font: inherit;
+    padding: 0 1px;
+    margin: 0 -1px;
+    contain: strict;
+    -ms-user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
+    /*with `pre-line` chrome inserts &nbsp; instead of space*/
+    white-space: pre!important;
+}
+.ace_text-input.ace_composition {
+    background: transparent;
+    color: inherit;
+    z-index: 1000;
+    opacity: 1;
+}
+.ace_composition_placeholder { color: transparent }
+.ace_composition_marker { 
+    border-bottom: 1px solid;
+    position: absolute;
+    border-radius: 0;
+    margin-top: 1px;
+}
+
+[ace_nocontext=true] {
+    transform: none!important;
+    filter: none!important;
+    clip-path: none!important;
+    mask : none!important;
+    contain: none!important;
+    perspective: none!important;
+    mix-blend-mode: initial!important;
+    z-index: auto;
+}
+
+.ace_layer {
+    z-index: 1;
+    position: absolute;
+    overflow: hidden;
+    /* workaround for chrome bug https://github.com/ajaxorg/ace/issues/2312*/
+    word-wrap: normal;
+    white-space: pre;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    /* setting pointer-events: auto; on node under the mouse, which changes
+        during scroll, will break mouse wheel scrolling in Safari */
+    pointer-events: none;
+}
+
+.ace_gutter-layer {
+    position: relative;
+    width: auto;
+    text-align: right;
+    pointer-events: auto;
+    height: 1000000px;
+    contain: style size layout;
+}
+
+.ace_text-layer {
+    font: inherit !important;
+    position: absolute;
+    height: 1000000px;
+    width: 1000000px;
+    contain: style size layout;
+}
+
+.ace_text-layer > .ace_line, .ace_text-layer > .ace_line_group {
+    contain: style size layout;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.ace_hidpi .ace_text-layer,
+.ace_hidpi .ace_gutter-layer,
+.ace_hidpi .ace_content,
+.ace_hidpi .ace_gutter {
+    contain: strict;
+}
+.ace_hidpi .ace_text-layer > .ace_line, 
+.ace_hidpi .ace_text-layer > .ace_line_group {
+    contain: strict;
+}
+
+.ace_cjk {
+    display: inline-block;
+    text-align: center;
+}
+
+.ace_cursor-layer {
+    z-index: 4;
+}
+
+.ace_cursor {
+    z-index: 4;
+    position: absolute;
+    box-sizing: border-box;
+    border-left: 2px solid;
+    /* workaround for smooth cursor repaintng whole screen in chrome */
+    transform: translatez(0);
+}
+
+.ace_multiselect .ace_cursor {
+    border-left-width: 1px;
+}
+
+.ace_slim-cursors .ace_cursor {
+    border-left-width: 1px;
+}
+
+.ace_overwrite-cursors .ace_cursor {
+    border-left-width: 0;
+    border-bottom: 1px solid;
+}
+
+.ace_hidden-cursors .ace_cursor {
+    opacity: 0.2;
+}
+
+.ace_hasPlaceholder .ace_hidden-cursors .ace_cursor {
+    opacity: 0;
+}
+
+.ace_smooth-blinking .ace_cursor {
+    transition: opacity 0.18s;
+}
+
+.ace_animate-blinking .ace_cursor {
+    animation-duration: 1000ms;
+    animation-timing-function: step-end;
+    animation-name: blink-ace-animate;
+    animation-iteration-count: infinite;
+}
+
+.ace_animate-blinking.ace_smooth-blinking .ace_cursor {
+    animation-duration: 1000ms;
+    animation-timing-function: ease-in-out;
+    animation-name: blink-ace-animate-smooth;
+}
+    
+@keyframes blink-ace-animate {
+    from, to { opacity: 1; }
+    60% { opacity: 0; }
+}
+
+@keyframes blink-ace-animate-smooth {
+    from, to { opacity: 1; }
+    45% { opacity: 1; }
+    60% { opacity: 0; }
+    85% { opacity: 0; }
+}
+
+.ace_marker-layer .ace_step, .ace_marker-layer .ace_stack {
+    position: absolute;
+    z-index: 3;
+}
+
+.ace_marker-layer .ace_selection {
+    position: absolute;
+    z-index: 5;
+}
+
+.ace_marker-layer .ace_bracket {
+    position: absolute;
+    z-index: 6;
+}
+
+.ace_marker-layer .ace_error_bracket {
+    position: absolute;
+    border-bottom: 1px solid #DE5555;
+    border-radius: 0;
+}
+
+.ace_marker-layer .ace_active-line {
+    position: absolute;
+    z-index: 2;
+}
+
+.ace_marker-layer .ace_selected-word {
+    position: absolute;
+    z-index: 4;
+    box-sizing: border-box;
+}
+
+.ace_line .ace_fold {
+    box-sizing: border-box;
+
+    display: inline-block;
+    height: 11px;
+    margin-top: -2px;
+    vertical-align: middle;
+
+    background-image:
+        url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),
+        url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACJJREFUeNpi+P//fxgTAwPDBxDxD078RSX+YeEyDFMCIMAAI3INmXiwf2YAAAAASUVORK5CYII=");
+    background-repeat: no-repeat, repeat-x;
+    background-position: center center, top left;
+    color: transparent;
+
+    border: 1px solid black;
+    border-radius: 2px;
+
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.ace_dark .ace_fold {
+}
+
+.ace_fold:hover{
+    background-image:
+        url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),
+        url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACBJREFUeNpi+P//fz4TAwPDZxDxD5X4i5fLMEwJgAADAEPVDbjNw87ZAAAAAElFTkSuQmCC");
+}
+
+.ace_tooltip {
+    background-color: #f5f5f5;
+    border: 1px solid gray;
+    border-radius: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    color: black;
+    padding: 3px 4px;
+    position: fixed;
+    z-index: 999999;
+    box-sizing: border-box;
+    cursor: default;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: normal;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: normal;
+    pointer-events: none;
+    overflow: auto;
+    max-width: min(33em, 66vw);
+    overscroll-behavior: contain;
+}
+.ace_tooltip pre {
+    white-space: pre-wrap;
+}
+
+.ace_tooltip.ace_dark {
+    background-color: #636363;
+    color: #fff;
+}
+
+.ace_tooltip:focus {
+    outline: 1px solid #5E9ED6;
+}
+
+.ace_icon {
+    display: inline-block;
+    width: 18px;
+    vertical-align: top;
+}
+
+.ace_icon_svg {
+    display: inline-block;
+    width: 12px;
+    vertical-align: top;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: 12px;
+    -webkit-mask-position: center;
+}
+
+.ace_folding-enabled > .ace_gutter-cell, .ace_folding-enabled > .ace_gutter-cell_svg-icons {
+    padding-right: 13px;
+}
+
+.ace_fold-widget, .ace_custom-widget {
+    box-sizing: border-box;
+
+    margin: 0 -12px 0 1px;
+    display: none;
+    width: 11px;
+    vertical-align: top;
+
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42mWKsQ0AMAzC8ixLlrzQjzmBiEjp0A6WwBCSPgKAXoLkqSot7nN3yMwR7pZ32NzpKkVoDBUxKAAAAABJRU5ErkJggg==");
+    background-repeat: no-repeat;
+    background-position: center;
+
+    border-radius: 3px;
+    
+    border: 1px solid transparent;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.ace_custom-widget {
+    background: none;
+}
+
+.ace_folding-enabled .ace_fold-widget {
+    display: inline-block;   
+}
+
+.ace_fold-widget.ace_end {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42m3HwQkAMAhD0YzsRchFKI7sAikeWkrxwScEB0nh5e7KTPWimZki4tYfVbX+MNl4pyZXejUO1QAAAABJRU5ErkJggg==");
+}
+
+.ace_fold-widget.ace_closed {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAGCAYAAAAG5SQMAAAAOUlEQVR42jXKwQkAMAgDwKwqKD4EwQ26sSOkVWjgIIHAzPiCgaqiqnJHZnKICBERHN194O5b9vbLuAVRL+l0YWnZAAAAAElFTkSuQmCCXA==");
+}
+
+.ace_fold-widget:hover {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+}
+
+.ace_fold-widget:active {
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+/**
+ * Dark version for fold widgets
+ */
+.ace_dark .ace_fold-widget {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4//8/AzoGEQ7oGCaLLAhWiSwB146BAQCSTPYocqT0AAAAAElFTkSuQmCC");
+}
+.ace_dark .ace_fold-widget.ace_end {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH0lEQVQIW2P4//8/AxQ7wNjIAjDMgC4AxjCVKBirIAAF0kz2rlhxpAAAAABJRU5ErkJggg==");
+}
+.ace_dark .ace_fold-widget.ace_closed {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAYAAACAcVaiAAAAHElEQVQIW2P4//+/AxAzgDADlOOAznHAKgPWAwARji8UIDTfQQAAAABJRU5ErkJggg==");
+}
+.ace_dark .ace_fold-widget:hover {
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.ace_dark .ace_fold-widget:active {
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.ace_inline_button {
+    border: 1px solid lightgray;
+    display: inline-block;
+    margin: -1px 8px;
+    padding: 0 5px;
+    pointer-events: auto;
+    cursor: pointer;
+}
+.ace_inline_button:hover {
+    border-color: gray;
+    background: rgba(200,200,200,0.2);
+    display: inline-block;
+    pointer-events: auto;
+}
+
+.ace_fold-widget.ace_invalid {
+    background-color: #FFB4B4;
+    border-color: #DE5555;
+}
+
+.ace_fade-fold-widgets .ace_fold-widget {
+    transition: opacity 0.4s ease 0.05s;
+    opacity: 0;
+}
+
+.ace_fade-fold-widgets:hover .ace_fold-widget {
+    transition: opacity 0.05s ease 0.05s;
+    opacity:1;
+}
+
+.ace_underline {
+    text-decoration: underline;
+}
+
+.ace_bold {
+    font-weight: bold;
+}
+
+.ace_nobold .ace_bold {
+    font-weight: normal;
+}
+
+.ace_italic {
+    font-style: italic;
+}
+
+
+.ace_error-marker {
+    background-color: rgba(255, 0, 0,0.2);
+    position: absolute;
+    z-index: 9;
+}
+
+.ace_highlight-marker {
+    background-color: rgba(255, 255, 0,0.2);
+    position: absolute;
+    z-index: 8;
+}
+
+.ace_mobile-menu {
+    position: absolute;
+    line-height: 1.5;
+    border-radius: 4px;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    background: white;
+    box-shadow: 1px 3px 2px grey;
+    border: 1px solid #dcdcdc;
+    color: black;
+}
+.ace_dark > .ace_mobile-menu {
+    background: #333;
+    color: #ccc;
+    box-shadow: 1px 3px 2px grey;
+    border: 1px solid #444;
+
+}
+.ace_mobile-button {
+    padding: 2px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.ace_mobile-button:hover {
+    background-color: #eee;
+    opacity:1;
+}
+.ace_mobile-button:active {
+    background-color: #ddd;
+}
+
+.ace_placeholder {
+    position: relative;
+    font-family: arial;
+    transform: scale(0.9);
+    transform-origin: left;
+    white-space: pre;
+    opacity: 0.7;
+    margin: 0 10px;
+    z-index: 1;
+}
+
+.ace_ghost_text {
+    opacity: 0.5;
+    font-style: italic;
+}
+
+.ace_ghost_text_container > div {
+    white-space: pre;
+}
+
+.ghost_text_line_wrapped::after {
+    content: "↩";
+    position: absolute;
+}
+
+.ace_lineWidgetContainer.ace_ghost_text {
+    margin: 0px 4px
+}
+
+.ace_screenreader-only {
+    position:absolute;
+    left:-10000px;
+    top:auto;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+}
+
+.ace_hidden_token {
+    display: none;
+}
+/*# sourceURL=ace/css/ace_editor.css */</style><style id="ace_scrollbar.css">.ace_editor>.ace_sb-v div, .ace_editor>.ace_sb-h div{
+  position: absolute;
+  background: rgba(128, 128, 128, 0.6);
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  z-index: 8;
+}
+.ace_editor>.ace_sb-v, .ace_editor>.ace_sb-h {
+  position: absolute;
+  z-index: 6;
+  background: none;
+  overflow: hidden!important;
+}
+.ace_editor>.ace_sb-v {
+  z-index: 6;
+  right: 0;
+  top: 0;
+  width: 12px;
+}
+.ace_editor>.ace_sb-v div {
+  z-index: 8;
+  right: 0;
+  width: 100%;
+}
+.ace_editor>.ace_sb-h {
+  bottom: 0;
+  left: 0;
+  height: 12px;
+}
+.ace_editor>.ace_sb-h div {
+  bottom: 0;
+  height: 100%;
+}
+.ace_editor>.ace_sb_grabbed {
+  z-index: 8;
+  background: #000;
+}
+/*# sourceURL=ace/css/ace_scrollbar.css */</style>
+        
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <title>Section 5.9 - CS 2520: Python for Programmers | zyBooks</title>
+        <meta content="" name="description">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <link href="https://learn.zybooks.com/assets/favicon.ico" integrity="" rel="icon">
+
+        <meta name="zybooks-web/config/environment" content="%7B%22appName%22%3A%22zybooks-web%22%2C%22environment%22%3A%22production%22%2C%22localRun%22%3Afalse%2C%22locationType%22%3A%22history%22%2C%22modulePrefix%22%3A%22zybooks-web%22%2C%22podModulePrefix%22%3A%22zybooks-web%2Froutes%22%2C%22rootURL%22%3A%22%2F%22%2C%22EmberENV%22%3A%7B%22EXTEND_PROTOTYPES%22%3Afalse%2C%22FEATURES%22%3A%7B%7D%2C%22_APPLICATION_TEMPLATE_WRAPPER%22%3Afalse%2C%22_DEFAULT_ASYNC_OBSERVERS%22%3Atrue%2C%22_JQUERY_INTEGRATION%22%3Afalse%2C%22_TEMPLATE_ONLY_GLIMMER_COMPONENTS%22%3Atrue%7D%2C%22APP%22%3A%7B%22BUILDKEY%22%3A%2243a301c2-799a-402a-f5a8-bffb580debb8%22%2C%22OVERRIDES%22%3A%7B%7D%2C%22IS_RUNNING_TEST_WITHOUT_SERVER_ARGS%22%3Afalse%7D%2C%22moment%22%3A%7B%22includeTimezone%22%3A%22subset%22%7D%2C%22stripe%22%3A%7B%22lazyLoad%22%3Atrue%2C%22publishableKey%22%3A%22pk_live_6WfpM1NZl9sSnKivV9WvGD2H%22%7D%2C%22ember-froala-editor%22%3A%7B%22key%22%3A%22eHE5C-11E3A2D2I2B6C4C1td1CGHNOa1TNSPH1e1J1VLPUUCVd1FC-22C4A3C3C1D4F2C2C3B3A1%3D%3D%22%2C%22imageAllowedTypes%22%3A%5B%22gif%22%2C%22jpeg%22%2C%22jpg%22%2C%22png%22%5D%2C%22imageMaxSize%22%3A10000000%2C%22imageUploadMethod%22%3A%22POST%22%2C%22videoAllowedTypes%22%3A%5B%22mp4%22%5D%2C%22videoMaxSize%22%3A300000000%2C%22videoUploadMethod%22%3A%22POST%22%2C%22videoInsertButtons%22%3A%5B%22videoUpload%22%5D%7D%2C%22%40sentry%2Fember%22%3A%7B%22sentry%22%3A%7B%22environment%22%3A%22production%22%2C%22release%22%3A%224a12e5b6065d22a66de1a7c673c0df010975354f%22%7D%2C%22disableInitialLoadInstrumentation%22%3Afalse%2C%22disablePerformance%22%3Afalse%7D%2C%22ember-cli-content-security-policy%22%3A%7B%22policy%22%3A%22connect-src%20&#39;self&#39;%20https%3A%2F%2F*.zybooks.com%20https%3A%2F%2F*.s3.amazonaws.com%20https%3A%2F%2F*.ingest.us.sentry.io%20https%3A%2F%2Fs3-us-west-2.amazonaws.com%20https%3A%2F%2F*.g.doubleclick.net%20https%3A%2F%2F*.analytics.google.com%20https%3A%2F%2Fanalytics.google.com%20https%3A%2F%2Fcmp.osano.com%20https%3A%2F%2Fapp.hopscotch.club%20https%3A%2F%2Fwidgets.hopscotch.club%20consent.api.osano.com%20tattle.api.osano.com%20cmp.osano.com%20disclosure.api.osano.com%3B%20default-src%20&#39;none&#39;%3B%20font-src%20&#39;self&#39;%20https%3A%2F%2Ffonts.gstatic.com%20https%3A%2F%2F*.zybooks.com%20data%3A%3B%20frame-ancestors%20*%20*.instructure.com%20*.schoology.com%20*.blackboard.com%20*.brightspace.com%20*.desire2learn.com%20*.umassonline.net%20*.mathworks.com%20*.brighthorizons.com%20*.moodlecloud.com%20*.mrooms3.net%20*.straighterline.com%20*.gostudyhall.com%20*.campusedu.com%20*.zybooks.com%20*.vcs.net%20*.mthree.com%20*.mrooms.net%20*.fullsail.com%20*.algonquincollege.com%20classroom.google.com%20learn.dcollege.net%20piazza.com%20*.binus.ac.id%20canvas.juacs.org%20*.riolearn.org%20corallanguage.org%20*.usask.ca%20*.uwaterloo.ca%20*.capu.ca%20*.uleth.ca%20*.wlu.ca%20*.smu.ca%20*.uwo.ca%20*.ontariotechu.ca%20*.willisonline.ca%20*.senecapolytechnic.ca%20*.yorku.ca%20*.uwindsor.ca%20*.concordia.ca%20*.nic.bc.ca%20*.torontomu.ca%20*.camosun.ca%20*.okanagan.bc.ca%20*.ucalgary.ca%20*.elearningontario.ca%20*.sheridancollege.ca%20*.stmarys.ca%20*.uoguelph.ca%20*.umanitoba.ca%20*.capilanou.ca%20*.utoronto.ca%20*.mohawkcollege.ca%20*.ualberta.ca%20*.saskpolytech.ca%20*.mcmaster.ca%20*.learnalberta.ca%20*.ubc.ca%20*.mycreds.ca%20www.fanshaweonline.ca%20www.gradescope.ca%20*.kfupm.edu.sa%20*.pmu.edu.sa%20https%3A%2F%2Feducation.wiley.com%20https%3A%2F%2Feducation-qa.wiley.com%3B%20frame-src%20&#39;self&#39;%20https%3A%2F%2F*.s3.amazonaws.com%20https%3A%2F%2Fplayer.vimeo.com%20https%3A%2F%2Fphet.colorado.edu%20https%3A%2F%2Fheadway-widget.net%20https%3A%2F%2Ftd.doubleclick.net%20https%3A%2F%2F*.codingrooms.com%20https%3A%2F%2F*.mathworks.com%20https%3A%2F%2F*.statuspage.io%20https%3A%2F%2F*.streamlit.app%20https%3A%2F%2Fconnect-js.stripe.com%20https%3A%2F%2Fjs.stripe.com%20https%3A%2F%2F*.youtube.com%20https%3A%2F%2F*.zybooks.com%20https%3A%2F%2Feducation.wiley.com%20https%3A%2F%2Feducation-qa.wiley.com%20https%3A%2F%2Fdrbuc2jl8158i.cloudfront.net%20consent.api.osano.com%20tattle.api.osano.com%20cmp.osano.com%20disclosure.api.osano.com%3B%20img-src%20&#39;self&#39;%20data%3A%20blob%3A%20https%3A%2F%2Fdrive.google.com%20https%3A%2F%2Flh3.googleusercontent.com%20https%3A%2F%2F*.googletagmanager.com%20https%3A%2F%2F*.stripe.com%20https%3A%2F%2F*.zybooks.com%20https%3A%2F%2Fres.cloudinary.com%3B%20media-src%20&#39;self&#39;%20https%3A%2F%2Fres.cloudinary.com%3B%20script-src%20&#39;self&#39;%20&#39;unsafe-inline&#39;%20&#39;unsafe-eval&#39;%20blob%3A%20https%3A%2F%2F*.googletagmanager.com%20https%3A%2F%2Fcdn.headwayapp.co%2Fwidget.js%20https%3A%2F%2F*.codingrooms.com%20https%3A%2F%2F*.statuspage.io%20https%3A%2F%2Fconnect-js.stripe.com%20https%3A%2F%2Fjs.stripe.com%20https%3A%2F%2Fm.stripe.network%20https%3A%2F%2Fcmp.osano.com%20https%3A%2F%2F*.zybooks.com%20https%3A%2F%2Fapp.hopscotch.club%20https%3A%2F%2Fwidgets.hopscotch.club%20consent.api.osano.com%20tattle.api.osano.com%20cmp.osano.com%20disclosure.api.osano.com%3B%20style-src%20&#39;self&#39;%20&#39;unsafe-inline&#39;%20https%3A%2F%2Ffonts.googleapis.com%20https%3A%2F%2Fcdn.headwayapp.co%2Fheadway-animate.css%20https%3A%2F%2F*.sentry.io%20consent.api.osano.com%20tattle.api.osano.com%20cmp.osano.com%20disclosure.api.osano.com%3B%22%2C%22reportOnly%22%3Afalse%7D%2C%22ember-websockets%22%3A%7B%22socketIO%22%3Atrue%7D%7D">
+<script type="text/javascript">if (window.performance && window.performance.mark) {
+  window.performance.mark('@sentry/ember:initial-load-start');
+}
+</script>
+
+        <link href="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/vendor-0f5b501efbe18d8b5011aae709b52aa8.css" integrity="" rel="stylesheet">
+<link rel="stylesheet" href="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/chunk.4741.676343815924319c8995.css" integrity="sha256-+4YF0doQnH6Qp8gKTCJZ7Dw6HqZj5gUkjyQqDcV+zls= sha512-6l1retUW2SlMl33xiQkNtgQun4ugIZlUY90I7b/V1rrfrTwcegd6aQmaQYeP4uJFfyY8P188mWcz+GvO5gNl3A==">
+        <link href="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/zybooks-web-01d583767a55a2083371137954f52bc9.css" integrity="" rel="stylesheet">
+
+        <link href="https://fonts.googleapis.com/" integrity="" rel="preconnect">
+        <link crossorigin="" href="https://fonts.gstatic.com/" integrity="" rel="preconnect">
+        <!-- crossorigin attribute needed to avoid error messages by the dom-to-svg library -->
+        <link crossorigin="" href="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/css2" integrity="" rel="stylesheet">
+        <link crossorigin="" href="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/css" integrity="" rel="stylesheet">
+        <link href="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/basicLightbox.min-69bdb9cd40a5bbcb4587424b1c70f89b.css" integrity="" rel="stylesheet">
+        <script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/osano.js.download"></script>
+        <script integrity="" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/vendor-134977bf3f763a9fefe069347b90e8ff.js.download"></script>
+<script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/chunk.4741.676343815924319c8995.js.download" integrity="sha256-tMYwXWWvsuO3+BC0QS/fyjtjkkRr/wShdnONfHBaPyQ= sha512-KDz0fkkaqlLQW4OZ6GTwBQdO9eeYhAItyg/9jDiZ8+fQmknyPvuU6sjuEQ0awqYcK0QDYGoKgoJ+RCP66yF4bw=="></script>
+<script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/chunk.8044.102e8cc0a7d9e967dcb7.js.download" integrity="sha256-fFsIvKbGkebMgntUC3up8lC2rl/lJ3GxgYwU2JdXHbo= sha512-ZOb60UwREKhvD5gJL6kJ8LaefAJDk0lIUD0oKB5R6H1qGvboYoDjGOnM+dozl2jxodavF8nNDQM0YHtseUPNXQ=="></script>
+<script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/chunk.3524.ea9fae823f5f3a449ad0.js.download" integrity="sha256-I751AnnuLDID714ixYJ4TXddqCznwLLpk7L0tiaAAl8= sha512-rHBFPBvT4yXqVGPcroSjLur2jkENX/2DR8x9nRETVmRGdtz0MO8l1WgtfY2jcSuA/zWCqNJMUjNvfO4dD9zFEA=="></script>
+        <script integrity="" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/zybooks-web-e38a3346de3556e8c7f597e6f539e986.js.download"></script>
+        <script integrity="" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/ace.js.download"></script>
+        <script integrity="" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/string-diff-4bf5ebb4b800cf1705420016e8da5e4e.js.download"></script>
+
+        
+    <script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/tex-mml-svg.js.download"></script><script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/svg.js.download" charset="UTF-8"></script><script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/theme-zyautumn.js.download"></script><script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/mode-python.js.download"></script><script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/mathtools.js.download" charset="UTF-8"></script><script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/lazy.js.download" charset="UTF-8"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/codeOutput/js/codeOutput.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/codeOutput.js.download"></script><script src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/assistive-mml.js.download" charset="UTF-8"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style>.MJX_LiveRegion {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 1px;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.MJX_LiveRegion_Show {
+  top: 0;
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 0px 0px;
+  opacity: 1;
+  z-index: 202;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 255, 0.2);
+  box-shadow: 0px 5px 20px #888;
+  border: 2px solid #CCCCCC;
+}</style><style>.MJX_LiveRegion {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 1px;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.MJX_LiveRegion_Show {
+  top: 0;
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 0px 0px;
+  opacity: 1;
+  z-index: 202;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 255, 0.2);
+  box-shadow: 0px 5px 20px #888;
+  border: 2px solid #CCCCCC;
+}</style><style>.MJX_HoverRegion {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.MJX_HoverRegion_Show {
+  position: absolute;
+  width: max-content;
+  height: auto;
+  padding: 0px 0px;
+  opacity: 1;
+  z-index: 202;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 255, 0.2);
+  box-shadow: 0px 10px 20px #888;
+  border: 2px solid #CCCCCC;
+}</style><style>.MJX_ToolTip {
+  position: absolute;
+  display: inline-block;
+  height: 1px;
+  width: 1px;
+}
+
+.MJX_ToolTip_Show {
+  width: auto;
+  height: auto;
+  opacity: 1;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0px 0px;
+  border-bottom: 1px dotted black;
+  position: absolute;
+  z-index: 202;
+}</style><style id="MJX-SVG-styles">
+mjx-container[overflow="scroll"][display] {
+  overflow-x: auto;
+  min-width: initial !important;
+}
+
+mjx-container[overflow="truncate"][display] {
+  overflow-x: hidden;
+  min-width: initial !important;
+}
+
+mjx-container[jax="SVG"] {
+  direction: ltr;
+  white-space: nowrap;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: polygon(0 0, 0 1px, 1px 1px, 1px 0);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  justify-content: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+  justify-content: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+  justify-content: right;
+}
+
+mjx-container[jax="SVG"] mjx-break::after {
+  content: " ";
+  white-space: normal;
+  line-height: 0;
+  font-family: MJX-ZERO;
+}
+
+mjx-break[size="0"] {
+  letter-spacing: -0.999em;
+}
+
+mjx-break[size="1"] {
+  letter-spacing: -0.889em;
+}
+
+mjx-break[size="2"] {
+  letter-spacing: -0.833em;
+}
+
+mjx-break[size="3"] {
+  letter-spacing: -0.778em;
+}
+
+mjx-break[size="4"] {
+  letter-spacing: -0.722em;
+}
+
+mjx-break[size="5"] {
+  letter-spacing: -0.667em;
+}
+
+mjx-container[jax="SVG"] mjx-break[newline]::before {
+  white-space: pre;
+  content: "\A";
+}
+
+mjx-break[newline] + svg[width="0.054ex"] {
+  margin-right: -1px;
+}
+
+mjx-break[prebreak] {
+  letter-spacing: -.999em;
+}
+
+@font-face /* zero */ {
+  font-family: MJX-ZERO;
+  src: url(data:application/x-font-woff;charset=utf-8;base64,T1RUTwAJAIAAAwAQQ0ZGIGnFMZkAAARQAAAAlE9TLzJpUWOBAAABAAAAAGBjbWFwAAwAUwAABAQAAAAsaGVhZCFRvpAAAACcAAAANmhoZWEC8AD9AAAA1AAAACRobXR4A+gAAAAABOQAAAAIbWF4cAACUAAAAAD4AAAABm5hbWVNb8+2AAABYAAAAqNwb3N0AAMAAAAABDAAAAAgAAEAAAABAABVWOu4Xw889QADA+gAAAAA3ym+2AAAAADfKb7YAAAAAAPoAAAAAAADAAIAAAAAAAAAAQAAAu79EgAAA+gAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAIAAFAAAAIAAAADA+gB9AAFAAACigK7AAAAjAKKArsAAAHfADEBAgAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABYWFhYAEAAIAAgAu79EgAAAu4C7gAAAAEAAAAAAXcAAAAgACAAAAAAACIBngABAAAAAAAAAAEAQQABAAAAAAABAAsAAAABAAAAAAACAAcAIQABAAAAAAADABUAxgABAAAAAAAEABMANgABAAAAAAAFAAsApQABAAAAAAAGABIAbwABAAAAAAAHAAEAQQABAAAAAAAIAAEAQQABAAAAAAAJAAEAQQABAAAAAAAKAAEAQQABAAAAAAALAAEAQQABAAAAAAAMAAEAQQABAAAAAAANAAEAQQABAAAAAAAOAAEAQQABAAAAAAAQAAsAAAABAAAAAAARAAcAIQADAAEECQAAAAIAXwADAAEECQABABYACwADAAEECQACAA4AKAADAAEECQADACoA2wADAAEECQAEACYASQADAAEECQAFABYAsAADAAEECQAGACQAgQADAAEECQAHAAIAXwADAAEECQAIAAIAXwADAAEECQAJAAIAXwADAAEECQAKAAIAXwADAAEECQALAAIAXwADAAEECQAMAAIAXwADAAEECQANAAIAXwADAAEECQAOAAIAXwADAAEECQAQABYACwADAAEECQARAA4AKG1qeC1sbS16ZXJvAG0AagB4AC0AbABtAC0AegBlAHIAb1JlZ3VsYXIAUgBlAGcAdQBsAGEAcm1qeC1sbS16ZXJvIFJlZ3VsYXIAbQBqAHgALQBsAG0ALQB6AGUAcgBvACAAUgBlAGcAdQBsAGEAcm1qeC1sbS16ZXJvUmVndWxhcgBtAGoAeAAtAGwAbQAtAHoAZQByAG8AUgBlAGcAdQBsAGEAclZlcnNpb24gMC4xAFYAZQByAHMAaQBvAG4AIAAwAC4AMSA6bWp4LWxtLXplcm8gUmVndWxhcgAgADoAbQBqAHgALQBsAG0ALQB6AGUAcgBvACAAUgBlAGcAdQBsAGEAcgAAAAABAAMAAQAAAAwABAAgAAAABAAEAAEAAAAg//8AAAAg////4QABAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAEAQABAQETbWp4LWxtLXplcm9SZWd1bGFyAAEBASf4GwD4HAL4HQP4HgSLi/mC+nwFHQAAAIYPHQAAAIkRix0AAACUEgAFAQEMHyoxNlZlcnNpb24gMC4xbWp4LWxtLXplcm8gUmVndWxhcm1qeC1sbS16ZXJvUmVndWxhcnNwYWNlAAAAAYsAAgEBAwaLDvp8DgAAAAAD6AAA) format("woff");
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  line-height: 0;
+  padding: .2em;
+  border: 1px solid #888;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+
+foreignObject[data-mjx-html] {
+  overflow: visible;
+}
+
+mjx-html {
+  display: inline-block;
+  line-height: normal;
+  text-align: initial;
+}
+
+mjx-html-holder {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+</style><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/utilities/js/utilities.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/utilities.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/progressionTool/js/progressionTool.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/progressionTool.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/segmentedControl/js/segmentedControl.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/segmentedControl.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/fedd6ce0-9b18-4962-be09-a685ba949790/zyFlowchartSDK/js/zyFlowchartSDK.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/zyFlowchartSDK.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/restrictedEditor/js/restrictedEditor.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/restrictedEditor.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/71f3c9da-cb82-4a84-ab9d-317ec6d2e707/vendor/handlebars.1.3.0.min.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/handlebars.1.3.0.min.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/71f3c9da-cb82-4a84-ab9d-317ec6d2e707/vendor/spin.min.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/spin.min.js.download"></script><style type="text/css"></style><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/71f3c9da-cb82-4a84-ab9d-317ec6d2e707/vendor/raphael.min.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/raphael.min.js.download"></script><script data-requiremodule="https://zytools.zybooks.com/zyBooks2/fingerprinted/71f3c9da-cb82-4a84-ab9d-317ec6d2e707/vendor/alea.min.js" data-requirecontext="_" async="" charset="utf-8" type="text/javascript" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/alea.min.js.download"></script></head>
+    <body class="do-not-process-mathjax-2 ember-application"><div data-nosnippet="" class="osano-cm-window" dir="ltr"><!----> <!--?lit$607861584$--><div hidden="" class="osano-visually-hidden"> <span id="osano-cm-aria.newWindow"><!--?lit$607861584$-->Opens in a new window</span> <span id="osano-cm-aria.external"><!--?lit$607861584$-->Opens an external website</span> <span id="osano-cm-aria.externalNewWindow"><!--?lit$607861584$-->Opens an external website in a new window</span> </div> <!--?lit$607861584$--> <div role="dialog" id="f34c297e-4efb-47d5-8095-40d3f945c90f" aria-label="Cookie Consent Banner" aria-describedby="f34c297e-4efb-47d5-8095-40d3f945c90f__label" class=" osano-cm-window__dialog osano-cm-dialog osano-cm-dialog--hidden osano-cm-dialog--position_bottom osano-cm-dialog--type_bar "> <!--?lit$607861584$--> <div class=" osano-cm-dialog__content osano-cm-content "> <!--?lit$607861584$--> <!--?lit$607861584$--> <span id="f34c297e-4efb-47d5-8095-40d3f945c90f__label" class=" osano-cm-content__message osano-cm-message "> <!--?lit$607861584$-->This website uses various technologies, 
+including third-party cookies and codes, to 
+personalize our website functionalities, measure 
+website usage and performance and provide 
+targeting advertising, information about your 
+website visit may be stored or shared with third 
+parties as identified in our Privacy Policy. To 
+learn more and manage cookies, please refer to 
+our Cookie Statement. <!--?lit$607861584$--> <!--?lit$607861584$--> </span>  <!--?lit$607861584$--> <!--?lit$607861584$--><!--?lit$607861584$--><a rel="noopener" tabindex="0" href="https://www.zybooks.com/privacy-policy/" target="_blank" class=" osano-cm-storage-policy osano-cm-content__link osano-cm-link " aria-describedby="osano-cm-aria.newWindow"><!--?lit$607861584$-->Privacy Policy</a><!--?--><!--?lit$607861584$--> <!--?lit$607861584$--> <!--?lit$607861584$--> </div> <!--?lit$607861584$--> <div class=" osano-cm-dialog__buttons osano-cm-buttons osano-cm-buttons--disabled "> <!--?lit$607861584$--><!--?lit$607861584$--><button class=" osano-cm-accept osano-cm-buttons__button osano-cm-button osano-cm-button--type_accept " tabindex="0"> <!--?lit$607861584$-->Accept </button><!--?--> <!--?lit$607861584$--><!--?lit$607861584$--><button class=" osano-cm-deny osano-cm-buttons__button osano-cm-button osano-cm-button--type_deny " tabindex="0"> <!--?lit$607861584$-->Deny Non-Essential </button><!--?--> <!--?lit$607861584$--> <!--?lit$607861584$--><!--?lit$607861584$--><button class=" osano-cm-manage osano-cm-buttons__button osano-cm-button osano-cm-button--type_manage " tabindex="0"> <!--?lit$607861584$-->Manage Preferences </button><!--?--> </div> </div>  <!--?lit$607861584$--> <!--?lit$607861584$--> <button id="9bbd6ef2-06ea-415f-b220-2d4656261b90" class="osano-cm-window__widget osano-cm-widget osano-cm-widget--position_right" title="Cookie Preferences" aria-label="Cookie Preferences"> <svg role="img" width="40" height="40" viewBox="0 0 71.85 72.23" xmlns="http://www.w3.org/2000/svg" aria-labelledby="9bbd6ef2-06ea-415f-b220-2d4656261b90"> <path d="m67.6 36.73a6.26 6.26 0 0 1 -3.2-2.8 5.86 5.86 0 0 0 -5.2-3.1h-.3a11 11 0 0 1 -11.4-9.5 6 6 0 0 1 -.1-1.4 9.2 9.2 0 0 1 .4-2.9 8.65 8.65 0 0 0 .2-1.6 5.38 5.38 0 0 0 -1.9-4.3 7.3 7.3 0 0 1 -2.5-5.5 3.91 3.91 0 0 0 -3.5-3.9 36.46 36.46 0 0 0 -15 1.5 33.14 33.14 0 0 0 -22.1 22.7 35.62 35.62 0 0 0 -1.5 10.2 34.07 34.07 0 0 0 4.8 17.6.75.75 0 0 0 .07.12c.11.17 1.22 1.39 2.68 3-.36.47 5.18 6.16 5.65 6.52a34.62 34.62 0 0 0 55.6-21.9 4.38 4.38 0 0 0 -2.7-4.74z" stroke-width="3" class=" osano-cm-widget__outline osano-cm-outline "></path> <path d="m68 41.13a32.37 32.37 0 0 1 -52 20.5l-2-1.56c-2.5-3.28-5.62-7.15-5.81-7.44a32 32 0 0 1 -4.5-16.5 34.3 34.3 0 0 1 1.4-9.6 30.56 30.56 0 0 1 20.61-21.13 33.51 33.51 0 0 1 14.1-1.4 1.83 1.83 0 0 1 1.6 1.8 9.38 9.38 0 0 0 3.3 7.1 3.36 3.36 0 0 1 1.2 2.6 3.37 3.37 0 0 1 -.1 1 12.66 12.66 0 0 0 -.5 3.4 9.65 9.65 0 0 0 .1 1.7 13 13 0 0 0 10.5 11.2 16.05 16.05 0 0 0 3.1.2 3.84 3.84 0 0 1 3.5 2 10 10 0 0 0 4.1 3.83 2 2 0 0 1 1.4 2z" stroke-width="3" class=" osano-cm-widget__outline osano-cm-outline "></path> <g class=" osano-cm-widget__dot osano-cm-dot "> <path d="m26.6 31.43a5.4 5.4 0 1 1 5.4-5.43 5.38 5.38 0 0 1 -5.33 5.43z"></path> <path d="m25.2 53.13a5.4 5.4 0 1 1 5.4-5.4 5.44 5.44 0 0 1 -5.4 5.4z"></path> <path d="m47.9 52.33a5.4 5.4 0 1 1 5.4-5.4 5.32 5.32 0 0 1 -5.24 5.4z"></path> </g> </svg> </button>  <!--?lit$607861584$--><div role="dialog" aria-modal="true" id="1ccd5ceb-5651-4ae8-8ef7-2c5f2afb1e19" aria-labelledby="1ccd5ceb-5651-4ae8-8ef7-2c5f2afb1e19__label" aria-hidden="true" class=" osano-cm-window__info-dialog osano-cm-info-dialog osano-cm-info-dialog--hidden "> <!--?lit$607861584$--><!--?lit$607861584$--><span tabindex="0" aria-hidden="true" data-focus="first"></span><!--?--> <div role="presentation" class=" osano-cm-info-dialog__info osano-cm-info osano-cm-info--position_right "> <!--?lit$607861584$--><div role="presentation" class=" osano-cm-info__info-dialog-header osano-cm-info-dialog-header "> <p role="heading" aria-level="1" id="1ccd5ceb-5651-4ae8-8ef7-2c5f2afb1e19__label" class=" osano-cm-info-dialog-header__header osano-cm-header "> <!--?lit$607861584$--> </p> <!--?lit$607861584$--> <button class=" osano-cm-info-dialog-header__close osano-cm-close "> <!--?lit$607861584$--><svg width="20px" height="20px" viewBox="0 0 20 20" role="img" aria-labelledby="a76df3c2-773f-497b-b346-794841f6a950"> <title id="a76df3c2-773f-497b-b346-794841f6a950"><!---->Close Cookie Preferences<!----></title> <line role="presentation" x1="2" y1="2" x2="18" y2="18"></line> <line role="presentation" x1="2" y1="18" x2="18" y2="2"></line> </svg> </button> <!--?lit$607861584$--> </div> <div role="presentation" class=" osano-cm-info__info-views osano-cm-info-views osano-cm-info-views--hidden osano-cm-info-views--position_0 "> <!--?lit$607861584$--> </div> </div> <!--?lit$607861584$--><!--?lit$607861584$--><span tabindex="0" aria-hidden="true" data-focus="last"></span><!--?--> </div> </div>
+        
+
+        
+
+        <script type="text/javascript">if (window.performance && window.performance.mark) {
+  window.performance.mark('@sentry/ember:initial-load-end');
+}
+</script>
+    
+<iframe id="zybooks-status-iframe" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/frame.html" title="zyBooks Status" aria-hidden="true" style="position: fixed; border: none; box-shadow: rgba(9, 20, 66, 0.25) 0px 20px 32px -8px; z-index: 9999; transition: left 1s, bottom 1s, right 1s; height: 115px; width: 320px; left: -9999px; right: -9999px; bottom: calc(100% - 175px); display: none;"></iframe><a class="skip-link" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9#main-content">Skip to main content</a>
+
+
+
+<header class="top-toolbar ">
+    <div class="left-buttons">
+        <div class="zb-breadcrumbs ">
+        <button class="zb-button grey   icon-button left         menu-button" aria-expanded="false" aria-label="Menu" type="button">
+            <div>
+                <i aria-label="menu" class="zb-icon material-icons med grey " role="img" aria-hidden="false">
+            menu
+<!----></i>
+            </div>
+<!----><!----></button>
+
+        <div class="logo">
+                <a id="ember4" class="ember-view" href="https://learn.zybooks.com/"><img alt="zyBooks" height="22px" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/logo.svg" width="83px"></a>
+        </div>
+
+            <ul class="bread-crumbs">
+                    <li class="bread-crumb">
+                        <a id="ember10" class="ember-view no-underline" href="https://learn.zybooks.com/library">
+                            My library
+                        </a>
+                            <span aria-hidden="true" class="divider">&gt;</span>
+                    </li>
+                    <li class="bread-crumb">
+                        <a id="ember11" class="ember-view active no-underline" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026">
+                            CS 2520: Python for Programmers home
+                        </a>
+                            <span aria-hidden="true" class="divider">&gt;</span>
+                    </li>
+                    <li class="bread-crumb">
+                        <a id="ember86" class="ember-view active no-underline" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9">
+                            5.9: Incremental programming
+                        </a>
+<!---->                    </li>
+            </ul>
+</div>
+    </div>
+    <div class="right-buttons">
+<!----><!----><!---->                <a id="ember9" class="ember-view zb-button" href="https://learn.zybooks.com/catalog">
+                    <i aria-label="zyBooks catalog" class="zb-icon material-icons med grey " role="img">
+            library_books
+<!----></i>
+                    <span aria-hidden="true" class="font-light ml-2 text-base">
+                        zyBooks catalog
+                    </span>
+                </a>
+                    <a class="no-underline zb-button help-button " href="https://support.zybooks.com/" rel="noopener noreferrer" target="_blank">
+            <i aria-label="Help/FAQ" class="zb-icon material-icons med grey " role="img">
+            help
+<!----></i>
+                <span aria-hidden="true">Help/FAQ</span>
+        </a>
+            
+        <div class="ember-basic-dropdown zb-menu">
+                
+        <div id="ember6" class="ember-view ember-basic-dropdown-trigger
+             ember-basic-dropdown-trigger--in-place
+            
+            
+             toolbar-menu-toggle" tabindex="0" aria-label="Profile for Casey Wong" role="button" data-ebd-id="ember5-trigger" aria-owns="ember-basic-dropdown-content-ember5" aria-controls="ember-basic-dropdown-content-ember5" aria-expanded="false" aria-disabled="false">
+          
+                    <i aria-label="account_circle" class="zb-icon material-icons med grey  mr-2" role="img" aria-hidden="true">
+            account_circle
+<!----></i>
+                    Casey Wong
+                    <i aria-label="arrow_drop_down" class="zb-icon material-icons med grey " role="img" aria-hidden="true">
+            arrow_drop_down
+<!----></i>
+                
+        </div>
+  
+                
+      <div id="ember-basic-dropdown-content-ember5" class="ember-basic-dropdown-content-placeholder" style="display: none;"></div>
+  
+            </div>
+  
+    </div>
+</header>
+
+<!---->
+<!---->
+<div aria-label="zybook page" class="route-container
+        zybook-chapter-section-page
+        no-margin-left
+        
+        " id="main-content" role="main">
+            <ul class="notify-outlet-global notify-outlet" id="global-notify-outlet">
+        <li class="notify-outlet-message-container info " id="ember7">
+    <div class="notify-outlet-message">
+        <div class="notify-outlet-message-content clickable">
+                <div class="notify-outlet-message-icon-container">
+                    <i aria-label="info" class="zb-icon material-icons med grey " role="img" aria-hidden="true">
+            info
+<!----></i>
+                </div>
+            <p class="notify-outlet-message-text" role="status">
+                <div>You have unverified email(s). Use <span class="link">My Profile</span> to send another verification email.</div>
+            </p>
+        </div>
+            <button class="zb-button grey   icon-button left         notify-outlet-message-close-button" title="Dismiss this notification" type="button">
+            <div>
+                <i aria-label="close" class="zb-icon material-icons med grey " role="img" aria-hidden="false">
+            close
+<!----></i>
+            </div>
+<!----><!----></button>
+    </div>
+</li>
+</ul>
+
+
+    <nav class="zb-nav-menu hide-nav-menu" inert="">
+    <ul class="level-1">
+                <li class="flex-row">
+                        <a id="ember87" class="ember-view flex-row " tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/content-explorer">
+                                    <i aria-label="search" class="zb-icon material-icons med grey  item-bullet" role="img" aria-hidden="true">
+            search
+<!----></i>
+                                                            <span class="self-center">
+                                Search zyBook
+                            </span>
+                        </a>
+                </li>
+                <li class="flex-row">
+                        <button class="list-toggle" tabindex="-1" type="button">
+                            <div class="flex-row">
+                                        <i aria-label="info" class="zb-icon material-icons med grey  item-bullet" role="img" aria-hidden="true">
+            info
+<!----></i>
+                                                                    <span class="self-center list-toggle-title ">
+                                    About this Material
+                                </span>
+                            </div>
+                        </button>
+                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">1)</span>
+                                <span class="list-toggle-title ">
+                                    Introduction to Python
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">2)</span>
+                                <span class="list-toggle-title ">
+                                    Variables and Expressions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">3)</span>
+                                <span class="list-toggle-title ">
+                                    Types
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">4)</span>
+                                <span class="list-toggle-title ">
+                                    Branching
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="true" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">5)</span>
+                                <span class="list-toggle-title ">
+                                    Loops
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_less" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_less
+<!----></i>
+                        </div>
+                    </button>
+
+                        <ul class="level-2">
+                                <li>
+                                    <a id="ember88" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/1">
+                                                <span class="item-bullet">5.1</span>
+                                        <span>
+                                            Loops (general)
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember89" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/2">
+                                                <span class="item-bullet">5.2</span>
+                                        <span>
+                                            While loops
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember90" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/3">
+                                                <span class="item-bullet">5.3</span>
+                                        <span>
+                                            More while loop examples
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember91" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/4">
+                                                <span class="item-bullet">5.4</span>
+                                        <span>
+                                            Counting
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember92" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/5">
+                                                <span class="item-bullet">5.5</span>
+                                        <span>
+                                            For loops
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember93" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/6">
+                                                <span class="item-bullet">5.6</span>
+                                        <span>
+                                            range()
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember94" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/7">
+                                                <span class="item-bullet">5.7</span>
+                                        <span>
+                                            while vs. for
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember95" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/8">
+                                                <span class="item-bullet">5.8</span>
+                                        <span>
+                                            Nested loops
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember96" class="ember-view active" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/9">
+                                                <span class="item-bullet">5.9</span>
+                                        <span>
+                                            Incremental programming
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember97" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/10">
+                                                <span class="item-bullet">5.10</span>
+                                        <span>
+                                            Break and continue
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember98" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/11">
+                                                <span class="item-bullet">5.11</span>
+                                        <span>
+                                            Loop else
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember99" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/12">
+                                                <span class="item-bullet">5.12</span>
+                                        <span>
+                                            enumerate()
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember100" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/13">
+                                                <span class="item-bullet">5.13</span>
+                                        <span>
+                                            Additional practice: Dice statistics
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember101" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/14">
+                                                <span class="item-bullet">5.14</span>
+                                        <span>
+                                            LAB: Convert to reverse binary
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember102" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/15">
+                                                <span class="item-bullet">5.15</span>
+                                        <span>
+                                            LAB: Password modifier
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember103" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/16">
+                                                <span class="item-bullet">5.16</span>
+                                        <span>
+                                            LAB: Output range with increment of 5
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember104" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/17">
+                                                <span class="item-bullet">5.17</span>
+                                        <span>
+                                            LAB: Print string in reverse
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember105" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/18">
+                                                <span class="item-bullet">5.18</span>
+                                        <span>
+                                            LAB: Brute force equation solver
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember106" class="ember-view" tabindex="-1" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/19">
+                                                <span class="item-bullet">5.19</span>
+                                        <span>
+                                            LAB: Adjust values in a list by normalizing
+                                        </span>
+                                        <div class="section-labels">
+<!----><!---->                                                <span class="nav-item-label-lab">Lab</span>
+<!---->                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="ember107" class="ember-view" tabindex="-1" target="_blank" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/print">
+                                                <i aria-label="print" class="zb-icon material-icons med grey  item-bullet" role="img">
+            print
+<!----></i>
+                                                                                    <span>
+                                            Print chapter
+                                        </span>
+                                        <div class="section-labels">
+<!----><!----><!----><!---->                                        </div>
+                                    </a>
+                                </li>
+                        </ul>
+                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">6)</span>
+                                <span class="list-toggle-title ">
+                                    Functions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">7)</span>
+                                <span class="list-toggle-title ">
+                                    Strings
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">8)</span>
+                                <span class="list-toggle-title ">
+                                    Lists and Dictionaries
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">9)</span>
+                                <span class="list-toggle-title ">
+                                    Classes
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">10)</span>
+                                <span class="list-toggle-title ">
+                                    Exceptions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">11)</span>
+                                <span class="list-toggle-title ">
+                                    Modules
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">12)</span>
+                                <span class="list-toggle-title ">
+                                    Files
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">13)</span>
+                                <span class="list-toggle-title ">
+                                    Inheritance
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">14)</span>
+                                <span class="list-toggle-title ">
+                                    Recursion
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">15)</span>
+                                <span class="list-toggle-title ">
+                                    Python for Data Science
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">16)</span>
+                                <span class="list-toggle-title ">
+                                    Searching and Sorting Algorithms
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">17)</span>
+                                <span class="list-toggle-title ">
+                                    Artificial Intelligence
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">18)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Material
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">19)</span>
+                                <span class="list-toggle-title ">
+                                    Coding Practice Problems
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">20)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Introduction to Python
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">21)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Variables and Expressions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">22)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Types
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">23)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Branching
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">24)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Loops
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">25)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Functions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">26)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Strings
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">27)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Lists and Dictionaries
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">28)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Classes
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">29)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Exceptions
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">30)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Files
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+                <li>
+                    <button aria-expanded="false" class="list-toggle" tabindex="-1" type="button">
+                        <div class="list-toggle">
+                            <div class="flex-row">
+                                        <span class="item-bullet">31)</span>
+                                <span class="list-toggle-title ">
+                                    Additional Labs: Recursion
+                                </span>
+                            </div>
+<!---->                            <i aria-label="expand_more" class="zb-icon material-icons med grey  item-icon" role="img" aria-hidden="true">
+            expand_more
+<!----></i>
+                        </div>
+                    </button>
+
+<!---->                </li>
+    </ul>
+</nav>
+
+    <section class="section-container">
+    
+
+<div>
+
+</div>
+        <nav aria-label="previous section" class="section-nav previous">
+            <a id="ember109" class="ember-view nav-link" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/8">
+                <i aria-label="arrow_upward" class="zb-icon material-icons sm secondary " role="img" aria-hidden="true">
+            arrow_upward
+<!----></i>
+                <span class="nav-text previous">
+                    5.8
+                    Nested loops
+                </span>
+            </a>
+    </nav>
+
+
+    <div aria-label="section content" role="main">
+            <!---->
+<!---->
+<!---->
+<!---->
+    <div class="section-announcement zb-card primary assignment-section-announcement">
+        <div class="icon-container">
+            <i aria-label="assignment" class="zb-icon material-icons xl white " role="img">
+            assignment
+<!----></i>
+        </div>
+
+<!---->
+        <div class="section-announcement-block-content">
+        <span class="announcement-title">Students:</span>
+        <div class="assignment-announcement-content">
+            <div class="title-message">
+                <div class="assignment-title">
+                    <span>
+<!---->                        Section
+                        5.9
+                        is a part of
+                        1 assignment:
+                    </span>
+                        <span class="title-text">C5</span>
+<!---->                </div>
+<!---->                <div class="error">
+<!----><!---->                </div>
+            </div>
+            <div class="flex flex-col items-end">
+                <div class="flex flex-row mb-2">
+                    <span class="mr-1">Activities:</span>
+                        <div aria-hidden="true" class="mx-1 zb-chevron  participation  filled  small" role="img">
+        <span class="zb-chevron-letter">P</span>
+</div>
+                        <span class="mx-1">Participation</span>
+<!----><!----><!---->                </div>
+                    <div class="assignment-due-date-lms-details in-section col-start-2">
+            <div class="due-date-text body-text  flex items-center">
+                        Due:
+                        02/28/2026, 11:59 PM PST
+            </div>
+<!----><!----></div>
+            </div>
+        </div>
+    </div>
+
+<!----></div>
+
+<!---->
+<!---->
+            <div class="zb-card zybook-section " canonical_section_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3" canonical_section_id="29520442">
+    <div class="zb-card-content ">
+        
+<!---->    <div class="section-header-row">
+<!---->            <div class="section-action-container">
+<!----><!----><!----><!----><!---->
+<!----><!----><!---->            </div>
+    </div>
+<!---->    <div class="flex flex-row items-center">
+        <h1 class="zybook-section-title" id="section-title-29520442">
+            5.9
+            Developing programs incrementally
+        </h1>
+<!---->    </div>
+<!---->
+<!---->
+    <!---->
+<!---->
+<!---->
+<!---->
+<!---->
+            <div class="section-content-resources-container">
+                            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_613cd62b-40bd-c8a7-7ba0-9fddc138768epython3" content_resource_id="122584495">
+        <div>
+<h3>Incremental programming</h3>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="content-resource
+        image-content-resource
+        
+        
+        
+        
+        pull-right
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_447670c7-6442-8d5b-07ad-8a5379b5a5d6python3" content_resource_id="122584496">
+    <img alt="3x4 keypad that has letters under a given number. For example button 2 has letters A, B, and C underneath." src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/447670c7-6442-8d5b-07ad-8a5379b5a5d6" width="250">
+</div>
+        
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_ce524d73-0183-41aa-a861-ee4bcf25d581python3" content_resource_id="122584497">
+        <div>
+<p>
+As programs increase in complexity, a programmer's development process becomes more important. A programmer should not write the entire program and then run the program hoping the program works. If the program does not work on the first try, debugging can be extra difficult because the program may have many bugs.
+
+</p>
+
+<p>
+<span data-definition="true">Experienced programmers practice <span class="term" obeycase="true" data-term="true">incremental programming</span> by starting with a simple version of the program, and growing the program little by little into a complete version.</span> 
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_9905f33c-ecb2-d3c1-daf8-187ad986576apython3" content_resource_id="122584498">
+        <div>
+<h3>Example: Phone number program</h3>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_47691420-4b7e-4d0a-95ef-77217a770436python3" content_resource_id="122584499">
+        <div>
+<p>
+The following program allows the user to enter a phone number that includes letters, which appear on phone keypads along with numbers, and are used by companies as a marketing tactic (e.g., 1-555-HOLIDAY). The program then outputs the phone number using numbers only.
+</p>
+
+<p>
+The first program version simply prints each element of the string to ensure the loop iterates properly through each string element.
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="container-content-resource
+        
+        static-container
+        
+        large
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_9f4dabee-ada4-258a-aba9-3ce9d893b1eepython3" content_resource_id="122584500">
+        <div class="static-container-header  ">
+                    <h2 class="clear-heading-style flex">
+                        <div class="static-container-title ">
+                                Figure 5.9.1: First version echoes input phone number string.
+                        </div>
+                    </h2>
+            <div class="flex ml-auto justify-end">
+<!----><!---->            </div>
+<!----><!---->        </div>
+
+        <div class="static-container-payload
+                
+                
+                ">
+            <div class="w-full  ">
+<!---->                <div class="content-resource container-content-resource
+        container-content-resource
+        
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_9f4dabee-ada4-258a-aba9-3ce9d893b1eepython3" content_resource_id="122584500">
+        <div class="container-resource-payload">
+            <div>
+
+<div class="table"><table>
+ <tbody><tr>
+  <td>
+ 
+
+
+<div class="code"><div class="highlight"><pre><span></span><span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"Enter phone number: "</span><span class="p">)</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">user_input</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Element </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> is: </span><span class="si">{</span><span class="n">character</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div></div>
+   
+  </td>
+  <td><div class="console"><pre>Enter phone number: 1-555-HOLIDAY
+Element 0 is: 1
+Element 1 is: -
+Element 2 is: 5
+Element 3 is: 5
+Element 4 is: 5
+Element 5 is: -
+Element 6 is: H
+Element 7 is: O
+Element 8 is: L
+Element 9 is: I
+Element 10 is: D
+Element 11 is: A
+Element 12 is: Y</pre></div>
+  </td>
+ </tr>
+</tbody></table></div>
+</div><!----><!---->
+        </div>
+</div>
+            </div>
+        </div>
+
+        <div class="zb-feedback resource" id="ember118">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+
+<!----></div>
+
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_fe68d460-33a3-49e7-a8e0-dcb77a1b7f08python3" content_resource_id="122584501">
+        <div>
+<p>
+The second program version outputs the numbers 0 - 9 of the phone number and outputs a "?" for all other characters. <span data-definition="true">A <span class="term" obeycase="true" data-term="true">FIXME comment</span> attracts attention to code that needs to be fixed in the future.</span> Many editors automatically highlight FIXME comments. Large projects with multiple programmers might also include a username and date, as in <code style="white-space: pre;">FIXME(01/22/2018, John)</code>.
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="container-content-resource
+        
+        static-container
+        
+        large
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_ed57a7d9-53c0-d379-4475-dc3df8f6ba88python3" content_resource_id="122584502">
+        <div class="static-container-header  ">
+                    <h2 class="clear-heading-style flex">
+                        <div class="static-container-title ">
+                                Figure 5.9.2: Second version echoes numbers and has FIXME comment.
+                        </div>
+                    </h2>
+            <div class="flex ml-auto justify-end">
+<!----><!---->            </div>
+<!----><!---->        </div>
+
+        <div class="static-container-payload
+                
+                
+                ">
+            <div class="w-full  ">
+<!---->                <div class="content-resource container-content-resource
+        container-content-resource
+        
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_ed57a7d9-53c0-d379-4475-dc3df8f6ba88python3" content_resource_id="122584502">
+        <div class="container-resource-payload">
+            <div>
+<div class="table"><table>
+ <tbody><tr>
+  <td>
+   
+
+   
+    <div class="code"><div class="highlight"><pre><span></span><span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"Enter phone number: "</span><span class="p">)</span>
+<span class="n">phone_number</span> <span class="o">=</span> <span class="s2">""</span>
+
+<span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">user_input</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"0"</span> <span class="o">&lt;=</span> <span class="n">character</span> <span class="o">&lt;=</span> <span class="s2">"9"</span><span class="p">:</span>
+        <span class="n">phone_number</span> <span class="o">+=</span> <span class="n">character</span>
+    <span class="k">else</span><span class="p">:</span>
+<span class="hll">        <span class="c1">#FIXME: Add elif branches for letters and hyphen</span>
+</span>        <span class="n">phone_number</span> <span class="o">+=</span> <span class="s2">"?"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Numbers only: </span><span class="si">{</span><span class="n">phone_number</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div></div>
+   
+  </td>
+  <td>
+   <div class="console"><pre>Enter phone number: 1-555-HOLIDAY
+Numbers only: 1?555????????</pre></div>
+  </td>
+ </tr>
+</tbody></table></div>
+</div><!----><!---->
+        </div>
+</div>
+            </div>
+        </div>
+
+        <div class="zb-feedback resource" id="ember122">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+
+<!----></div>
+
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_2420c96a-5a8f-42a1-bbc6-14385dcc378fpython3" content_resource_id="122584503">
+        <div>
+<p>
+The third version completes the elif branch for the letters A-C (lowercase and uppercase, per a standard phone keypad). The code also modifies the if branch to echo a hyphen in addition to numbers. The third version adds the elif branch for the letters A-C (lowercase and uppercase, per a standard phone keypad).
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="container-content-resource
+        
+        static-container
+        
+        large
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_64d34b25-36f6-aada-e458-a43be286523dpython3" content_resource_id="122584504">
+        <div class="static-container-header  ">
+                    <h2 class="clear-heading-style flex">
+                        <div class="static-container-title ">
+                                Figure 5.9.3: Third version echoes hyphens and handles the first three letters.
+                        </div>
+                    </h2>
+            <div class="flex ml-auto justify-end">
+<!----><!---->            </div>
+<!----><!---->        </div>
+
+        <div class="static-container-payload
+                
+                
+                ">
+            <div class="w-full  ">
+<!---->                <div class="content-resource container-content-resource
+        container-content-resource
+        
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_64d34b25-36f6-aada-e458-a43be286523dpython3" content_resource_id="122584504">
+        <div class="container-resource-payload">
+            <div>
+<div class="table"><table>
+ <tbody><tr>
+  <td>
+   
+
+   
+    <div class="code"><div class="highlight"><pre><span></span><span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"Enter phone number: "</span><span class="p">)</span>
+<span class="n">phone_number</span> <span class="o">=</span> <span class="s2">""</span>
+
+<span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">user_input</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s2">"0"</span> <span class="o">&lt;=</span> <span class="n">character</span> <span class="o">&lt;=</span> <span class="s2">"9"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">character</span> <span class="o">==</span> <span class="s2">"-"</span><span class="p">):</span>
+        <span class="n">phone_number</span> <span class="o">+=</span> <span class="n">character</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="s2">"a"</span> <span class="o">&lt;=</span> <span class="n">character</span> <span class="o">&lt;=</span> <span class="s2">"c"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s2">"A"</span> <span class="o">&lt;=</span> <span class="n">character</span> <span class="o">&lt;=</span> <span class="s2">"C"</span><span class="p">):</span>
+        <span class="n">phone_number</span> <span class="o">+=</span> <span class="s2">"2"</span>
+<span class="hll">    <span class="c1">#FIXME: Add remaining elif branches</span>
+</span>    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phone_number</span> <span class="o">+=</span> <span class="s2">"?"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Numbers only: </span><span class="si">{</span><span class="n">phone_number</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div></div>
+   
+  </td>
+  <td>
+   <div class="console"><pre>Enter phone number: 1-555-HOLIDAY
+Numbers only: 1-555-?????2?</pre></div>
+  </td>
+ </tr>
+</tbody></table></div>
+</div><!----><!---->
+        </div>
+</div>
+            </div>
+        </div>
+
+        <div class="zb-feedback resource" id="ember126">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+
+<!----></div>
+
+<!---->
+<!---->            <div class="content-resource
+        html-content-resource
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_0c5b3e8d-4353-410d-be70-67bd22963f80python3" content_resource_id="122584505">
+        <div>
+<p>
+The fourth version can be created by filling in the elif branches similarly for other letters and adding more instructions for handling unexpected characters. The code is not shown below, but a sample input/output is provided.
+</p>
+</div><!----><!---->
+    </div>
+        
+<!---->
+<!---->            <div class="container-content-resource
+        
+        static-container
+        
+        large
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_6e545d31-658a-e7e8-7fb0-abe875b86de4python3" content_resource_id="122584506">
+        <div class="static-container-header  ">
+                    <h2 class="clear-heading-style flex">
+                        <div class="static-container-title ">
+                                Figure 5.9.4: Fourth and final version sample input/output.
+                        </div>
+                    </h2>
+            <div class="flex ml-auto justify-end">
+<!----><!---->            </div>
+<!----><!---->        </div>
+
+        <div class="static-container-payload
+                
+                
+                ">
+            <div class="w-full  ">
+<!---->                <div class="content-resource container-content-resource
+        container-content-resource
+        
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_6e545d31-658a-e7e8-7fb0-abe875b86de4python3" content_resource_id="122584506">
+        <div class="container-resource-payload">
+            <div>
+<div class="console"><pre>Enter phone number (letters/- OK, no spaces): 1-555-HOLIDAY       
+Numbers only: 1-555-4654329
+...
+Enter phone number (letters/- OK, no spaces): 1-555-holiday
+Numbers only: 1-555-4654329
+...
+Enter phone number (letters/- OK, no spaces): 999-9999
+Numbers only: 999-9999
+...
+Enter phone number (letters/- OK, no spaces): 9876zywx%$#@
+Numbers only: 98769999????</pre></div>
+</div><!----><!---->
+        </div>
+</div>
+            </div>
+        </div>
+
+        <div class="zb-feedback resource" id="ember130">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+
+<!----></div>
+
+<!---->
+<!---->            <div class="zystudio-content-resource
+        
+        static-container
+        
+        large
+        
+        " content_resource_guid="53c931ec-6877-1143-85bb-8557b6b688e2" content_resource_id="122584508">
+        <div class="static-container-header  ">
+                    <h2 class="clear-heading-style flex">
+                        <div class="static-container-title ">
+                                Try 5.9.1: Complete the phone number program.
+                        </div>
+                    </h2>
+            <div class="flex ml-auto justify-end">
+<!----><!---->            </div>
+<!---->                    <button class="zb-button secondary    left       icon-button-with-title " type="button">
+            <div>
+                <i aria-label="fullscreen" class="zb-icon material-icons med secondary " role="img" aria-hidden="true">
+            fullscreen
+<!----></i>
+            </div>
+                <span class="title">Full screen</span>
+<!----></button>
+        </div>
+
+        <div class="static-container-payload
+                
+                
+                w-full">
+            <div class="w-full  h-full">
+                        <div class="activity-instructions">
+                            <div><p>Complete the program by providing the additional branches for decoding other letters in a phone number. Try  writing the program incrementally by adding one elif branch at a time, testing that each added branch works as intended.</p></div><!----><!---->
+                        </div>
+                                <div class="content-resource zystudio-payload
+        zystudio-content-resource
+        
+        
+        
+        " content_resource_guid="53c931ec-6877-1143-85bb-8557b6b688e2" content_resource_id="122584508">
+    <div class="question-set-question zystudio-question">
+        <div class="flex flex-col w-full gap-y-5">
+            <div class="relative">
+<!---->                    <div class="question " id="122584508" style="padding-bottom: 10px;">
+<!----><!---->                    <div class="resizable-bar"></div><iframe src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/callback.html" width="100%" height="100%" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking; serial; clipboard-read; clipboard-write" sandbox="allow-forms allow-downloads allow-modals allow-popups allow-presentation allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" allowfullscreen="true" title="Code and output" style="border: none; background: white;"></iframe></div>
+
+<!---->            </div>
+                <details>
+    <summary>Model Solution</summary>
+    <div class="question zystudio-container-h-full">
+    <iframe src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/callback(1).html" width="100%" height="100%" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking; serial; clipboard-read; clipboard-write" sandbox="allow-forms allow-downloads allow-modals allow-popups allow-presentation allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" allowfullscreen="true" title="Code and output" style="border: none; background: white;"></iframe></div>
+</details>
+                    </div>
+
+<!----></div>
+</div>
+            </div>
+        </div>
+
+        <div class="zb-feedback resource" id="ember132">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+
+<!----></div>
+
+<!---->
+<!---->                <div class="multiple-choice-content-resource
+        
+        interactive-activity-container
+        large
+        participation" content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_aec84983-3b75-eec8-d97d-43a8f283dc08python3" content_resource_id="122584507">
+    <div class="activity-title-bar">
+        <div class="activity-type" role="button">
+            participation
+            activity
+        </div>
+
+        <div class="activity-description ">
+                <h2 class="clear-heading-style flex grow">
+                    <div class="activity-title">
+                        5.9.1:
+                        Incremental programming.
+                    </div>
+                </h2>
+<!---->                <div class="title-bar-chevron-container">
+<!---->
+<!----><!---->
+<!---->
+<!---->
+<!---->
+<!---->
+                            <div aria-label="Activity completed" class="title-bar-chevron zb-chevron check orange  filled  large" role="img">
+<!----></div>
+                </div>
+        </div>
+    </div>
+    <div class="activity-payload">
+            <div class="activity-instructions">
+                <div>
+</div><!----><!---->
+            </div>
+<!---->        <!----><!---->
+        <div class="content-resource multiple-choice-payload
+        multiple-choice-content-resource
+        
+        
+        
+        " content_resource_guid="414cb424-8c44-e888-4711-9c4d18d7559epython3_aec84983-3b75-eec8-d97d-43a8f283dc08python3" content_resource_id="122584507">
+            <div class="question-set-question multiple-choice-question ">
+    <div class="question">
+            <div class="setup flex-row">
+                    <div class="label" id="e7c49dfa-ea86-4e75-a5c2-c5eeef249903">1)</div>
+                    <div class="text" id="ed0339c7-5913-423d-8e7b-0d0d155a2d0e"><div>Incremental programming may help reduce the number of errors in a program.</div><!----><!----></div>
+            </div>
+
+                <div aria-labelledby="e7c49dfa-ea86-4e75-a5c2-c5eeef249903 ed0339c7-5913-423d-8e7b-0d0d155a2d0e" class="question-choices " role="radiogroup">
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="cbc9d361-b654-4822-9b0f-030412132442" name="1-1" type="radio">
+            <label class="ml-2" id="cbc9d361-b654-4822-9b0f-030412132442">
+                    
+                            <div>True</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="c6c71f74-5236-4734-803e-b45ab8508174" name="1-1" type="radio">
+            <label class="ml-2" id="c6c71f74-5236-4734-803e-b45ab8508174">
+                    
+                            <div>False</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                </div>
+    </div>
+        <div aria-atomic="true" aria-live="polite" class="zb-explanation
+                
+                " role="alert">
+<!---->        </div>
+    
+            
+    <div class="chevron-container">
+            <div aria-label="Question completed" class="question-chevron zb-chevron check participation  filled  medium" role="img">
+<!----></div>
+    </div>
+
+
+<!---->
+<!----></div>
+            <div class="question-set-question multiple-choice-question ">
+    <div class="question">
+            <div class="setup flex-row">
+                    <div class="label" id="dcefb5cf-81a1-439a-9a2f-7e7d8f2cded0">2)</div>
+                    <div class="text" id="dda4dbe1-ecbd-43e7-841e-a8a1ce877dc1"><div>FIXME comments provide a way for a programmer to remember what needs to be added.</div><!----><!----></div>
+            </div>
+
+                <div aria-labelledby="dcefb5cf-81a1-439a-9a2f-7e7d8f2cded0 dda4dbe1-ecbd-43e7-841e-a8a1ce877dc1" class="question-choices " role="radiogroup">
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="cc0a00c8-aedb-417d-b1bc-0acb51bf956b" name="1-2" type="radio">
+            <label class="ml-2" id="cc0a00c8-aedb-417d-b1bc-0acb51bf956b">
+                    
+                            <div>True</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="dbf445e2-8687-41eb-a892-564f6520c8a3" name="1-2" type="radio">
+            <label class="ml-2" id="dbf445e2-8687-41eb-a892-564f6520c8a3">
+                    
+                            <div>False</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                </div>
+    </div>
+        <div aria-atomic="true" aria-live="polite" class="zb-explanation
+                
+                " role="alert">
+<!---->        </div>
+    
+            
+    <div class="chevron-container">
+            <div aria-label="Question completed" class="question-chevron zb-chevron check participation  filled  medium" role="img">
+<!----></div>
+    </div>
+
+
+<!---->
+<!----></div>
+            <div class="question-set-question multiple-choice-question ">
+    <div class="question">
+            <div class="setup flex-row">
+                    <div class="label" id="d111cfa8-f32e-49eb-b494-a8d9774e0edb">3)</div>
+                    <div class="text" id="e531491f-5759-409b-aae5-4401c652ee65"><div>Once a program is complete, a programmer can expect to see several FIXME comments.</div><!----><!----></div>
+            </div>
+
+                <div aria-labelledby="d111cfa8-f32e-49eb-b494-a8d9774e0edb e531491f-5759-409b-aae5-4401c652ee65" class="question-choices " role="radiogroup">
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="d752b423-0720-47aa-b0c5-5d6a2b48597f" name="1-3" type="radio">
+            <label class="ml-2" id="d752b423-0720-47aa-b0c5-5d6a2b48597f">
+                    
+                            <div>True</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                            <div class="zb-radio-button flex-row
+            
+            
+            orange
+            
+            ">
+        <input aria-labelledby="dee7deaa-b120-4b32-86c7-63ef41218135" name="1-3" type="radio">
+            <label class="ml-2" id="dee7deaa-b120-4b32-86c7-63ef41218135">
+                    
+                            <div>False</div><!----><!---->
+                        
+            </label>
+    </div>
+
+                </div>
+    </div>
+        <div aria-atomic="true" aria-live="polite" class="zb-explanation
+                
+                " role="alert">
+<!---->        </div>
+    
+            
+    <div class="chevron-container">
+            <div aria-label="Question completed" class="question-chevron zb-chevron check participation  filled  medium" role="img">
+<!----></div>
+    </div>
+
+
+<!---->
+<!----></div>
+<!----></div>
+    </div>
+
+    <div class="flex-row ">
+<!---->
+            <div class="zb-feedback resource" id="ember134">
+        <div class="feedback-control-row">
+<!----><!---->
+<!---->
+                <button class="zb-button secondary             open-feedback expand-feedback-button" type="button">
+<!---->                <span class="title">Feedback?</span>
+<!----></button>
+        </div>
+
+<!----><!----></div>
+    </div>
+</div>
+
+<!---->
+<!---->
+            </div>
+
+<!---->
+        <div class="zb-feedback " id="ember85">
+        <div class="feedback-control-row">
+<!---->                <div class="section-feedback-controls">
+                    <span class="feedback-prompt">How was this section?</span>
+                    <div class="feedback-thumbs-pill raised shadow flex justify-between px-2 items-center">
+                            <button class="zb-button secondary   icon-button left        " aria-label="Thumbs up" type="button">
+            <div>
+                <i aria-label="thumb_up" class="zb-icon material-icons-outlined med secondary " role="img" aria-hidden="false">
+            thumb_up
+<!----></i>
+            </div>
+<!----><!----></button>
+                        <div aria-hidden="true" class="vertical-divider">|</div>
+                            <button class="zb-button secondary   icon-button left        " aria-label="Thumbs down" type="button">
+            <div>
+                <i aria-label="thumb_down" class="zb-icon material-icons-outlined med secondary " role="img" aria-hidden="false">
+            thumb_down
+<!----></i>
+            </div>
+<!----><!----></button>
+                    </div>
+                    <button class="zb-button secondary             open-feedback" type="button">
+<!---->                <span class="title">Provide section feedback</span>
+<!----></button>
+                </div>
+
+<!---->
+<!---->        </div>
+
+<!----><!----></div>
+
+    </div>
+</div>
+
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+
+            <div class="zb-card assignment-completion-summary-card">
+    <div class="zb-card-content ">
+        
+    <div class="header-row">
+        <div class="assignment-completion-header">
+            Activity summary for assignment:
+                C5
+<!---->        </div>
+        <div class="points-text-submit-button">
+            <span class="points-completed-text">
+                224 / 224 points
+            </span>
+<!---->        </div>
+    </div>
+    <div class="due-date-message-row">
+            <div>
+                <div class="due-date-text">
+                    <div class="assignment-due-date-lms-details in-section">
+            <div class="due-date-text body-text  flex items-center">
+                        Due:
+                        02/28/2026, 11:59 PM PST
+            </div>
+<!----><!----></div>
+                </div>
+<!---->            </div>
+        <div class="submission-messaging-container">
+<!----><!---->        </div>
+    </div>
+        <button class="zb-button secondary    right       icon-button-with-title  expand-sections" type="button">
+            <div>
+                <i aria-label="keyboard_arrow_down" class="zb-icon material-icons med secondary " role="img" aria-hidden="true">
+            keyboard_arrow_down
+<!----></i>
+            </div>
+                <span class="title">Completion details</span>
+<!----></button>
+<!---->
+    </div>
+</div>
+
+<!---->    </div>
+
+<!---->
+        <nav aria-label="next section" class="section-nav next">
+            <a id="ember145" class="ember-view nav-link" href="https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/10">
+                <i aria-label="arrow_downward" class="zb-icon material-icons sm secondary " role="img" aria-hidden="true">
+            arrow_downward
+<!----></i>
+                <span class="nav-text next">
+                    5.10
+                    Break and continue
+                </span>
+            </a>
+    </nav>
+
+
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+</section>
+
+<div>
+</div>
+
+<!---->
+<!---->
+<!---->
+
+<!----></div>
+
+
+    <div id="ember-basic-dropdown-wormhole"></div>
+  <div class="disable-lazy-typesetting"></div><iframe name="__uspapiLocator" style="display: none;" src="./Section 5.9 - CS 2520_ Python for Programmers _ zyBooks_files/saved_resource(2).html"></iframe><div class="MJX_LiveRegion" aria-live="assertive" style="background-color: white;"><div></div></div><div class="MJX_LiveRegion" aria-live="assertive" style="background-color: white;"><div></div></div><div class="MJX_HoverRegion" style="background-color: white;"><div style="line-height: 0;"></div></div><div class="MJX_ToolTip" style="background-color: white;"><div></div></div><div class="MJX_ToolTip" style="background-color: white;"><div></div></div><div class="MJX_ToolTip" style="background-color: white;"><div></div></div></body></html>

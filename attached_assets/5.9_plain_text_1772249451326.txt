@@ -1,0 +1,140 @@
+Skip to main content
+
+zyBooks
+My library >
+CS 2520: Python for Programmers home >
+5.9: Incremental programming
+zyBooks catalog
+Help/FAQ
+Casey Wong
+You have unverified email(s). Use My Profile to send another verification email.
+
+
+5.8 Nested loops
+Students:
+Section 5.9 is a part of 1 assignment:
+C5
+Activities:
+P
+Participation
+Due: 02/28/2026, 11:59 PM PST
+5.9 Developing programs incrementally
+Incremental programming
+3x4 keypad that has letters under a given number. For example button 2 has letters A, B, and C underneath.
+As programs increase in complexity, a programmer's development process becomes more important. A programmer should not write the entire program and then run the program hoping the program works. If the program does not work on the first try, debugging can be extra difficult because the program may have many bugs.
+
+Experienced programmers practice incremental programming by starting with a simple version of the program, and growing the program little by little into a complete version.
+
+Example: Phone number program
+The following program allows the user to enter a phone number that includes letters, which appear on phone keypads along with numbers, and are used by companies as a marketing tactic (e.g., 1-555-HOLIDAY). The program then outputs the phone number using numbers only.
+
+The first program version simply prints each element of the string to ensure the loop iterates properly through each string element.
+
+Figure 5.9.1: First version echoes input phone number string.
+user_input = input("Enter phone number: ")
+
+index = 0
+for character in user_input:
+    print(f"Element {index} is: {character}")
+    index += 1
+Enter phone number: 1-555-HOLIDAY
+Element 0 is: 1
+Element 1 is: -
+Element 2 is: 5
+Element 3 is: 5
+Element 4 is: 5
+Element 5 is: -
+Element 6 is: H
+Element 7 is: O
+Element 8 is: L
+Element 9 is: I
+Element 10 is: D
+Element 11 is: A
+Element 12 is: Y
+
+Feedback?
+The second program version outputs the numbers 0 - 9 of the phone number and outputs a "?" for all other characters. A FIXME comment attracts attention to code that needs to be fixed in the future. Many editors automatically highlight FIXME comments. Large projects with multiple programmers might also include a username and date, as in FIXME(01/22/2018, John).
+
+Figure 5.9.2: Second version echoes numbers and has FIXME comment.
+user_input = input("Enter phone number: ")
+phone_number = ""
+
+for character in user_input:
+    if "0" <= character <= "9":
+        phone_number += character
+    else:
+        #FIXME: Add elif branches for letters and hyphen
+        phone_number += "?"
+
+print(f"Numbers only: {phone_number}")
+Enter phone number: 1-555-HOLIDAY
+Numbers only: 1?555????????
+
+Feedback?
+The third version completes the elif branch for the letters A-C (lowercase and uppercase, per a standard phone keypad). The code also modifies the if branch to echo a hyphen in addition to numbers. The third version adds the elif branch for the letters A-C (lowercase and uppercase, per a standard phone keypad).
+
+Figure 5.9.3: Third version echoes hyphens and handles the first three letters.
+user_input = input("Enter phone number: ")
+phone_number = ""
+
+for character in user_input:
+    if ("0" <= character <= "9") or (character == "-"):
+        phone_number += character
+    elif ("a" <= character <= "c") or ("A" <= character <= "C"):
+        phone_number += "2"
+    #FIXME: Add remaining elif branches
+    else:
+        phone_number += "?"
+
+print(f"Numbers only: {phone_number}")
+Enter phone number: 1-555-HOLIDAY
+Numbers only: 1-555-?????2?
+
+Feedback?
+The fourth version can be created by filling in the elif branches similarly for other letters and adding more instructions for handling unexpected characters. The code is not shown below, but a sample input/output is provided.
+
+Figure 5.9.4: Fourth and final version sample input/output.
+Enter phone number (letters/- OK, no spaces): 1-555-HOLIDAY       
+Numbers only: 1-555-4654329
+...
+Enter phone number (letters/- OK, no spaces): 1-555-holiday
+Numbers only: 1-555-4654329
+...
+Enter phone number (letters/- OK, no spaces): 999-9999
+Numbers only: 999-9999
+...
+Enter phone number (letters/- OK, no spaces): 9876zywx%$#@
+Numbers only: 98769999????
+
+Feedback?
+Try 5.9.1: Complete the phone number program.
+
+Full screen
+Complete the program by providing the additional branches for decoding other letters in a phone number. Try writing the program incrementally by adding one elif branch at a time, testing that each added branch works as intended.
+
+
+Model Solution
+
+Feedback?
+participation activity
+5.9.1: Incremental programming.
+1)
+Incremental programming may help reduce the number of errors in a program.
+2)
+FIXME comments provide a way for a programmer to remember what needs to be added.
+3)
+Once a program is complete, a programmer can expect to see several FIXME comments.
+
+Feedback?
+How was this section?
+
+|
+
+
+Provide section feedback
+Activity summary for assignment: C5
+224 / 224 points
+Due: 02/28/2026, 11:59 PM PST
+
+Completion details
+5.10 Break and continue

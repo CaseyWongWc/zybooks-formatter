@@ -378,14 +378,58 @@ function formatMarkdownPaste(input: string): string {
   text = text.replace(/^[הה]{10,}\s*$/gm, '');
   text = text.replace(/^X{10,}\s*$/gm, '');
 
+  function hasActiveComment(line: string): boolean {
+    let inSingle = false, inDouble = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === "'" && !inDouble && (i === 0 || line[i-1] !== '\\')) inSingle = !inSingle;
+      if (ch === '"' && !inSingle && (i === 0 || line[i-1] !== '\\')) inDouble = !inDouble;
+      if (ch === '#' && !inSingle && !inDouble) return true;
+    }
+    return false;
+  }
+
   function splitCodeLine(flat: string): string[] {
-    const stmtStart = /(?<=\s)(?=(?:while |for |if |elif |else:|def |class |import |from |return |try:|except |with |raise |pass$|print\(|[a-z_]\w*\s*=(?!=)|"""|# ))/;
+    const stmtStart = /(?<=\s)(?=(?:while |for (?=\w.*\bin\b)|if |elif (?=.*:)|else:|def |class |import |from |return |try:|except |with |raise |pass$|print\(|[a-z_]\w*\s*[+\-*\/]?=(?!=)|"""|# ))/;
     const parts = flat.split(stmtStart).map(s => s.trim()).filter(s => s.length > 0);
     if (parts.length <= 1) {
       const fallback = flat.split(/\s{2,}/).filter(l => l.trim());
       return fallback.length > 1 ? fallback : [flat];
     }
-    return parts;
+    function looksLikeCode(s: string): boolean {
+      if (/^[a-zA-Z_]\w*\s*(?:[+\-*\/]?=(?!=))/.test(s)) return true;
+      if (/^[a-zA-Z_]\w*\s*\(/.test(s)) return true;
+      if (/^return\s+\S/.test(s)) return true;
+      if (/^(?:break|continue|pass)\s*$/.test(s)) return true;
+      if (/^else:/.test(s)) return true;
+      if (/^try:/.test(s)) return true;
+      if (/^except\b/.test(s)) return true;
+      if (/^finally:/.test(s)) return true;
+      if (/^while\s/.test(s)) return true;
+      if (/^if\s/.test(s)) return true;
+      if (/^def\s/.test(s)) return true;
+      if (/^class\s/.test(s)) return true;
+      if (/^import\s/.test(s)) return true;
+      if (/^from\s/.test(s)) return true;
+      if (/^for\s(?=\w.*\bin\b)/.test(s)) return true;
+      if (/^elif\s(?=.*:)/.test(s)) return true;
+      return false;
+    }
+
+    const merged: string[] = [];
+    for (const part of parts) {
+      if (merged.length > 0 && hasActiveComment(merged[merged.length - 1]) && !looksLikeCode(part)) {
+        merged[merged.length - 1] += ' ' + part;
+      } else {
+        merged.push(part);
+      }
+    }
+    return merged;
+  }
+
+  function splitOutputLine(flat: string): string[] {
+    const lines = flat.split(/(?<=\S)\s+(?=(?:Enter |Numbers only:|Element \d|Total:|Average:|Result:|Output:|Error:|Warning:|Value:|Count:|Sum:|Score:|Grade:|Name:|Age:|Price:|Quantity:|\.\.\.))/);
+    return lines.map(s => s.trim()).filter(s => s.length > 0);
   }
 
   text = text.replace(/^\| -.*main\.py.*\|.*\|\s*$/gm, '');
@@ -423,7 +467,10 @@ function formatMarkdownPaste(input: string): string {
       const code = unescapeMd(columns[0]);
       const output = unescapeMd(columns[1]);
       const codeLines = splitCodeLine(code);
-      const outputLines = output.split(/\s{2,}/).filter(l => l.trim());
+      let outputLines = output.split(/\s{2,}/).filter(l => l.trim());
+      if (outputLines.length <= 1 && output.trim()) {
+        outputLines = splitOutputLine(output.trim());
+      }
       let result = '```python\n' + codeLines.join('\n') + '\n```';
       if (outputLines.length > 0 && outputLines[0].trim()) {
         result += '\n\nOutput:\n' + outputLines.join('\n');
