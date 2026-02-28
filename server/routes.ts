@@ -55,7 +55,7 @@ export async function registerRoutes(
 
       let existingSha: string | undefined;
       const getRes = await fetch(
-        `https://api.github.com/repos/${gh.login}/${repo}/contents/${path}`,
+        `https://api.github.com/repos/${gh.login}/${repo}/contents/${path}?ref=main2`,
         {
           headers: {
             Authorization: `token ${gh.token}`,
@@ -80,6 +80,7 @@ export async function registerRoutes(
           body: JSON.stringify({
             message: `Add notebook: ${filename}`,
             content,
+            branch: "main2",
             ...(existingSha ? { sha: existingSha } : {}),
           }),
         }
@@ -90,7 +91,7 @@ export async function registerRoutes(
         return res.status(500).json({ error: `GitHub API error: ${errText}` });
       }
 
-      const colabUrl = `https://colab.research.google.com/github/${gh.login}/${repo}/blob/main/${path}`;
+      const colabUrl = `https://colab.research.google.com/github/${gh.login}/${repo}/blob/main2/${path}`;
 
       return res.json({ colabUrl });
     } catch (err: any) {
