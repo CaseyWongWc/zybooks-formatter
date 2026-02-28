@@ -17,7 +17,7 @@ Single-page tool with input/output textareas. Users paste raw zyBooks content, c
 - `client/src/lib/zybooks-formatter.ts` — Core regex cleanup engine with three paste modes
 - `client/src/lib/html-parser.ts` — HTML paste mode: DOM-based parser for raw zyBooks page HTML
 - `client/src/lib/notebook-generator.ts` — .ipynb notebook generation (nbformat 4)
-- `client/src/pages/home.tsx` — Main formatter page with input/output textareas and mode toggle
+- `client/src/pages/home.tsx` — Main formatter page with input/output textareas, mode toggle, and debug preview panels
 - `client/src/App.tsx` — App router
 
 ## Paste Modes
@@ -155,6 +155,14 @@ In HTML, the fill-in-the-blank inputs are fully visible:
 </pre>
 ```
 This means an HTML parser could reconstruct `for [___] in ["Scooter", "Kobe", "Bella"]:` with a visible blank marker.
+
+## Debug/Preview Panels
+
+When in HTML Paste mode, a "Show Previews" toggle button appears below the main UI. It reveals two side-by-side panels:
+- **HTML Preview (left)** — Renders the pasted HTML in a sandboxed iframe (`sandbox=""`, no scripts) so you can see the original zyBooks content
+- **Markdown Preview (right)** — Renders the formatted markdown output using `marked.js` + `DOMPurify` sanitization via Tailwind Typography (`prose` class)
+- Panels are collapsible via the toggle button; state resets when switching paste modes
+- Security: HTML is sanitized with DOMPurify (strips scripts, iframes, objects, embeds); iframe uses empty sandbox attribute (no same-origin, no scripts)
 
 ## Roadmap
 

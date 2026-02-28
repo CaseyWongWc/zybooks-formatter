@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -9,8 +9,10 @@ import {
   downloadNotebook,
   generateFilename,
 } from "@/lib/notebook-generator";
-import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown } from "lucide-react";
+import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown, Eye, EyeOff } from "lucide-react";
 import { SiNotion } from "react-icons/si";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -23,6 +25,7 @@ export default function Home() {
   const [selectedParentPage, setSelectedParentPage] = useState<string>("");
   const [notionPagesLoading, setNotionPagesLoading] = useState(false);
   const [pasteMode, setPasteMode] = useState<PasteMode>("regular");
+  const [showPreviews, setShowPreviews] = useState(false);
   const { toast } = useToast();
 
   const handleFormat = useCallback(() => {
@@ -164,6 +167,35 @@ export default function Home() {
   const inputLineCount = input ? input.split("\n").length : 0;
   const outputLineCount = output ? output.split("\n").length : 0;
 
+  const renderedMarkdown = useMemo(() => {
+    if (!output || !showPreviews) return "";
+    const raw = marked.parse(output, { async: false }) as string;
+    return DOMPurify.sanitize(raw);
+  }, [output, showPreviews]);
+
+  const htmlPreviewSrcdoc = useMemo(() => {
+    if (!showPreviews || pasteMode !== "html" || !input.trim()) return "";
+    const sanitizedHtml = DOMPurify.sanitize(input, { ALLOW_UNKNOWN_PROTOCOLS: false, FORBID_TAGS: ['script', 'iframe', 'object', 'embed'] });
+    return `<!DOCTYPE html><html><head><style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; padding: 16px; color: #333; line-height: 1.6; }
+      .code, pre { background: #f5f5f5; padding: 8px; border-radius: 4px; overflow-x: auto; font-family: monospace; font-size: 13px; }
+      .console pre { background: #1e1e1e; color: #d4d4d4; padding: 8px; border-radius: 4px; }
+      table { border-collapse: collapse; width: 100%; }
+      td { vertical-align: top; padding: 4px; }
+      .activity-title-bar { background: #f0f4ff; padding: 8px 12px; border-radius: 4px; margin: 8px 0; }
+      .activity-type { font-size: 11px; text-transform: uppercase; color: #666; }
+      .activity-title { font-weight: 600; }
+      .term { font-weight: bold; }
+      .static-container-title { font-weight: 600; color: #555; }
+      .question-set-question { margin: 12px 0; padding: 8px; border-left: 3px solid #ddd; }
+      .label { font-weight: bold; margin-right: 4px; }
+      .zb-nav-menu, .top-toolbar, .zb-feedback, .assignment-completion-summary-card, .section-announcement, .osano-cm-window { display: none !important; }
+      h1 { font-size: 1.5em; } h3 { font-size: 1.2em; }
+      code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; font-size: 0.9em; }
+      .highlight span { font-family: monospace; }
+    </style></head><body>${sanitizedHtml}</body></html>`;
+  }, [input, showPreviews, pasteMode]);
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <header className="border-b px-6 py-4">
@@ -208,7 +240,7 @@ export default function Home() {
                   <div className="flex rounded-md border border-input overflow-hidden text-xs" data-testid="toggle-paste-mode">
                     <button
                       type="button"
-                      onClick={() => setPasteMode("regular")}
+                      onClick={() => { setPasteMode("regular"); setShowPreviews(false); }}
                       className={`px-3 py-1.5 transition-colors ${
                         pasteMode === "regular"
                           ? "bg-primary text-primary-foreground"
@@ -220,7 +252,7 @@ export default function Home() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setPasteMode("markdown")}
+                      onClick={() => { setPasteMode("markdown"); setShowPreviews(false); }}
                       className={`px-3 py-1.5 transition-colors border-l border-input ${
                         pasteMode === "markdown"
                           ? "bg-primary text-primary-foreground"
@@ -345,6 +377,50 @@ export default function Home() {
               />
             </div>
           </div>
+
+          {pasteMode === "html" && (
+            <div className="mt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowPreviews(!showPreviews)}
+                data-testid="button-toggle-previews"
+                className="gap-1.5"
+              >
+                {showPreviews ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPreviews ? "Hide Previews" : "Show Previews"}
+              </Button>
+
+              {showPreviews && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-3" data-testid="preview-panels">
+                  <div className="flex flex-col gap-2 border rounded-lg overflow-hidden">
+                    <div className="bg-muted px-3 py-2 text-sm font-medium flex items-center gap-2 border-b" data-testid="label-html-preview">
+                      <Eye className="w-4 h-4 text-muted-foreground" />
+                      HTML Preview (Original)
+                    </div>
+                    <iframe
+                      sandbox=""
+                      srcDoc={htmlPreviewSrcdoc}
+                      className="w-full min-h-[400px] bg-white"
+                      title="HTML Preview"
+                      data-testid="iframe-html-preview"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 border rounded-lg overflow-hidden">
+                    <div className="bg-muted px-3 py-2 text-sm font-medium flex items-center gap-2 border-b" data-testid="label-markdown-preview">
+                      <FileText className="w-4 h-4 text-muted-foreground" />
+                      Markdown Preview (Formatted)
+                    </div>
+                    <div
+                      className="w-full min-h-[400px] p-4 prose prose-sm max-w-none dark:prose-invert overflow-auto bg-white dark:bg-background"
+                      data-testid="div-markdown-preview"
+                      dangerouslySetInnerHTML={{ __html: renderedMarkdown || '<p class="text-gray-400">Format content to see rendered markdown preview...</p>' }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
 
