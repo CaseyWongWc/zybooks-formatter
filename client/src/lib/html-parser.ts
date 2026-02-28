@@ -60,7 +60,7 @@ function removeUnwantedElements(doc: Document): void {
     '.show-answer-button', '.zb-explanation',
     '.zb-input-container', 'iframe',
     'style', 'script', 'link',
-    '.resizable-bar', '.question-container',
+    '.resizable-bar',
     '.segmented-control', '.assistive-text',
     '.zb-simple-expandable', '.levels-bar',
     '.check-next-container', '.view-solution-container',
@@ -361,8 +361,66 @@ function extractQuestion(q: HTMLElement, idx: number): string | null {
     if (qText) qParts.push(qText);
   }
 
+  const answerOptions = extractAnswerOptions(q);
+  if (answerOptions) qParts.push(answerOptions);
+
   const result = qParts.join('\n');
   return result.trim() || null;
+}
+
+function extractAnswerOptions(q: HTMLElement): string | null {
+  const options: string[] = [];
+
+  const mcAnswers = q.querySelectorAll('.answer, .zb-radio-button, [role="radio"], .mc-answer, .multiple-choice-answer');
+  if (mcAnswers.length > 0) {
+    mcAnswers.forEach(ans => {
+      const labelEl = ans.querySelector('.label, .text, .formatted-text, span:not(.zb-icon):not(.material-icons)');
+      let text = '';
+      if (labelEl) {
+        text = labelEl.textContent?.trim() || '';
+      }
+      if (!text) {
+        text = (ans as HTMLElement).textContent?.trim() || '';
+        text = text.replace(/^(check_circle|radio_button_unchecked|radio_button_checked|circle)\s*/i, '').trim();
+      }
+      if (text) options.push(`- ○ ${text}`);
+    });
+  }
+
+  if (options.length === 0) {
+    const questionContainer = q.querySelector('.question-container');
+    if (questionContainer) {
+      const inputs = questionContainer.querySelectorAll('input[type="radio"]');
+      if (inputs.length > 0) {
+        inputs.forEach(input => {
+          const parent = (input as HTMLElement).closest('.answer, label, div') || (input as HTMLElement).parentElement;
+          if (parent) {
+            let text = parent.textContent?.trim() || '';
+            text = text.replace(/^(check_circle|radio_button_unchecked|radio_button_checked|circle)\s*/i, '').trim();
+            if (text) options.push(`- ○ ${text}`);
+          }
+        });
+      }
+    }
+  }
+
+  if (options.length === 0) {
+    const container = q.querySelector('.question-container, .answers');
+    if (container) {
+      const divs = container.querySelectorAll(':scope > div, :scope > label');
+      divs.forEach(div => {
+        const hasRadio = div.querySelector('input[type="radio"], .zb-radio, [role="radio"], .material-icons');
+        if (hasRadio) {
+          let text = div.textContent?.trim() || '';
+          text = text.replace(/^(check_circle|radio_button_unchecked|radio_button_checked|circle)\s*/i, '').trim();
+          text = text.replace(/(Check|Show answer|Feedback\?)$/i, '').trim();
+          if (text) options.push(`- ○ ${text}`);
+        }
+      });
+    }
+  }
+
+  return options.length > 0 ? options.join('\n') : null;
 }
 
 function extractQuestionText(el: HTMLElement): string {
