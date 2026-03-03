@@ -63,6 +63,7 @@ The formatter preserves:
 - Educational content and explanations
 - Code examples and exercise prompts
 - Question text and answer choices
+- Fill-in-the-blank placeholders (`[___]`) for text input fields in questions
 - Multiple-choice answer choices formatted as bullet lists (`- `) within PA/CA sections
   - Detects three question types: simple (text answers), output (code supplement → output answers), prints (output supplement → code answers)
   - "How many" questions treated as output type (code is a supplement, not answer choices)

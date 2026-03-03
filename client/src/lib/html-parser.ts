@@ -3,6 +3,7 @@ export function formatHtmlPaste(html: string): string {
   const doc = parser.parseFromString(html, 'text/html');
   const parts: string[] = [];
 
+  replaceInputsWithBlanks(doc);
   removeUnwantedElements(doc);
 
   const sectionTitle = doc.querySelector('h1.zybook-section-title');
@@ -50,6 +51,22 @@ function findProcessedAncestor(el: Element, processed: Set<Element>): Element | 
   return null;
 }
 
+function replaceInputsWithBlanks(doc: Document): void {
+  doc.querySelectorAll('.zb-input-container').forEach(container => {
+    const input = container.querySelector('input');
+    const placeholder = doc.createTextNode(' [___] ');
+    if (input) {
+      container.replaceWith(placeholder);
+    }
+  });
+  doc.querySelectorAll('input[type="text"], input:not([type])').forEach(input => {
+    if (!(input as HTMLElement).closest('.answer, [role="radio"]')) {
+      const placeholder = doc.createTextNode(' [___] ');
+      input.replaceWith(placeholder);
+    }
+  });
+}
+
 function removeUnwantedElements(doc: Document): void {
   const selectors = [
     '.zb-nav-menu', '.top-toolbar', '.osano-cm-window',
@@ -58,7 +75,7 @@ function removeUnwantedElements(doc: Document): void {
     '.activity-watermark', '.chevron-container',
     '.title-bar-chevron-container', '.check-button',
     '.show-answer-button', '.zb-explanation',
-    '.zb-input-container', 'iframe',
+    'iframe',
     'style', 'script', 'link',
     '.resizable-bar',
     '.segmented-control', '.assistive-text',
