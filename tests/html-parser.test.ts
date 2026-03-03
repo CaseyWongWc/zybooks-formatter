@@ -288,6 +288,27 @@ test('Parsons (drag-and-drop) challenge extraction', () => {
   assert(contains(output, 'for row in range(num_rows)'), 'Should extract code blocks');
 });
 
+test('Section 6.1: Animation assistive-text extraction', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'attached_assets', 'Section_6.1_-_CS_2520__Python_for_Programmers___zyBooks_1772501226127.html'), 'utf-8');
+  const output = formatHtmlPaste(html);
+  assert(contains(output, '6.1 User-defined function basics'), 'Section title should be extracted');
+  assert(contains(output, 'calc_pizza_area'), 'Should contain calc_pizza_area function reference');
+  assert(contains(output, 'def calc_pizza_area'), 'Should extract animation code block');
+  assert(contains(output, 'Step 1'), 'Should contain step-by-step animation descriptions');
+  assert(contains(output, 'Step 2'), 'Should contain Step 2 description');
+  assert(contains(output, 'pizza_radius'), 'Should include code variables from animation');
+  assert(contains(output, 'F2C'), 'Should extract F2C function from first animation');
+  assert(!contains(output, 'animation-text-object'), 'Should not contain raw HTML class names');
+  assert(!contains(output, 'assistive-text'), 'Should not contain assistive-text class');
+});
+
+test('Section 6.1: Animation content not duplicated in body text', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'attached_assets', 'Section_6.1_-_CS_2520__Python_for_Programmers___zyBooks_1772501226127.html'), 'utf-8');
+  const output = formatHtmlPaste(html);
+  const occurrences = output.split('Step 1: The function call to calc_pizza_area').length - 1;
+  assert(occurrences === 1, `Step 1 description should appear exactly once, found ${occurrences}`);
+});
+
 console.log('\n' + '='.repeat(50));
 const passed = results.filter(r => r.passed).length;
 const failed = results.filter(r => !r.passed).length;

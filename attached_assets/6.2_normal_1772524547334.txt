@@ -1,0 +1,232 @@
+Skip to main content
+
+zyBooks
+My library >
+CS 2520: Python for Programmers home >
+6.2: Print functions
+zyBooks catalog
+Help/FAQ
+Casey Wong
+You have unverified email(s). Use My Profile to send another verification email.
+
+
+6.1 User-defined function basics
+Students:
+Section 6.2 is a part of 1 assignment:
+C6
+Activities:
+P
+Participation
+C
+Challenge
+Due: 03/07/2026, 11:59 PM PST
+6.2 Print functions
+Printing from a function
+A common operation for a function is to print text. Large text outputs can clutter the main program, especially if the text needs to be output multiple times. A function that only prints typically does not return a value. A function with no return statement is called a void function, and such a function returns the value None.
+
+participation activity
+6.2.1: Printing with a void function.
+
+Start
+def print_summary(oid, items, price):
+Order
+...
+print_summary(oid, items, price)
+# Assume oid = 42, items = 4, price = 13.99
+...
+# Continues execution
+print(f"Order {oid}:")
+print(f"   Items: {items}")
+print(f"   Total: ${price:.2f}")
+Static figure: A code block and a monitor are displayed. Begin Python code: Def print_summary(oid, items, price): print(f"Order {oid}:") print(f" Items: {items}") print(f" Total: ${price:.2f}") ... # Assume oid = 42, items = 4, price = 13.99 print_summary(oid, items, price) ... # Continues execution End Python code. Step 1: Printing instructions can clutter a program. Here, the program consists of three print statements. Step 2: A print function can handle output and reduce clutter in the main program. The three print statements are moved from the main program to a new function called print_summary(oid, items, price). print_summary() takes three parameters, which are all used by the print statements. A function call print_summary(oid, items, price) replaces the print statements in the main program. Step 3: The main program calls function print_summary(), which prints the parameters as formatted output. A code comment states to assume oid = 42, items = 4, and price = 13.99. A monitor displays the print statements, stating Order 42: Items: 4 Total: $13.99 Step 4: print_summary() completes execution and returns back to the caller, the main program.
+
+Captions
+
+Feedback?
+participation activity
+6.2.2: Print functions.
+1)
+Print operations must be performed in the main program.
+2)
+A void function can have any number of parameters.
+3)
+A print function must return the value that was output.
+
+Feedback?
+A function that produces output can also return a value, but this material separates these operations for clarity. A function that both outputs and returns a value is not void.
+
+Calling a print function multiple times
+One benefit of a print function is that complex output statements can be written in code once. Then the print function can be called multiple times to produce the output instead of rewriting complex statements for every necessary instance. Changes to output and formatting are made easier and are less prone to error.
+
+participation activity
+6.2.3: Calling a print function repeatedly.
+
+Start
+...
+# Read from input: word = "Show"
+print_greatest(word)
+...
+...
+def print_greatest(word):
+# Read from input: word = "Song"
+print_greatest(word)
+print("--The Greatest *", end="")
+print(word, end="")
+...
+...
+# Read from input: word = "Show"
+print("--The Greatest *", end="")
+print(word, end="")
+...
+# Read from input: word = "Song"
+print("--The Greatest *", end="")
+print(word, end="")
+print("* on Earth!--")
+print("* on Earth!--")
+print("* on Earth!--")
+print("* on Earth--")
+print("* on Earth--")
+print("* on Earth--")
+Static figure: Two code blocks are displayed. Program A: Begin Python code: … # Read from input: word = "Show" print("--The Greatest *", end="") print(word, end="") print("* on Earth!--") # Read from input: word = "Song" print("--The Greatest *", end="") print(word, end="") print("* on Earth!--") End Python code. Program B: Begin Python code: def print_greatest(word): print("--The Greatest *", end="") print(word, end="") print("* on Earth!--") … # Read from input: word = "Show" print_greatest(word) … … # Read from input: word = Song print_greatest(word) End Python code. Step 1: A print function can improve the organization of a program. Step 2: The benefit of a print function increases with repeated calls. Both Program A and B output the formatted text twice, but the output code for Program B is only written once in the print_greatest() function. Program B uses two function calls print_greatest() to produce the same output as Program A. Step 3: In Program B, any changes to the output, e.g. adding "!", have to be made only in the print_greatest() function. The print_greatest() function has one of its print statements changed from print("* on Earth--") to print("* on Earth!--"). Step 4: Without a function, like in Program A, output must be changed in multiple instances, which can be time-consuming and lead to errors. The two print statements print("* on Earth--") are both changed to print("* on Earth!--").
+
+Captions
+
+Feedback?
+participation activity
+6.2.4: Calling a print function multiple times.
+Refer to the example programs above.
+
+1)
+To output the phrase, "The Greatest [word] on Earth", with ten different words, what is the minimum number of times the main program would need to call print_greatest() in Program B?
+2)
+To output "in the Galaxy" instead of "on Earth" in the phrase (Ex: "--The Greatest *Cafe* in the Galaxy!-- "), how many statements need to be changed in Program A and Program B?
+
+Feedback?
+Example: Menu system
+Figure 6.2.1: Example: Menu System.
+def print_menu():
+    print("Today's Menu:")
+    print("   1) Gumbo")
+    print("   2) Jambalaya")
+    print("   3) Quit\n")
+
+quit_program = False
+
+while not quit_program :
+    print_menu()
+    choice = int(input("Enter choice: "))
+    if choice == 3 :
+        print("Goodbye")
+        quit_program = True
+    else :
+        print("Order: ", end="")
+        if choice == 1 :
+            print("Gumbo")
+        elif choice == 2 :
+            print("Jambalaya")
+        print()
+Today's Menu:
+   1) Gumbo
+   2) Jambalaya
+   3) Quit
+
+Enter choice: 2
+Order: Jambalaya
+
+Today's Menu:
+   1) Gumbo
+   2) Jambalaya
+   3) Quit
+
+Enter choice: 1 
+Order: Gumbo
+
+Today's Menu:
+   1) Gumbo
+   2) Jambalaya
+   3) Quit
+
+Enter choice: 3 
+Goodbye
+
+Feedback?
+participation activity
+6.2.5: Example: Menu System.
+Consider the example above.
+
+1)
+How many times is print_menu() called?
+2)
+Which of the following code statements if added to print_menu() would make the function no longer void?
+
+Feedback?
+challenge activity
+6.2.1: Enter the output of the print function.
+712910.5105864.qx3zqy7
+Start
+Type the program's output
+
+def print_age(user_age):
+    print(f"He is {user_age}")
+
+age_to_print = 22
+print_age(age_to_print)
+He is 22
+
+1
+2
+3
+4
+5
+Check
+Next
+1
+2
+3
+4
+5
+
+Feedback?
+challenge activity
+6.2.2: Print functions.
+712910.5105864.qx3zqy7
+
+Start
+Two name-salary pairs are read from input and are passed as arguments for print_salary(). Define a function print_salary() that has two parameters and outputs the following all on one line:
+
+the value of the first parameter
+" earns "
+the value of the second parameter
+" dollars per year."
+print_salary() should not return any value.
+Click here for example
+
+1
+
+2
+
+3
+
+4
+
+Check
+
+Next level
+1
+2
+3
+4
+
+Feedback?
+How was this section?
+
+|
+
+
+Provide section feedback
+Activity summary for assignment: C6
+1 / 218 points
+Due: 03/07/2026, 11:59 PM PST
+
+Completion details
+6.3 Dynamic typing

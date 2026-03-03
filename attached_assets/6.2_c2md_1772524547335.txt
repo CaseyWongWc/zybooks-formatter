@@ -1,0 +1,633 @@
+[Skip to main content](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/2#main-content)
+
+_menu_
+
+[![zyBooks](https://learn.zybooks.com/zycommon-web/assets/logo.svg)](https://learn.zybooks.com/)
+
+-   [My library](https://learn.zybooks.com/library) \>
+-   [CS 2520: Python for Programmers home](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026) \>
+-   [6.2: Print functions](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/2)
+
+[_library\_books_ zyBooks catalog](https://learn.zybooks.com/catalog) [_help_ Help/FAQ](https://support.zybooks.com/)
+
+_account\_circle_ Casey Wong _arrow\_drop\_down_
+
+-   _info_
+    
+    You have unverified email(s). Use My Profile to send another verification email.
+    
+    _close_
+    
+
+-   [_search_ Search zyBook](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/content-explorer)
+-   _info_ About this Material
+    
+-   1) Introduction to Python
+    
+    _expand\_more_
+    
+-   2) Variables and Expressions
+    
+    _expand\_more_
+    
+-   3) Types
+    
+    _expand\_more_
+    
+-   4) Branching
+    
+    _expand\_more_
+    
+-   5) Loops
+    
+    _expand\_more_
+    
+-   6) Functions
+    
+    _expand\_less_
+    
+    -   [6.1 Function basics
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/1)
+    -   [6.2 Print functions
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/2)
+    -   [6.3 Dynamic typing
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/3)
+    -   [6.4 Reasons for functions
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/4)
+    -   [6.5 Writing mathematical functions
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/5)
+    -   [6.6 Function stubs
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/6)
+    -   [6.7 Functions with branches/loops
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/7)
+    -   [6.8 Functions are objects
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/8)
+    -   [6.9 Functions: Common errors
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/9)
+    -   [6.10 Scope
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/10)
+    -   [6.11 Scope resolution
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/11)
+    -   [6.12 Function arguments
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/12)
+    -   [6.13 Keyword arguments and default parameter values
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/13)
+    -   [6.14 Arbitrary arguments
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/14)
+    -   [6.15 Multiple function outputs
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/15)
+    -   [6.16 help(), docstrings
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/16)
+    -   [6.17 Engineering examples
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/17)
+    -   [6.18 zyLab training: Unit tests to evaluate your program
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/18)
+    -   [6.19 LAB: Driving costs - functions
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/19)
+    -   [6.20 LAB: Step counter
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/20)
+    -   [6.21 LAB: Convert to binary - functions
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/21)
+    -   [6.22 LAB: Swapping variables
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/22)
+    -   [6.23 LAB: Fibonacci sequence
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/23)
+    -   [_print_ Print chapter
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/print)
+-   7) Strings
+    
+    _expand\_more_
+    
+-   8) Lists and Dictionaries
+    
+    _expand\_more_
+    
+-   9) Classes
+    
+    _expand\_more_
+    
+-   10) Exceptions
+    
+    _expand\_more_
+    
+-   11) Modules
+    
+    _expand\_more_
+    
+-   12) Files
+    
+    _expand\_more_
+    
+-   13) Inheritance
+    
+    _expand\_more_
+    
+-   14) Recursion
+    
+    _expand\_more_
+    
+-   15) Python for Data Science
+    
+    _expand\_more_
+    
+-   16) Searching and Sorting Algorithms
+    
+    _expand\_more_
+    
+-   17) Artificial Intelligence
+    
+    _expand\_more_
+    
+-   18) Additional Material
+    
+    _expand\_more_
+    
+-   19) Coding Practice Problems
+    
+    _expand\_more_
+    
+-   20) Additional Labs: Introduction to Python
+    
+    _expand\_more_
+    
+-   21) Additional Labs: Variables and Expressions
+    
+    _expand\_more_
+    
+-   22) Additional Labs: Types
+    
+    _expand\_more_
+    
+-   23) Additional Labs: Branching
+    
+    _expand\_more_
+    
+-   24) Additional Labs: Loops
+    
+    _expand\_more_
+    
+-   25) Additional Labs: Functions
+    
+    _expand\_more_
+    
+-   26) Additional Labs: Strings
+    
+    _expand\_more_
+    
+-   27) Additional Labs: Lists and Dictionaries
+    
+    _expand\_more_
+    
+-   28) Additional Labs: Classes
+    
+    _expand\_more_
+    
+-   29) Additional Labs: Exceptions
+    
+    _expand\_more_
+    
+-   30) Additional Labs: Files
+    
+    _expand\_more_
+    
+-   31) Additional Labs: Recursion
+    
+    _expand\_more_
+    
+
+[_arrow\_upward_ 6.1 User-defined function basics](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/1)
+
+_assignment_
+
+Students:
+
+Section 6.2 is a part of 1 assignment: C6
+
+Activities:
+
+P
+
+Participation
+
+C
+
+Challenge
+
+Due: 03/07/2026, 11:59 PM PST
+
+# 6.2 Print functions
+
+### Printing from a function
+
+A common operation for a function is to print text. Large text outputs can clutter the main program, especially if the text needs to be output multiple times. A function that only prints typically does not return a value. A function with no return statement is called a void function, and such a function returns the value `None`.
+
+participation activity
+
+## 
+
+6.2.1: Printing with a void function.
+
+Start
+
+ 2x speed
+
+def print\_summary(oid, items, price):  
+
+Order  
+
+...  
+
+print\_summary(oid, items, price)  
+
+\# Assume oid = 42, items = 4, price = 13.99  
+
+...  
+
+\# Continues execution  
+
+print(f"Order {oid}:")  
+print(f"   Items: {items}")  
+print(f"   Total: ${price:.2f}")  
+
+Static figure: A code block and a monitor are displayed. Begin Python code: Def print\_summary(oid, items, price): print(f"Order {oid}:") print(f" Items: {items}") print(f" Total: ${price:.2f}") ... # Assume oid = 42, items = 4, price = 13.99 print\_summary(oid, items, price) ... # Continues execution End Python code. Step 1: Printing instructions can clutter a program. Here, the program consists of three print statements. Step 2: A print function can handle output and reduce clutter in the main program. The three print statements are moved from the main program to a new function called print\_summary(oid, items, price). print\_summary() takes three parameters, which are all used by the print statements. A function call print\_summary(oid, items, price) replaces the print statements in the main program. Step 3: The main program calls function print\_summary(), which prints the parameters as formatted output. A code comment states to assume oid = 42, items = 4, and price = 13.99. A monitor displays the print statements, stating Order 42: Items: 4 Total: $13.99 Step 4: print\_summary() completes execution and returns back to the caller, the main program.
+
+_keyboard\_arrow\_down_
+
+Captions
+
+Feedback?
+
+participation activity
+
+## 
+
+6.2.2: Print functions.
+
+1)
+
+Print operations must be performed in the main program.
+
+True
+
+False
+
+2)
+
+A void function can have any number of parameters.
+
+True
+
+False
+
+3)
+
+A print function must return the value that was output.
+
+True
+
+False
+
+Feedback?
+
+A function that produces output can also return a value, but this material separates these operations for clarity. A function that both outputs and returns a value is not void.
+
+### Calling a print function multiple times
+
+One benefit of a print function is that complex output statements can be written in code once. Then the print function can be called multiple times to produce the output instead of rewriting complex statements for every necessary instance. Changes to output and formatting are made easier and are less prone to error.
+
+participation activity
+
+## 
+
+6.2.3: Calling a print function repeatedly.
+
+Start
+
+ 2x speed
+
+...  
+\# Read from input: word = "Show"  
+print\_greatest(word)  
+...  
+...  
+
+def print\_greatest(word):  
+
+\# Read from input: word = "Song"  
+print\_greatest(word)  
+
+print("--The Greatest \*", end\="")  
+print(word, end\="")  
+
+...  
+...  
+
+\# Read from input: word = "Show"  
+print("--The Greatest \*", end\="")  
+print(word, end\="")  
+...  
+
+\# Read from input: word = "Song"  
+print("--The Greatest \*", end\="")  
+print(word, end\="")  
+
+print("\* on Earth!--")  
+
+print("\* on Earth!--")  
+
+print("\* on Earth!--")  
+
+print("\* on Earth--")  
+
+print("\* on Earth--")  
+
+print("\* on Earth--")  
+
+Static figure: Two code blocks are displayed. Program A: Begin Python code: … # Read from input: word = "Show" print("--The Greatest \*", end="") print(word, end="") print("\* on Earth!--") # Read from input: word = "Song" print("--The Greatest \*", end="") print(word, end="") print("\* on Earth!--") End Python code. Program B: Begin Python code: def print\_greatest(word): print("--The Greatest \*", end="") print(word, end="") print("\* on Earth!--") … # Read from input: word = "Show" print\_greatest(word) … … # Read from input: word = Song print\_greatest(word) End Python code. Step 1: A print function can improve the organization of a program. Step 2: The benefit of a print function increases with repeated calls. Both Program A and B output the formatted text twice, but the output code for Program B is only written once in the print\_greatest() function. Program B uses two function calls print\_greatest() to produce the same output as Program A. Step 3: In Program B, any changes to the output, e.g. adding "!", have to be made only in the print\_greatest() function. The print\_greatest() function has one of its print statements changed from print("\* on Earth--") to print("\* on Earth!--"). Step 4: Without a function, like in Program A, output must be changed in multiple instances, which can be time-consuming and lead to errors. The two print statements print("\* on Earth--") are both changed to print("\* on Earth!--").
+
+_keyboard\_arrow\_down_
+
+Captions
+
+Feedback?
+
+participation activity
+
+## 
+
+6.2.4: Calling a print function multiple times.
+
+Refer to the example programs above.
+
+1)
+
+To output the phrase, "The Greatest \[word\] on Earth", with ten different words, what is the minimum number of times the main program would need to call print\_greatest() in Program B?
+
+1
+
+10
+
+30
+
+2)
+
+To output "in the Galaxy" instead of "on Earth" in the phrase (Ex: "--The Greatest \*Cafe\* in the Galaxy!-- "), how many statements need to be changed in Program A and Program B?
+
+Program A: 1  
+Program B: 1
+
+Program A: 2  
+Program B: 1
+
+Program A: 2  
+Program B: 2
+
+Feedback?
+
+### Example: Menu system
+
+## 
+
+Figure 6.2.1: Example: Menu System.
+
+| def print\\_menu(): print("Today's Menu:") print(" 1) Gumbo") print(" 2) Jambalaya") print(" 3) Quit\\\\n") quit\\_program \\= False while not quit\\_program : print\\_menu() choice \\= int(input("Enter choice: ")) if choice \\== 3 : print("Goodbye") quit\\_program \\= True else : print("Order: ", end\\="") if choice \\== 1 : print("Gumbo") elif choice \\== 2 : print("Jambalaya") print() | Today's Menu: 1) Gumbo 2) Jambalaya 3) Quit Enter choice: 2 Order: Jambalaya Today's Menu: 1) Gumbo 2) Jambalaya 3) Quit Enter choice: 1 Order: Gumbo Today's Menu: 1) Gumbo 2) Jambalaya 3) Quit Enter choice: 3 Goodbye |
+| --- | --- |
+
+Feedback?
+
+participation activity
+
+## 
+
+6.2.5: Example: Menu System.
+
+Consider the example above.
+
+1)
+
+How many times is print\_menu() called?
+
+1
+
+2
+
+3
+
+2)
+
+Which of the following code statements if added to print\_menu() would make the function no longer void?
+
+num\_options = 3
+
+return 0
+
+return
+
+Feedback?
+
+challenge activity
+
+## 
+
+6.2.1: Enter the output of the print function.
+
+712910.5105864.qx3zqy7
+
+ 
+
+Start Jump to level 1
+
+Type the program's output
+
+| - main.py def print\\_age(user\\_age): print(f"He is {user\\_age}") age\\_to\\_print = 22 print\\_age(age\\_to\\_print) | Input Output |
+| --- | --- |
+
+1
+
+2
+
+3
+
+4
+
+5
+
+Check
+
+Next
+
+Try again
+
+question\_mark signifies a specific hint for an answer
+
+Show solution
+
+**Done**. Click any level to practice more. Completion is preserved.
+
+✖ ![Correct](https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/utilities/resource/checkmark.png)
+
+Solution
+
+1
+
+2
+
+3
+
+4
+
+5
+
+Feedback?
+
+challenge activity
+
+## 
+
+6.2.2: Print functions.
+
+712910.5105864.qx3zqy7
+
+Start
+
+Two name-salary pairs are read from input and are passed as arguments for print\_salary(). Define a function print\_salary() that has two parameters and outputs the following all on one line:
+
+-   the value of the first parameter
+-   " earns "
+-   the value of the second parameter
+-   " dollars per year."
+
+print\_salary() should not return any value.
+
+**Click here for example** Ex: If the input is:
+
+```
+Ada
+52300
+Ogonna
+93400
+```
+
+then the output is:
+
+```
+Ada earns 52300 dollars per year.
+Ogonna earns 93400 dollars per year.
+```
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+""" Your code goes here """
+
+employee\_name1 \= input()
+
+employee\_salary1 \= int(input())
+
+employee\_name2 \= input()
+
+employee\_salary2 \= int(input())
+
+print\_salary(employee\_name1, employee\_salary1)
+
+print\_salary(employee\_name2, employee\_salary2)
+
+הההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההה
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+1
+
+2
+
+3
+
+4
+
+Check Next level
+
+1
+
+2
+
+3
+
+4
+
+Feedback?
+
+How was this section?
+
+_thumb\_up_
+
+|
+
+_thumb\_down_
+
+Provide section feedback
+
+Activity summary for assignment: C6
+
+1 / 218 points
+
+Due: 03/07/2026, 11:59 PM PST
+
+_keyboard\_arrow\_down_
+
+Completion details
+
+[_arrow\_downward_ 6.3 Dynamic typing](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/3)
+

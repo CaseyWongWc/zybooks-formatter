@@ -1,0 +1,25 @@
+Here's my **6.2 Formatter Gap Analysis** — comparing what's on the actual zyBooks page vs what came through in the formatter output:
+
+**What CAME THROUGH correctly:**
+- Section title: "6.2 Print functions"
+- All 3 subsection headings (Printing from a function, Calling a print function multiple times, Example: Menu system)
+- All prose/explanatory text with bold terms like **void function** and `None`
+- PA 6.2.2 — all 3 True/False questions with options
+- PA 6.2.4 — both multiple-choice questions with options
+- PA 6.2.5 — both multiple-choice questions with options
+- Figure 6.2.1 Menu System — full Python code block with proper formatting
+- Menu system sample output (the Enter choice / Order / Goodbye sequence)
+- CA 6.2.1 — title, prompt ("Type the program's output"), and the `print_age` code block
+- CA 6.2.2 — title, full description, bullet list of output requirements
+- The transitional prose paragraph between PA 6.2.2 and the next section
+
+**What's MISSING or DEGRADED:**
+1. **PA 6.2.1 animation content** — Only the title "Printing with a void function" appears. The `print_summary(oid, items, price)` code example and the step-by-step explanation are **completely gone**. The animation's static figure description (which includes the actual code) was stripped.
+2. **PA 6.2.3 animation content** — Same issue. Only the title "Calling a print function repeatedly" shows up. The Program A vs Program B comparison code (`print_greatest(word)`) and all 4 step descriptions are **missing**.
+3. **CA multi-level indicators** — CA 6.2.1 shows 5 levels and CA 6.2.2 shows 4 levels on zyBooks, but the formatter only shows level 1 content. This is the known Task 3 issue.
+
+**Summary for the Replit agent:**
+- **Bug: Animation/figure content stripped** — The formatter's `removeUnwantedElements` is likely stripping the animation containers including their static figure descriptions and code examples. PAs 6.2.1 and 6.2.3 lose all their teaching content. This is a significant loss since animations contain the core code examples that the questions reference.
+- **Known issue: Multi-level CAs** — Only level 1 of challenge activities is captured (Task 3, already tracked).
+
+The animation content loss is the biggest new finding. Those PAs contain the actual code examples students need to understand before answering the questions. Want me to update the Agent Bridge on Notion with this analysis, or would you prefer to relay it yourself?
