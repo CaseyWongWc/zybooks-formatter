@@ -1,0 +1,967 @@
+[Skip to main content](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/1#main-content)
+
+_menu_
+
+[![zyBooks](https://learn.zybooks.com/zycommon-web/assets/logo.svg)](https://learn.zybooks.com/)
+
+-   [My library](https://learn.zybooks.com/library) \>
+-   [CS 2520: Python for Programmers home](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026) \>
+-   [6.1: Function basics](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/1)
+
+[_library\_books_ zyBooks catalog](https://learn.zybooks.com/catalog) [_help_ Help/FAQ](https://support.zybooks.com/)
+
+_account\_circle_ Casey Wong _arrow\_drop\_down_
+
+-   [_search_ Search zyBook](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/content-explorer)
+-   _info_ About this Material
+    
+-   1) Introduction to Python
+    
+    _expand\_more_
+    
+-   2) Variables and Expressions
+    
+    _expand\_more_
+    
+-   3) Types
+    
+    _expand\_more_
+    
+-   4) Branching
+    
+    _expand\_more_
+    
+-   5) Loops
+    
+    _expand\_more_
+    
+-   6) Functions
+    
+    _expand\_less_
+    
+    -   [6.1 Function basics
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/1)
+    -   [6.2 Print functions
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/2)
+    -   [6.3 Dynamic typing
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/3)
+    -   [6.4 Reasons for functions
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/4)
+    -   [6.5 Writing mathematical functions
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/5)
+    -   [6.6 Function stubs
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/6)
+    -   [6.7 Functions with branches/loops
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/7)
+    -   [6.8 Functions are objects
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/8)
+    -   [6.9 Functions: Common errors
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/9)
+    -   [6.10 Scope
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/10)
+    -   [6.11 Scope resolution
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/11)
+    -   [6.12 Function arguments
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/12)
+    -   [6.13 Keyword arguments and default parameter values
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/13)
+    -   [6.14 Arbitrary arguments
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/14)
+    -   [6.15 Multiple function outputs
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/15)
+    -   [6.16 help(), docstrings
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/16)
+    -   [6.17 Engineering examples
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/17)
+    -   [6.18 zyLab training: Unit tests to evaluate your program
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/18)
+    -   [6.19 LAB: Driving costs - functions
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/19)
+    -   [6.20 LAB: Step counter
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/20)
+    -   [6.21 LAB: Convert to binary - functions
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/21)
+    -   [6.22 LAB: Swapping variables
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/22)
+    -   [6.23 LAB: Fibonacci sequence
+        
+        Lab
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/23)
+    -   [_print_ Print chapter
+        
+        ](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/print)
+-   7) Strings
+    
+    _expand\_more_
+    
+-   8) Lists and Dictionaries
+    
+    _expand\_more_
+    
+-   9) Classes
+    
+    _expand\_more_
+    
+-   10) Exceptions
+    
+    _expand\_more_
+    
+-   11) Modules
+    
+    _expand\_more_
+    
+-   12) Files
+    
+    _expand\_more_
+    
+-   13) Inheritance
+    
+    _expand\_more_
+    
+-   14) Recursion
+    
+    _expand\_more_
+    
+-   15) Python for Data Science
+    
+    _expand\_more_
+    
+-   16) Searching and Sorting Algorithms
+    
+    _expand\_more_
+    
+-   17) Artificial Intelligence
+    
+    _expand\_more_
+    
+-   18) Additional Material
+    
+    _expand\_more_
+    
+-   19) Coding Practice Problems
+    
+    _expand\_more_
+    
+-   20) Additional Labs: Introduction to Python
+    
+    _expand\_more_
+    
+-   21) Additional Labs: Variables and Expressions
+    
+    _expand\_more_
+    
+-   22) Additional Labs: Types
+    
+    _expand\_more_
+    
+-   23) Additional Labs: Branching
+    
+    _expand\_more_
+    
+-   24) Additional Labs: Loops
+    
+    _expand\_more_
+    
+-   25) Additional Labs: Functions
+    
+    _expand\_more_
+    
+-   26) Additional Labs: Strings
+    
+    _expand\_more_
+    
+-   27) Additional Labs: Lists and Dictionaries
+    
+    _expand\_more_
+    
+-   28) Additional Labs: Classes
+    
+    _expand\_more_
+    
+-   29) Additional Labs: Exceptions
+    
+    _expand\_more_
+    
+-   30) Additional Labs: Files
+    
+    _expand\_more_
+    
+-   31) Additional Labs: Recursion
+    
+    _expand\_more_
+    
+
+[_arrow\_upward_ 5.19 LAB: Adjust values in a list by normalizing](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/5/section/19)
+
+_assignment_
+
+Students:
+
+Section 6.1 is a part of 1 assignment: C6
+
+Activities:
+
+P
+
+Participation
+
+C
+
+Challenge
+
+Due: 03/07/2026, 11:59 PM PST
+
+# 6.1 User-defined function basics
+
+### Functions (general)
+
+A program may perform the same operation repeatedly, causing a large and confusing program due to redundancy. Program redundancy can be reduced by creating a grouping of predefined statements for repeated operations, known as a function. Even without redundancy, functions can prevent a main program from becoming large and confusing.
+
+participation activity
+
+## 
+
+6.1.1: Functions can reduce redundancy and keep the main program simple.
+
+Start
+
+ 2x speed
+
+Main program
+
+c1 = (f1 - 32.0) \* (5.0 / 9.0)
+
+c2 = (f2 - 32.0) \* (5.0 / 9.0)
+
+Main program
+
+c1 = F2C(f1)
+
+F2C(f)
+
+c = (f - 32.0) \* (5.0 / 9.0)
+
+return c
+
+c2 = F2C(f2)
+
+c3 = F2C(f3)
+
+Simpler
+
+a = expression1
+
+b = a + expression2
+
+c = b \* expression3
+
+c = XYZ(a, b)
+
+d = expression1
+
+e = d + expression2
+
+f = e \* expression3
+
+f = XYZ(d, e)
+
+Main program
+
+Main program
+
+a = expression1
+
+b = a + expression2
+
+c = b \* expression3
+
+c = XYZ(a, b)
+
+d = expression4
+
+e = d \* d \* d
+
+f = (e + 1) \* 2
+
+f = CalcPQR(d, e, g)
+
+Main program
+
+Main program
+
+f = f / g
+
+XYZ
+
+XYZ
+
+XYZ
+
+CalcPQR
+
+Cluttered Repeated code
+
+Oops, error in third calculation.
+
+c3 = (f3 + 32.0) \* (5.0 / 9.0)
+
+Calculation only written once
+
+Static figure: Three code blocks are displayed, a main program, a function program, and a simplified version of the main program. Main program Begin Python code: c1 = (f1 - 32.0) \* (5.0 / 9.0) c2 = (f2 - 32.0) \* (5.0 / 9.0) c3 = (f3 + 32.0) \* (5.0 / 9.0) End Python code. Begin Python code: c = (f - 32.0) \* (5.0 / 9.0) return c End Python code. Main program Begin Python code: c1 = F2C(f1) c2 = F2C(f2) c3 = F2C(f3) End Python code. Step 1: Commonly, a program performs the same operation, such as a calculation, in multiple places. Here, the Fahrenheit to Celsius calculation is done in three places. Main program c1 = (f1 - 32.0) \* (5.0 / 9.0) c2 = (f2 - 32.0) \* (5.0 / 9.0) c3 = (f3 + 32.0) \* (5.0 / 9.0) Step 2: Repeated operations clutter the main program and are more prone to errors. The main program code is cluttered and has repeated code. In addition, the calculation for c3 has an error that uses the wrong operation. Step 3: A better approach defines the Fahrenheit to Celsius calculation once, named F2C. Then, F2C can be "called" three times, yielding a simpler main program. A function is defined where the calculation is only written once. F2C(f) c = (f - 32.0) \* (5.0 / 9.0) return c The simpler version of the main program code becomes c1 = F2C(f1) c2 = F2C(f2) c3 = F2C(f3) Step 4: The impact is greater when the operation has multiple statements - here three statements but often tens of statements. The main program is much simpler. Two blocks appear, the first block titled Main program contains the code: a = expression1 b = a + expression2 c = b \* expression3 d = expression1 e = d + expression2 f = e \* expression3 The label XYZ appears next to variables a, b, and c, and again next to variables d, e, and f. The second block titled Main program contains the simpler code using a function: c = XYZ(a, b) f = XYZ(d, e) Step 5: Even without repeated operations, calling predefined operations keeps the main program simple and intuitive. Two blocks appear, the first block titled Main program contains the code: a = expression1 b = a + expression2 c = b \* expression3 d = expression4 e = d \* d \* d f = (e + 1) \* 2 f = f / g The label XYZ appears next to variables a, b, and c. The label CalcPQR appears next to variables d, e, and f. The second block titled Main program contains the simpler code: c = XYZ(a, b) f = CalcPQR(d, e, g)
+
+_keyboard\_arrow\_down_
+
+Captions
+
+1.  Commonly, a program performs the same operation, such as a calculation, in multiple places. Here, the Fahrenheit to Celsius calculation is done in three places.
+2.  Repeated operations clutter the main program and are more prone to errors.
+3.  A better approach defines the Fahrenheit to Celsius calculation once, named F2C. Then, F2C can be "called" three times, yielding a simpler main program.
+4.  The impact is greater when the operation has multiple statements - here three statements but often tens of statements. The main program is much simpler.
+5.  Even without repeated operations, calling predefined operations keeps the main program simple and intuitive.
+
+Feedback?
+
+participation activity
+
+## 
+
+6.1.2: Reasons for functions.
+
+Consider the animation above.
+
+1)
+
+In the original main program, the Fahrenheit to Celsius calculation appeared how many times?
+
+1
+
+3
+
+2)
+
+Along with yielding a simpler main program, using the predefined Fahrenheit to Celsius calculation prevented what error in the original program?
+
+Adding rather than subtracting 32.0
+
+Multiplying by 9.0 / 5.0 rather than by 5.0 / 9.0
+
+3)
+
+In the last example above, the main program was simplified by \_\_\_\_\_.
+
+eliminating redundant code for operation XYZ
+
+predefining operations for XYZ and CalcPQR
+
+Feedback?
+
+### Function basics
+
+A function is a named series of statements.
+
+-   A function definition consists of the function's name and a block of statements. Ex: `def calc_pizza_area():` is followed by an indented block of statements.
+-   A function call is an invocation of the function's name, causing the function's statements to execute.
+
+Python comes with a number of built-in functions, such as `input()`, `int()`, `len()`, etc. The def keyword is used to create new functions.
+
+The function call calc\_pizza\_area() in the animation below causes execution to jump to the function's statements. Execution returns to the original location after executing the function's last statement.
+
+Good practice is to follow the convention of naming functions with lowercase letters and underscores, such as get\_name or calc\_area.
+
+Other aspects of function definition, like the (), are discussed later.
+
+participation activity
+
+## 
+
+6.1.3: Function example: Printing a pizza area.
+
+Start
+
+ 2x speed
+
+def calc\_pizza\_area():  
+ pi\_val \= 3.14159265  
+  
+ pizza\_diameter \= 12.0  
+ pizza\_radius \= pizza\_diameter / 2.0  
+ pizza\_area \= pi\_val \* pizza\_radius \* pizza\_radius  
+ return pizza\_area  
+  
+print(f"{12:.1f} inch pizza is {calc\_pizza\_area():.3f}  
+  square inches")  
+
+Static figure: Begin Python code: def calc\_pizza\_area(): pi\_val = 3.14159265 pizza\_diameter = 12.0 pizza\_radius = pizza\_diameter / 2.0 pizza\_area = pi\_val \* pizza\_radius \* pizza\_radius return pizza\_area print(f"{12:.1f} inch pizza is {calc\_pizza\_area():.3f} square inches") End Python code. Step 1: The function call to calc\_pizza\_area() jumps execution to the function's statements. Each line within the calc\_pizza\_area function is highlighted one by one in order, up to return pizza\_area. Step 2: After the last statement of the calc\_pizza\_area() function, execution returns to the original location and the area of the pizza is returned and printed. A monitor displays the print statement, stating 12.0 inch pizza is 113.097 square inches.
+
+_keyboard\_arrow\_down_
+
+Captions
+
+Feedback?
+
+participation activity
+
+## 
+
+6.1.4: Function basics.
+
+Given the following program and the `calc_pizza_area()` function defined above:
+
+print(f"{12:.1f} inch pizza is {calc\_pizza\_area():.3f} square inches")
+print(f"{12:.1f} inch pizza is {calc\_pizza\_area():.3f} square inches")
+
+1)
+
+How many function calls to calc\_pizza\_area() exist?
+
+Check Show answer
+
+2)
+
+How many function definitions of calc\_pizza\_area() exist?
+
+Check Show answer
+
+3)
+
+How many output statements would execute in total?
+
+Check Show answer
+
+4)
+
+How many print statements exist in calc\_pizza\_area()?
+
+Check Show answer
+
+Feedback?
+
+## 
+
+PythonTutor: Calling a function.
+
+Feedback?
+
+challenge activity
+
+## 
+
+6.1.1: Basic function call
+
+get\_pattern() returns 5 characters. Call get\_pattern() twice in print() statements to return and print 10 characters. Example output:
+
+\*\*\*\*\*
+\*\*\*\*\*
+  
+  
+
+[Learn how our autograder works](https://learn.zybooks.com/zybook/HowToUsezyBooks2/70d49b1b-63ca-586d-e3cd-417eba845c6f)
+
+712910.5105864.qx3zqy7
+
+1
+
+2
+
+3
+
+4
+
+5
+
+def get\_pattern():
+
+return "\*\*\*\*\*"
+
+""" Your solution goes here """
+
+הההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההה
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+1 test passed
+
+All tests passed
+
+Run
+
+Feedback?
+
+### Return statements
+
+A function may return one value using a return statement. Below, the compute\_square() function returns the square of its argument.
+
+participation activity
+
+## 
+
+6.1.5: Function example: Returning a value.
+
+Start
+
+ 2x speed
+
+def compute\_square(num\_to\_square):  
+    return num\_to\_square \* num\_to\_square  
+  
+  
+num\_squared \= compute\_square(7)  
+  
+print(f"7 squared is {num\_squared}")  
+
+Static figure: Begin Python code: def compute\_square(num\_to\_square): return num\_to\_square \* num\_to\_square num\_squared = compute\_square(7) print(f"7 squared is {num\_squared}") End Python code. Step 1: Call compute\_square and pass in the value 7. Compute\_square has one parameter named num\_to\_square. Step 2: Compute the square of num\_to\_square and return the result. The value passed to compute\_square is 7, which is the value assigned to num\_to\_square. Compute\_square returns num\_to\_square times num\_to\_square, so 7 times 7 is calculated, resulting in 49 as the return value. Step 3: num\_squared is assigned the return value of compute\_square(7). A monitor displays the print statement, stating 7 squared is 49.
+
+_keyboard\_arrow\_down_
+
+Captions
+
+Feedback?
+
+A function can return only one item, not two or more (though a list or a tuple with multiple elements could be returned). A function with no return statement, or a return statement with no following expression, returns the value `None`. None is a special keyword that indicates no value.
+
+A return statement may appear at any point in a function, not just as the last statement. A function may also contain multiple return statements in different locations.
+
+participation activity
+
+## 
+
+6.1.6: Return basics.
+
+1)
+
+Add a return statement to the function that returns the result of adding `num1` and `num2`.
+
+def compute\_sum(num1, num2):
+      return  
+
+Check Show answer
+
+2)
+
+Add a return statement to the function that returns the cube of the argument, i.e. (`num*num*num`).
+
+def compute\_cube(num):
+      
+
+Check Show answer
+
+Feedback?
+
+### Parameters
+
+A programmer can influence a function's behavior via an input.
+
+-   A parameter is a function input specified in a function definition. Ex: A pizza area function might have diameter as an input.
+-   An argument is a value provided to a function's parameter during a function call. Ex: A pizza area function might be called as `calc_pizza_area(12.0)` or as `calc_pizza_area(16.0)`.
+
+A parameter is like a variable definition. Upon entering the function, the parameter is bound to the argument object provided by the call, creating a shared reference to the object. Upon return, the parameter can no longer be used.
+
+An argument may be an expression, like `12.0`, `x`, or `x * 1.5`.
+
+## 
+
+PythonTutor: Function parameters.
+
+Feedback?
+
+participation activity
+
+## 
+
+6.1.7: Parameters.
+
+1)
+
+Complete the function definition to have a parameter named num\_grade.
+
+def get\_letter\_grade(
+
+):
+
+Check Show answer
+
+2)
+
+Call a function named calc\_calories() passing the value 21 as an argument.
+
+Check Show answer
+
+3)
+
+Is the following a valid function definition beginning? Type yes or no.  
+`def my_fct(userNum + 5):`
+
+Check Show answer
+
+4)
+
+Assume a function def get\_birthday\_age(user\_age): simply returns the value of user\_age + 1. What will the following code output?  
+
+print(get\_birthday\_age(42), get\_birthday\_age(20))
+
+Check Show answer
+
+Feedback?
+
+### Multiple or no parameters
+
+A function may have multiple parameters separated by commas. Parameters are assigned with argument values: First parameter with the first argument, second with the second, etc.
+
+A function definition with no parameters must still have the parentheses, as in: `def calc_something():`. The call to such a function must include parentheses and must be empty, as in: `calc_something()`.
+
+## 
+
+Figure 6.1.1: Function with multiple parameters.
+
+def calc\_pizza\_volume(pizza\_diameter, pizza\_height):
+   pi\_val \= 3.14159265
+
+   pizza\_radius \= pizza\_diameter / 2.0
+   pizza\_area \= pi\_val \* pizza\_radius \* pizza\_radius
+   pizza\_volume \= pizza\_area \* pizza\_height
+   return pizza\_volume
+
+print(f"12.0 x 0.3 inch pizza is {calc\_pizza\_volume(12.0, 0.3):.3f} cubic inches.")
+
+print(f"12.0 x 0.8 inch pizza is {calc\_pizza\_volume(12.0, 0.8):.3f} cubic inches.")
+
+print(f"16.0 x 0.8 inch pizza is {calc\_pizza\_volume(16.0, 0.8):.3f} cubic inches.")
+
+12.0 x 0.3 inch pizza is 33.929 cubic inches.
+12.0 x 0.8 inch pizza is 90.478 cubic inches.
+16.0 x 0.8 inch pizza is 160.850 cubic inches.
+
+Feedback?
+
+participation activity
+
+## 
+
+6.1.8: Multiple parameters.
+
+1)
+
+Which answer correctly defines two parameters `x` and `y` for a function definition:  
+`def calc_val(...):`?
+
+(x; y)
+
+(x y)
+
+(x, y)
+
+2)
+
+Which answer correctly passes two integer arguments for the function call `calc_val(...)`?
+
+(99, 44 + 5)
+
+(99 + 44)
+
+(99 44)
+
+3)
+
+Given a function definition:  
+`def calc_val(a, b, c):`,  
+b is assigned with what value during this function call:  
+`calc_val(42, 55, 77)`?
+
+Unknown
+
+42
+
+55
+
+4)
+
+Given a function definition:  
+`def calc_val(a, b, c):`  
+and given variables i, j, and k, which are valid arguments in the call `calc_val(...)`?
+
+(i, j)
+
+(k, i + j, 99)
+
+(i + j + k)
+
+Feedback?
+
+participation activity
+
+## 
+
+6.1.9: Calls with multiple parameters.
+
+Given:
+
+def compute\_sum(num1, num2):
+    return num1 + num2
+
+1)
+
+What will be returned for the following function call?  
+`compute_sum(1, 2)`
+
+Check Show answer
+
+2)
+
+Write a function call using compute\_sum() to return the sum of x and 400 (providing the arguments in that order).
+
+Check Show answer
+
+Feedback?
+
+### Hierarchical function calls
+
+A function's statements may include function calls, known as hierarchical function calls or nested function calls. Code such as `user_input = int(input())` consists of such a hierarchical function call, in which the input() function is called and evaluates to a value that is then passed as an argument to the int() function.
+
+## 
+
+PythonTutor: Hierarchical function calls
+
+Feedback?
+
+participation activity
+
+## 
+
+6.1.10: Hierarchical function calls.
+
+Complete the calc\_pizza\_calories\_per\_slice() function to calculate the calories for a single slice of pizza.  
+A calc\_pizza\_calories() function returns a pizza's total calories given the pizza diameter passed as an argument.  
+A calc\_num\_pizza\_slices() function returns the number of slices in a pizza given the pizza diameter passed as an argument.  
+  
+
+def calc\_pizza\_calories\_per\_slice(pizza\_diameter):  
+    total\_calories \= <placeholder\_A\>
+    calories\_per\_slice \= <placeholder\_B\>
+    return calories\_per\_slice
+
+1)
+
+Type the expression for `placeholder_A` to calculate the total calories for a pizza with diameter `pizza_diameter`.
+
+total\_calories = 
+
+Check Show answer
+
+2)
+
+Type the expression for `placeholder_B` to calculate the calories per slice.
+
+calories\_per\_slice = 
+
+Check Show answer
+
+Feedback?
+
+challenge activity
+
+## 
+
+6.1.2: Basic function call.
+
+Complete the function definition to return the hours given minutes.  
+  
+Sample output with input: 210.0
+
+3.5
+  
+  
+
+[Learn how our autograder works](https://learn.zybooks.com/zybook/HowToUsezyBooks2/70d49b1b-63ca-586d-e3cd-417eba845c6f)
+
+712910.5105864.qx3zqy7
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+def get\_minutes\_as\_hours(orig\_minutes):
+
+""" Your solution goes here """
+
+minutes \= float(input())
+
+print(get\_minutes\_as\_hours(minutes))
+
+הההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההה
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+1 test passed
+
+All tests passed
+
+Run
+
+Feedback?
+
+challenge activity
+
+## 
+
+6.1.3: Enter the output of the returned value.
+
+712910.5105864.qx3zqy7
+
+ 
+
+Start Jump to level 1
+
+Type the program's output
+
+| - main.py def change\\_value(x): return x + 4 print(change\\_value(1)) | Input Output |
+| --- | --- |
+
+1
+
+2
+
+3
+
+Check
+
+Next
+
+Try again
+
+question\_mark signifies a specific hint for an answer
+
+Show solution
+
+**Done**. Click any level to practice more. Completion is preserved.
+
+✖ ![Correct](https://zytools.zybooks.com/zyBooks2/fingerprinted/989bd345-53bb-496c-85f2-cbd4a9e1c55b/utilities/resource/checkmark.png)
+
+Solution
+
+1
+
+2
+
+3
+
+Feedback?
+
+challenge activity
+
+## 
+
+6.1.4: Functions with parameters and return values.
+
+712910.5105864.qx3zqy7
+
+Start
+
+Define a function calc\_val() that has one parameter and returns the parameter minus 4.8.
+
+Ex: If the input is `5.3`, then the output is:
+
+`0.50`
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+""" Your code goes here """
+
+input\_val \= float(input())
+
+print(f"{calc\_val(input\_val):.2f}")
+
+הההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההה
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+1
+
+2
+
+Check Next level
+
+1
+
+2
+
+Feedback?
+
+How was this section?
+
+_thumb\_up_
+
+|
+
+_thumb\_down_
+
+Provide section feedback
+
+Activity summary for assignment: C6
+
+1 / 218 points
+
+Due: 03/07/2026, 11:59 PM PST
+
+_keyboard\_arrow\_down_
+
+Completion details
+
+[_arrow\_downward_ 6.2 Print functions](https://learn.zybooks.com/zybook/CPPCS2520NguyenSpring2026/chapter/6/section/2)
+
+
+
+
+
+
+

@@ -1,0 +1,396 @@
+Skip to main content
+
+zyBooks
+My library >
+CS 2520: Python for Programmers home >
+6.1: Function basics
+zyBooks catalog
+Help/FAQ
+Casey Wong
+You have unverified email(s). Use My Profile to send another verification email.
+
+
+5.19 LAB: Adjust values in a list by normalizing
+Students:
+Section 6.1 is a part of 1 assignment:
+C6
+Activities:
+P
+Participation
+C
+Challenge
+Due: 03/07/2026, 11:59 PM PST
+6.1 User-defined function basics
+Functions (general)
+A program may perform the same operation repeatedly, causing a large and confusing program due to redundancy. Program redundancy can be reduced by creating a grouping of predefined statements for repeated operations, known as a function. Even without redundancy, functions can prevent a main program from becoming large and confusing.
+
+participation activity
+6.1.1: Functions can reduce redundancy and keep the main program simple.
+
+Start
+Main programc1 = (f1 - 32.0) * (5.0 / 9.0)c2 = (f2 - 32.0) * (5.0 / 9.0)Main programc1 = F2C(f1)F2C(f)c = (f - 32.0) * (5.0 / 9.0)return cc2 = F2C(f2)c3 = F2C(f3)Simplera = expression1b = a + expression2c = b * expression3c = XYZ(a, b)d = expression1e = d + expression2f = e * expression3f = XYZ(d, e)Main programMain programa = expression1b = a + expression2c = b * expression3c = XYZ(a, b)d = expression4e = d * d * df = (e + 1) * 2f = CalcPQR(d, e, g)Main programMain programf = f / gXYZXYZXYZCalcPQRCluttered
+Repeated code
+Oops, error in third calculation.
+c3 = (f3 + 32.0) * (5.0 / 9.0)Calculation only 
+written once
+Static figure: Three code blocks are displayed, a main program, a function program, and a simplified version of the main program. Main program Begin Python code: c1 = (f1 - 32.0) * (5.0 / 9.0) c2 = (f2 - 32.0) * (5.0 / 9.0) c3 = (f3 + 32.0) * (5.0 / 9.0) End Python code. Begin Python code: c = (f - 32.0) * (5.0 / 9.0) return c End Python code. Main program Begin Python code: c1 = F2C(f1) c2 = F2C(f2) c3 = F2C(f3) End Python code. Step 1: Commonly, a program performs the same operation, such as a calculation, in multiple places. Here, the Fahrenheit to Celsius calculation is done in three places. Main program c1 = (f1 - 32.0) * (5.0 / 9.0) c2 = (f2 - 32.0) * (5.0 / 9.0) c3 = (f3 + 32.0) * (5.0 / 9.0) Step 2: Repeated operations clutter the main program and are more prone to errors. The main program code is cluttered and has repeated code. In addition, the calculation for c3 has an error that uses the wrong operation. Step 3: A better approach defines the Fahrenheit to Celsius calculation once, named F2C. Then, F2C can be "called" three times, yielding a simpler main program. A function is defined where the calculation is only written once. F2C(f) c = (f - 32.0) * (5.0 / 9.0) return c The simpler version of the main program code becomes c1 = F2C(f1) c2 = F2C(f2) c3 = F2C(f3) Step 4: The impact is greater when the operation has multiple statements - here three statements but often tens of statements. The main program is much simpler. Two blocks appear, the first block titled Main program contains the code: a = expression1 b = a + expression2 c = b * expression3 d = expression1 e = d + expression2 f = e * expression3 The label XYZ appears next to variables a, b, and c, and again next to variables d, e, and f. The second block titled Main program contains the simpler code using a function: c = XYZ(a, b) f = XYZ(d, e) Step 5: Even without repeated operations, calling predefined operations keeps the main program simple and intuitive. Two blocks appear, the first block titled Main program contains the code: a = expression1 b = a + expression2 c = b * expression3 d = expression4 e = d * d * d f = (e + 1) * 2 f = f / g The label XYZ appears next to variables a, b, and c. The label CalcPQR appears next to variables d, e, and f. The second block titled Main program contains the simpler code: c = XYZ(a, b) f = CalcPQR(d, e, g)
+
+Captions
+
+Feedback?
+participation activity
+6.1.2: Reasons for functions.
+Consider the animation above.
+
+1)
+In the original main program, the Fahrenheit to Celsius calculation appeared how many times?
+2)
+Along with yielding a simpler main program, using the predefined Fahrenheit to Celsius calculation prevented what error in the original program?
+3)
+In the last example above, the main program was simplified by _____.
+
+Feedback?
+Function basics
+A function is a named series of statements.
+
+A function definition consists of the function's name and a block of statements. Ex: def calc_pizza_area(): is followed by an indented block of statements.
+A function call is an invocation of the function's name, causing the function's statements to execute.
+Python comes with a number of built-in functions, such as input(), int(), len(), etc. The def keyword is used to create new functions.
+
+The function call calc_pizza_area() in the animation below causes execution to jump to the function's statements. Execution returns to the original location after executing the function's last statement.
+
+Good practice is to follow the convention of naming functions with lowercase letters and underscores, such as get_name or calc_area.
+
+Other aspects of function definition, like the (), are discussed later.
+
+participation activity
+6.1.3: Function example: Printing a pizza area.
+
+Start
+def calc_pizza_area():
+ pi_val = 3.14159265
+
+ pizza_diameter = 12.0
+ pizza_radius = pizza_diameter / 2.0
+ pizza_area = pi_val * pizza_radius * pizza_radius
+ return pizza_area
+
+print(f"{12:.1f} inch pizza is {calc_pizza_area():.3f}
+  square inches")
+Static figure: Begin Python code: def calc_pizza_area(): pi_val = 3.14159265 pizza_diameter = 12.0 pizza_radius = pizza_diameter / 2.0 pizza_area = pi_val * pizza_radius * pizza_radius return pizza_area print(f"{12:.1f} inch pizza is {calc_pizza_area():.3f} square inches") End Python code. Step 1: The function call to calc_pizza_area() jumps execution to the function's statements. Each line within the calc_pizza_area function is highlighted one by one in order, up to return pizza_area. Step 2: After the last statement of the calc_pizza_area() function, execution returns to the original location and the area of the pizza is returned and printed. A monitor displays the print statement, stating 12.0 inch pizza is 113.097 square inches.
+
+Captions
+
+Feedback?
+participation activity
+6.1.4: Function basics.
+Given the following program and the calc_pizza_area() function defined above:
+
+print(f"{12:.1f} inch pizza is {calc_pizza_area():.3f} square inches")
+print(f"{12:.1f} inch pizza is {calc_pizza_area():.3f} square inches")
+1)
+How many function calls to calc_pizza_area() exist?
+
+Check
+
+Show answer
+2)
+How many function definitions of calc_pizza_area() exist?
+
+Check
+
+Show answer
+3)
+How many output statements would execute in total?
+
+Check
+
+Show answer
+4)
+How many print statements exist in calc_pizza_area()?
+
+Check
+
+Show answer
+
+Feedback?
+PythonTutor: Calling a function.
+
+
+Feedback?
+challenge activity
+6.1.1: Basic function call
+get_pattern() returns 5 characters. Call get_pattern() twice in print() statements to return and print 10 characters. Example output:
+*****
+*****
+
+
+Learn how our autograder works
+
+712910.5105864.qx3zqy7
+1 test passed
+All tests passed
+
+Run
+
+Feedback?
+Return statements
+A function may return one value using a return statement. Below, the compute_square() function returns the square of its argument.
+
+participation activity
+6.1.5: Function example: Returning a value.
+
+Start
+def compute_square(num_to_square):
+    return num_to_square * num_to_square
+
+
+num_squared = compute_square(7)
+
+print(f"7 squared is {num_squared}")
+Static figure: Begin Python code: def compute_square(num_to_square): return num_to_square * num_to_square num_squared = compute_square(7) print(f"7 squared is {num_squared}") End Python code. Step 1: Call compute_square and pass in the value 7. Compute_square has one parameter named num_to_square. Step 2: Compute the square of num_to_square and return the result. The value passed to compute_square is 7, which is the value assigned to num_to_square. Compute_square returns num_to_square times num_to_square, so 7 times 7 is calculated, resulting in 49 as the return value. Step 3: num_squared is assigned the return value of compute_square(7). A monitor displays the print statement, stating 7 squared is 49.
+
+Captions
+
+Feedback?
+A function can return only one item, not two or more (though a list or a tuple with multiple elements could be returned). A function with no return statement, or a return statement with no following expression, returns the value None. None is a special keyword that indicates no value.
+
+A return statement may appear at any point in a function, not just as the last statement. A function may also contain multiple return statements in different locations.
+
+participation activity
+6.1.6: Return basics.
+1)
+Add a return statement to the function that returns the result of adding num1 and num2.
+def compute_sum(num1, num2):
+      return  
+
+
+Check
+
+Show answer
+2)
+Add a return statement to the function that returns the cube of the argument, i.e. (num*num*num).
+def compute_cube(num):
+      
+
+
+Check
+
+Show answer
+
+Feedback?
+Parameters
+A programmer can influence a function's behavior via an input.
+
+A parameter is a function input specified in a function definition. Ex: A pizza area function might have diameter as an input.
+An argument is a value provided to a function's parameter during a function call. Ex: A pizza area function might be called as calc_pizza_area(12.0) or as calc_pizza_area(16.0).
+A parameter is like a variable definition. Upon entering the function, the parameter is bound to the argument object provided by the call, creating a shared reference to the object. Upon return, the parameter can no longer be used.
+
+An argument may be an expression, like 12.0, x, or x * 1.5.
+
+PythonTutor: Function parameters.
+
+
+Feedback?
+participation activity
+6.1.7: Parameters.
+1)
+Complete the function definition to have a parameter named num_grade.
+def get_letter_grade(
+):
+
+Check
+
+Show answer
+2)
+Call a function named calc_calories() passing the value 21 as an argument.
+
+Check
+
+Show answer
+3)
+Is the following a valid function definition beginning? Type yes or no.
+def my_fct(userNum + 5): 
+
+Check
+
+Show answer
+4)
+Assume a function def get_birthday_age(user_age): simply returns the value of user_age + 1. What will the following code output?
+print(get_birthday_age(42), get_birthday_age(20))
+
+Check
+
+Show answer
+
+Feedback?
+Multiple or no parameters
+A function may have multiple parameters separated by commas. Parameters are assigned with argument values: First parameter with the first argument, second with the second, etc.
+
+A function definition with no parameters must still have the parentheses, as in: def calc_something():. The call to such a function must include parentheses and must be empty, as in: calc_something().
+
+Figure 6.1.1: Function with multiple parameters.
+def calc_pizza_volume(pizza_diameter, pizza_height):
+   pi_val = 3.14159265
+
+   pizza_radius = pizza_diameter / 2.0
+   pizza_area = pi_val * pizza_radius * pizza_radius
+   pizza_volume = pizza_area * pizza_height
+   return pizza_volume
+
+print(f"12.0 x 0.3 inch pizza is {calc_pizza_volume(12.0, 0.3):.3f} cubic inches.")
+
+print(f"12.0 x 0.8 inch pizza is {calc_pizza_volume(12.0, 0.8):.3f} cubic inches.")
+
+print(f"16.0 x 0.8 inch pizza is {calc_pizza_volume(16.0, 0.8):.3f} cubic inches.")
+12.0 x 0.3 inch pizza is 33.929 cubic inches.
+12.0 x 0.8 inch pizza is 90.478 cubic inches.
+16.0 x 0.8 inch pizza is 160.850 cubic inches.
+
+Feedback?
+participation activity
+6.1.8: Multiple parameters.
+1)
+Which answer correctly defines two parameters x and y for a function definition:
+def calc_val(...):?
+2)
+Which answer correctly passes two integer arguments for the function call calc_val(...)?
+3)
+Given a function definition:
+def calc_val(a, b, c):,
+b is assigned with what value during this function call:
+calc_val(42, 55, 77)?
+4)
+Given a function definition:
+def calc_val(a, b, c):
+and given variables i, j, and k, which are valid arguments in the call calc_val(...)?
+
+Feedback?
+participation activity
+6.1.9: Calls with multiple parameters.
+Given:
+
+def compute_sum(num1, num2):
+    return num1 + num2
+1)
+What will be returned for the following function call?
+ compute_sum(1, 2)
+
+Check
+
+Show answer
+2)
+Write a function call using compute_sum() to return the sum of x and 400 (providing the arguments in that order).
+
+Check
+
+Show answer
+
+Feedback?
+Hierarchical function calls
+A function's statements may include function calls, known as hierarchical function calls or nested function calls. Code such as user_input = int(input()) consists of such a hierarchical function call, in which the input() function is called and evaluates to a value that is then passed as an argument to the int() function.
+
+PythonTutor: Hierarchical function calls
+
+
+Feedback?
+participation activity
+6.1.10: Hierarchical function calls.
+Complete the calc_pizza_calories_per_slice() function to calculate the calories for a single slice of pizza.
+A calc_pizza_calories() function returns a pizza's total calories given the pizza diameter passed as an argument.
+A calc_num_pizza_slices() function returns the number of slices in a pizza given the pizza diameter passed as an argument.
+
+def calc_pizza_calories_per_slice(pizza_diameter):  
+    total_calories = <placeholder_A>
+    calories_per_slice = <placeholder_B>
+    return calories_per_slice
+1)
+Type the expression for placeholder_A to calculate the total calories for a pizza with diameter pizza_diameter.
+total_calories = 
+
+Check
+
+Show answer
+2)
+Type the expression for placeholder_B to calculate the calories per slice.
+calories_per_slice = 
+
+Check
+
+Show answer
+
+Feedback?
+challenge activity
+6.1.2: Basic function call.
+Complete the function definition to return the hours given minutes.
+
+Sample output with input: 210.0
+3.5
+
+
+Learn how our autograder works
+
+712910.5105864.qx3zqy7
+1 test passed
+All tests passed
+
+Run
+
+Feedback?
+challenge activity
+6.1.3: Enter the output of the returned value.
+712910.5105864.qx3zqy7
+Start
+Type the program's output
+
+def change_value(x):
+    return x + 4
+
+print(change_value(1))
+5
+
+1
+2
+3
+Check
+Next
+1
+2
+3
+
+Feedback?
+challenge activity
+6.1.4: Functions with parameters and return values.
+712910.5105864.qx3zqy7
+
+Start
+Define a function calc_val() that has one parameter and returns the parameter minus 4.8.
+
+Ex: If the input is 5.3, then the output is:
+
+0.50
+
+
+1
+
+2
+
+Check
+
+Next level
+1
+2
+
+Feedback?
+How was this section?
+
+|
+
+
+Provide section feedback
+Activity summary for assignment: C6
+1 / 218 points
+Due: 03/07/2026, 11:59 PM PST
+
+Completion details
+6.2 Print functions
