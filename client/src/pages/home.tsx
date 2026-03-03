@@ -31,9 +31,10 @@ export default function Home() {
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { toast } = useToast();
 
-  const appUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const defaultAppUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const [bookmarkletUrl, setBookmarkletUrl] = useState(defaultAppUrl);
 
-  const bookmarkletCode = `javascript:void((function(){var d=document,h=d.documentElement.outerHTML;var x=new XMLHttpRequest();x.open('POST','${appUrl}/api/bookmarklet',true);x.setRequestHeader('Content-Type','application/json');x.onload=function(){if(x.status===200){var b=d.createElement('div');b.style.cssText='position:fixed;top:20px;right:20px;background:#22c55e;color:white;padding:12px 20px;border-radius:8px;font:14px sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,0.3)';b.textContent='Sent to zyBooks Formatter!';d.body.appendChild(b);setTimeout(function(){b.remove()},3000)}else{alert('Error sending to formatter')}};x.onerror=function(){alert('Could not reach zyBooks Formatter app')};x.send(JSON.stringify({html:h}))})())`;
+  const bookmarkletCode = `javascript:void((function(){var d=document,h=d.documentElement.outerHTML;var x=new XMLHttpRequest();x.open('POST','${bookmarkletUrl}/api/bookmarklet',true);x.setRequestHeader('Content-Type','application/json');x.onload=function(){if(x.status===200){var b=d.createElement('div');b.style.cssText='position:fixed;top:20px;right:20px;background:#22c55e;color:white;padding:12px 20px;border-radius:8px;font:14px sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,0.3)';b.textContent='Sent to zyBooks Formatter!';d.body.appendChild(b);setTimeout(function(){b.remove()},3000)}else{alert('Error sending to formatter')}};x.onerror=function(){alert('Could not reach zyBooks Formatter app')};x.send(JSON.stringify({html:h}))})())`;
 
   const startPolling = useCallback(() => {
     if (pollingRef.current) return;
@@ -293,6 +294,20 @@ export default function Home() {
                 <p className="text-xs text-muted-foreground mb-3">
                   Drag the button below to your bookmarks bar. Then visit any zyBooks section page and click it — the page content will be sent here and auto-formatted.
                 </p>
+                <div className="flex items-center gap-2 mb-3">
+                  <label className="text-xs text-muted-foreground whitespace-nowrap">App URL:</label>
+                  <input
+                    type="text"
+                    value={bookmarkletUrl}
+                    onChange={(e) => setBookmarkletUrl(e.target.value.replace(/\/+$/, ''))}
+                    className="flex-1 max-w-md text-xs px-2 py-1 border rounded-md bg-background"
+                    placeholder="https://your-app.replit.app"
+                    data-testid="input-bookmarklet-url"
+                  />
+                  {bookmarkletUrl.includes('.picard.replit.dev') && (
+                    <span className="text-xs text-yellow-600 dark:text-yellow-400">⚠ Dev URL — may not work from zyBooks. Use your published .replit.app URL.</span>
+                  )}
+                </div>
                 <div className="flex items-center gap-3 flex-wrap">
                   <a
                     href={bookmarkletCode}

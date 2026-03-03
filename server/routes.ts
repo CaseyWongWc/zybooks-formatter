@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { sendToNotion, listNotionPages } from "./notion";
@@ -48,7 +49,7 @@ export async function registerRoutes(
     return res.sendStatus(204);
   });
 
-  app.post("/api/bookmarklet", (req, res) => {
+  app.post("/api/bookmarklet", express.json({ limit: "5mb" }), (req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
     const { html } = req.body;
     if (!html || typeof html !== "string") {
