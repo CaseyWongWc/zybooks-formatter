@@ -19,6 +19,7 @@ Single-page tool with input/output textareas. Users paste raw zyBooks content, c
 - `client/src/lib/notebook-generator.ts` — .ipynb notebook generation (nbformat 4)
 - `client/src/pages/home.tsx` — Main formatter page with input/output textareas, mode toggle, and debug preview panels
 - `client/src/App.tsx` — App router
+- `tests/html-parser.test.ts` — 19 automated tests for the HTML parser (run with `npx tsx tests/html-parser.test.ts`)
 
 ## Paste Modes
 
