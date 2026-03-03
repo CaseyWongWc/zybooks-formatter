@@ -19,6 +19,7 @@ Single-page tool with input/output textareas. Users paste raw zyBooks content, c
 - `client/src/lib/notebook-generator.ts` — .ipynb notebook generation (nbformat 4)
 - `client/src/pages/home.tsx` — Main formatter page with input/output textareas, mode toggle, and debug preview panels
 - `client/src/App.tsx` — App router
+- `tests/html-parser.test.ts` — 21 automated tests for the HTML parser (run with `npx tsx tests/html-parser.test.ts`)
 
 ## Paste Modes
 
@@ -63,6 +64,7 @@ The formatter preserves:
 - Educational content and explanations
 - Code examples and exercise prompts
 - Question text and answer choices
+- Fill-in-the-blank placeholders (`[___]`) for text input fields in questions
 - Multiple-choice answer choices formatted as bullet lists (`- `) within PA/CA sections
   - Detects three question types: simple (text answers), output (code supplement → output answers), prints (output supplement → code answers)
   - "How many" questions treated as output type (code is a supplement, not answer choices)
@@ -121,7 +123,8 @@ The saved HTML files in `attached_assets/` reveal rich semantic structure that w
 - `div.console > pre` — Program output
 - `div.table > table` — Code figure tables with `<td>` for code and output columns
 - Animation players: `animation-player` with `pre.highlight.text-object` for code display
-- `assistive-text` — Contains "Static figure:" accessibility descriptions (already stripped)
+- `assistive-text` — Contains animation step descriptions, code examples, and accessibility text (extracted by `extractAnimationContent()`)
+- `animation-canvas` with `.animation-text-object` divs — Positioned text objects with absolute CSS `top`/`left` (fallback extraction sorted by vertical position)
 
 ### Structural Pattern
 ```
