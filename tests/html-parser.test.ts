@@ -302,6 +302,16 @@ test('Section 6.1: Animation assistive-text extraction', () => {
   assert(!contains(output, 'assistive-text'), 'Should not contain assistive-text class');
 });
 
+test('Section 6.1: Instruction code blocks in activities (PA 6.1.4)', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'attached_assets', 'Section_6.1_-_CS_2520__Python_for_Programmers___zyBooks_1772501226127.html'), 'utf-8');
+  const output = formatHtmlPaste(html);
+  const pa614Idx = output.indexOf('6.1.4: Function basics');
+  assert(pa614Idx !== -1, 'PA 6.1.4 should exist');
+  const pa614Section = output.substring(pa614Idx, pa614Idx + 500);
+  assert(contains(pa614Section, 'print(f"{12:.1f} inch pizza is {calc_pizza_area():.3f} square inches")'), 'PA 6.1.4 should contain the print() code block from instructions');
+  assert(contains(pa614Section, '```python'), 'PA 6.1.4 code should be in a fenced code block');
+});
+
 test('Section 6.1: Animation content not duplicated in body text', () => {
   const html = fs.readFileSync(path.join(__dirname, '..', 'attached_assets', 'Section_6.1_-_CS_2520__Python_for_Programmers___zyBooks_1772501226127.html'), 'utf-8');
   const output = formatHtmlPaste(html);
