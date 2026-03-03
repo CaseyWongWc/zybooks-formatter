@@ -82,7 +82,6 @@ function removeUnwantedElements(doc: Document): void {
     '.zb-simple-expandable', '.levels-bar',
     '.check-next-container', '.view-solution-container',
     '.reset-template-button-container', '.editor-indents',
-    '.ace-editor-container', '.code-editor',
     '.zyante-progression-start-reset-buttons-container',
     '.zyante-progression-status-bar',
     '.zyante-progression-modal-cover > style'
@@ -152,6 +151,9 @@ function walkContentNodes(el: Element, parts: string[]): void {
     if (child.classList?.contains('assistive-text')) continue;
     if (child.classList?.contains('animation-player')) continue;
     if (child.classList?.contains('animation-canvas')) continue;
+    if (child.classList?.contains('ace-editor-container')) continue;
+    if (child.classList?.contains('ace_editor')) continue;
+    if (child.classList?.contains('code-editor')) continue;
     if (child.classList?.contains('table') && child.querySelector('.code')) continue;
 
     const tag = child.tagName;
@@ -175,9 +177,21 @@ function walkContentNodes(el: Element, parts: string[]): void {
       if (codeChild) {
         const codeText = codeChild.textContent?.trim();
         if (codeText) parts.push('```\n' + codeText + '\n```');
+      } else {
+        const preText = child.textContent?.trim();
+        if (preText) parts.push('```\n' + preText + '\n```');
       }
     } else if (tag === 'TABLE') {
       continue;
+    } else if (tag === 'ZYINSTRUCTIONS') {
+      for (let j = 0; j < child.childNodes.length; j++) {
+        const node = child.childNodes[j];
+        if (node.nodeType === 3) {
+          const text = node.textContent?.trim();
+          if (text) parts.push(text);
+        }
+      }
+      walkContentNodes(child, parts);
     } else if (tag === 'DIV' || tag === 'SECTION' || tag === 'SPAN') {
       walkContentNodes(child, parts);
     }
@@ -671,6 +685,19 @@ function extractChallengeContent(el: HTMLElement): string | null {
     walkContentNodes(codeWritingPrompt, promptParts);
     const promptText = promptParts.join('\n\n').trim();
     if (promptText) parts.push(promptText);
+  }
+
+  const aceLines = el.querySelectorAll('.ace_text-layer .ace_line');
+  if (aceLines.length > 0) {
+    const codeLines: string[] = [];
+    aceLines.forEach(line => {
+      const lineText = line.textContent || '';
+      codeLines.push(lineText);
+    });
+    const codeText = codeLines.join('\n').replace(/\n+$/, '');
+    if (codeText.trim()) {
+      parts.push('```python\n' + codeText + '\n```');
+    }
   }
 
   return parts.length > 0 ? parts.join('\n\n') : null;

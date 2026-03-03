@@ -337,6 +337,24 @@ test('Section 6.2: Full section extraction', () => {
   assert(contains(output, 'minimum number of times'), 'Should extract PA 6.2.4 question text');
 });
 
+test('Section 6.1: Challenge Activity instructions and Ace editor code', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'attached_assets', 'Section_6.1_-_CS_2520__Python_for_Programmers___zyBooks_1772524950263.html'), 'utf-8');
+  const output = formatHtmlPaste(html);
+  const ca611Idx = output.indexOf('6.1.1: Basic function call');
+  assert(ca611Idx !== -1, 'CA 6.1.1 should exist');
+  const ca611Section = output.substring(ca611Idx, ca611Idx + 500);
+  assert(contains(ca611Section, 'get_pattern() returns 5 characters'), 'CA 6.1.1 should contain zyinstructions text');
+  assert(contains(ca611Section, '*****'), 'CA 6.1.1 should contain example output');
+  assert(contains(ca611Section, 'def get_pattern()'), 'CA 6.1.1 should contain Ace editor starter code');
+  assert(contains(ca611Section, 'Your solution goes here'), 'CA 6.1.1 should contain solution placeholder');
+
+  const ca614Idx = output.indexOf('6.1.4: Functions with parameters');
+  assert(ca614Idx !== -1, 'CA 6.1.4 should exist');
+  const ca614Section = output.substring(ca614Idx, ca614Idx + 500);
+  assert(contains(ca614Section, 'compute_num()'), 'CA 6.1.4 should contain instructions about compute_num()');
+  assert(contains(ca614Section, 'Your code goes here'), 'CA 6.1.4 should contain starter code placeholder');
+});
+
 console.log('\n' + '='.repeat(50));
 const passed = results.filter(r => r.passed).length;
 const failed = results.filter(r => !r.passed).length;
