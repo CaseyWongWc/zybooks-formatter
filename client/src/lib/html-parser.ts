@@ -351,6 +351,14 @@ function processActivity(el: HTMLElement): string | null {
     walkContentNodes(instructionsEl, instrParts);
     const instrText = instrParts.join('\n\n').trim() || extractInlineText(instructionsEl).trim();
     if (instrText) parts.push(instrText);
+
+    const instrCodeBlocks = instructionsEl.querySelectorAll('.code .highlight pre');
+    instrCodeBlocks.forEach(pre => {
+      const codeText = extractCodeText(pre as HTMLElement);
+      if (codeText.trim()) {
+        parts.push('```python\n' + codeText + '\n```');
+      }
+    });
   }
 
   const animationContent = extractAnimationContent(el);
