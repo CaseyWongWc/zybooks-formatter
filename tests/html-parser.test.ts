@@ -309,6 +309,24 @@ test('Section 6.1: Animation content not duplicated in body text', () => {
   assert(occurrences === 1, `Step 1 description should appear exactly once, found ${occurrences}`);
 });
 
+test('Section 6.2: Full section extraction', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'attached_assets', 'Section_6.2_-_CS_2520__Python_for_Programmers___zyBooks_1772524538934.html'), 'utf-8');
+  const output = formatHtmlPaste(html);
+  assert(contains(output, '6.2 Print functions'), 'Should extract section title');
+  assert(contains(output, 'void function'), 'Should extract bold term void function');
+  assert(contains(output, '6.2.1: Printing with a void function'), 'Should extract PA 6.2.1');
+  assert(contains(output, '6.2.2: Print functions'), 'Should extract PA 6.2.2');
+  assert(contains(output, '6.2.3: Calling a print function repeatedly'), 'Should extract PA 6.2.3');
+  assert(contains(output, '6.2.4: Calling a print function multiple times'), 'Should extract PA 6.2.4');
+  assert(contains(output, '6.2.5: Example: Menu System'), 'Should extract PA 6.2.5');
+  assert(contains(output, 'print_menu'), 'Should extract Figure 6.2.1 code');
+  assert(contains(output, 'def print_age'), 'Should extract CA 6.2.1 code');
+  assert(contains(output, 'print_salary'), 'Should extract CA 6.2.2 instructions');
+  assert(contains(output, 'Step 1'), 'Should extract animation step descriptions');
+  assert(contains(output, 'print_greatest'), 'Should extract PA 6.2.3 animation content');
+  assert(contains(output, 'minimum number of times'), 'Should extract PA 6.2.4 question text');
+});
+
 console.log('\n' + '='.repeat(50));
 const passed = results.filter(r => r.passed).length;
 const failed = results.filter(r => !r.passed).length;
