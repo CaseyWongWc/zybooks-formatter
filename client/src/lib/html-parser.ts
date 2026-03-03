@@ -3,6 +3,7 @@ export function formatHtmlPaste(html: string): string {
   const doc = parser.parseFromString(html, 'text/html');
   const parts: string[] = [];
 
+  replaceInputsWithBlanks(doc);
   removeUnwantedElements(doc);
 
   const sectionTitle = doc.querySelector('h1.zybook-section-title');
@@ -50,6 +51,22 @@ function findProcessedAncestor(el: Element, processed: Set<Element>): Element | 
   return null;
 }
 
+function replaceInputsWithBlanks(doc: Document): void {
+  doc.querySelectorAll('.zb-input-container').forEach(container => {
+    const input = container.querySelector('input');
+    const placeholder = doc.createTextNode(' [___] ');
+    if (input) {
+      container.replaceWith(placeholder);
+    }
+  });
+  doc.querySelectorAll('input[type="text"], input:not([type])').forEach(input => {
+    if (!(input as HTMLElement).closest('.answer, [role="radio"]')) {
+      const placeholder = doc.createTextNode(' [___] ');
+      input.replaceWith(placeholder);
+    }
+  });
+}
+
 function removeUnwantedElements(doc: Document): void {
   const selectors = [
     '.zb-nav-menu', '.top-toolbar', '.osano-cm-window',
@@ -58,10 +75,10 @@ function removeUnwantedElements(doc: Document): void {
     '.activity-watermark', '.chevron-container',
     '.title-bar-chevron-container', '.check-button',
     '.show-answer-button', '.zb-explanation',
-    '.zb-input-container', 'iframe',
+    'iframe',
     'style', 'script', 'link',
     '.resizable-bar',
-    '.segmented-control', '.assistive-text',
+    '.segmented-control',
     '.zb-simple-expandable', '.levels-bar',
     '.check-next-container', '.view-solution-container',
     '.reset-template-button-container', '.editor-indents',
@@ -132,6 +149,9 @@ function walkContentNodes(el: Element, parts: string[]): void {
       continue;
     }
     if (child.classList?.contains('console')) continue;
+    if (child.classList?.contains('assistive-text')) continue;
+    if (child.classList?.contains('animation-player')) continue;
+    if (child.classList?.contains('animation-canvas')) continue;
     if (child.classList?.contains('table') && child.querySelector('.code')) continue;
 
     const tag = child.tagName;
@@ -333,6 +353,9 @@ function processActivity(el: HTMLElement): string | null {
     if (instrText) parts.push(instrText);
   }
 
+  const animationContent = extractAnimationContent(el);
+  if (animationContent) parts.push(animationContent);
+
   const questions = el.querySelectorAll('.question-set-question');
   if (questions.length > 0) {
     questions.forEach((q, idx) => {
@@ -346,6 +369,120 @@ function processActivity(el: HTMLElement): string | null {
 
   const result = parts.join('\n\n');
   return result.trim() || null;
+}
+
+function extractAnimationContent(el: HTMLElement): string | null {
+  const parts: string[] = [];
+
+  const assistiveTexts = el.querySelectorAll('.assistive-text');
+  for (let i = 0; i < assistiveTexts.length; i++) {
+    const at = assistiveTexts[i] as HTMLElement;
+    const raw = at.textContent?.trim() || '';
+    if (!raw || raw.length < 20) continue;
+
+    const lines = raw.split('\n').map(l => l.trim()).filter(l => l);
+    const meaningful: string[] = [];
+    let inCode = false;
+    const codeLines: string[] = [];
+
+    for (const line of lines) {
+      if (/^Begin Python code:?$/i.test(line)) {
+        inCode = true;
+        continue;
+      }
+      if (/^End Python code\.?$/i.test(line)) {
+        if (codeLines.length > 0) {
+          meaningful.push('```python\n' + codeLines.join('\n') + '\n```');
+          codeLines.length = 0;
+        }
+        inCode = false;
+        continue;
+      }
+      if (inCode) {
+        codeLines.push(line);
+        continue;
+      }
+      if (/^Static figure:$/i.test(line)) continue;
+      meaningful.push(line);
+    }
+    if (codeLines.length > 0) {
+      meaningful.push('```python\n' + codeLines.join('\n') + '\n```');
+    }
+
+    if (meaningful.length > 0) {
+      parts.push(meaningful.join('\n\n'));
+    }
+  }
+
+  if (parts.length > 0) return parts.join('\n\n');
+
+  const highlightPre = el.querySelector('.highlight.text-object');
+  if (highlightPre) {
+    const codeText = extractCodeText(highlightPre as HTMLElement);
+    if (codeText.trim()) {
+      parts.push('```python\n' + codeText + '\n```');
+    }
+  }
+
+  const caption = el.querySelector('.animation-caption');
+  if (caption) {
+    const capText = caption.textContent?.trim();
+    if (capText) parts.push(capText);
+  }
+
+  const canvas = el.querySelector('.animation-canvas');
+  if (canvas) {
+    const textObjects = canvas.querySelectorAll('.animation-text-object');
+    if (textObjects.length > 0) {
+      interface TextItem { text: string; top: number; left: number; }
+      const items: TextItem[] = [];
+      textObjects.forEach(obj => {
+        const text = obj.textContent?.trim();
+        if (!text) return;
+        const style = (obj as HTMLElement).getAttribute('style') || '';
+        const topMatch = style.match(/top:\s*([\d.]+)px/);
+        const leftMatch = style.match(/left:\s*([\d.]+)px/);
+        items.push({
+          text,
+          top: topMatch ? parseFloat(topMatch[1]) : 0,
+          left: leftMatch ? parseFloat(leftMatch[1]) : 0
+        });
+      });
+      items.sort((a, b) => a.top - b.top || a.left - b.left);
+
+      const groups: TextItem[][] = [];
+      let currentGroup: TextItem[] = [];
+      let lastTop = -999;
+      for (const item of items) {
+        if (Math.abs(item.top - lastTop) > 25) {
+          if (currentGroup.length > 0) groups.push(currentGroup);
+          currentGroup = [item];
+        } else {
+          currentGroup.push(item);
+        }
+        lastTop = item.top;
+      }
+      if (currentGroup.length > 0) groups.push(currentGroup);
+
+      const lines: string[] = [];
+      for (const group of groups) {
+        group.sort((a, b) => a.left - b.left);
+        lines.push(group.map(g => g.text).join('  '));
+      }
+
+      const filtered = lines.filter((line, i) => {
+        if (!line.trim()) return false;
+        if (i > 0 && line === lines[i - 1]) return false;
+        return true;
+      });
+
+      if (filtered.length > 0) {
+        parts.push('Animation content:\n' + filtered.join('\n'));
+      }
+    }
+  }
+
+  return parts.length > 0 ? parts.join('\n\n') : null;
 }
 
 function extractQuestion(q: HTMLElement, idx: number): string | null {
