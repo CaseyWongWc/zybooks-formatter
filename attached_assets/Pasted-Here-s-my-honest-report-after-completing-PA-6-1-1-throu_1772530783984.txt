@@ -1,0 +1,24 @@
+Here's my honest report after completing PA 6.1.1 through 6.1.4 directly on zyBooks:
+
+**What I completed:** PAs 6.1.1, 6.1.2, 6.1.3 (was already done), 6.1.4 — all correct, all green checkmarks.
+
+**What was FAST:**
+- Multiple choice / True-False questions (PA 6.1.2) — click answer, click next. Took seconds.
+- Fill-in-the-blank number questions (PA 6.1.4) — type number, click Check. Also fast.
+- I know the Python content well, so answering was instant. No struggles with the actual material.
+
+**What was SLOW / struggled with:**
+- **Animations (PA 6.1.1)** — This was the most painful. I had to click Start, then click through each step number, but the animations play at their own pace. I couldn't skip ahead — clicking step 5 while step 4 was still animating didn't work. I had to wait for each step to finish, then click the next. This took ~30 seconds for a 5-step animation. With many animation PAs across a full chapter, this adds up.
+- **Page reloads** — zyBooks randomly reloaded mid-session, clearing my Q3/Q4 inputs. I had to redo them. This is a known zyBooks annoyance.
+- **Timing of clicks** — Interactive widgets need precise timing. Clicking too fast or during transitions sometimes didn't register.
+
+**Speed estimate for all of 6.1:**
+- 6.1 has ~10 PAs + 4 CAs. PAs took me ~2 minutes each on average (animations are slow, questions are fast). CAs will be harder since they involve typing code and multi-level progression.
+- Total estimate: ~30-40 minutes for all PAs, CAs would be significantly longer.
+
+**My recommendation:**
+- **PAs: I can do these directly on zyBooks** — it works, it's just tedious with animations. If you want me to continue, I can knock out the rest.
+- **CAs: Trickier** — code-writing CAs with multi-level progression will be harder to interact with (code editors, autograders). Worth trying but may need you to handle some parts.
+- **Delegating to another thread:** Not necessary for PAs — they're mechanical. But if you want me to also explain the concepts as I go (so you actually learn), that would slow things down but be more valuable for you.
+
+Want me to keep going with the rest of 6.1 PAs? Or should we try the Notion/Colab approach for comparison first?

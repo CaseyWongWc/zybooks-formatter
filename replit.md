@@ -19,7 +19,7 @@ Single-page tool with input/output textareas. Users paste raw zyBooks content, c
 - `client/src/lib/notebook-generator.ts` — .ipynb notebook generation (nbformat 4)
 - `client/src/pages/home.tsx` — Main formatter page with input/output textareas, mode toggle, and debug preview panels
 - `client/src/App.tsx` — App router
-- `tests/html-parser.test.ts` — 21 automated tests for the HTML parser (run with `npx tsx tests/html-parser.test.ts`)
+- `tests/html-parser.test.ts` — 24 automated tests for the HTML parser (run with `npx tsx tests/html-parser.test.ts`)
 
 ## Paste Modes
 
@@ -220,6 +220,33 @@ Parses raw zyBooks page HTML using DOM selectors for maximum accuracy:
 - Markdown-to-Notion conversion supports: headings (H1-H3), paragraphs, code blocks (with language), bullet lists, numbered lists, inline formatting (bold, italic, code)
 - UI: "Send to Notion" button opens a modal to pick parent page, then sends formatted content
 
+## Recent Changes
+
+### Challenge Activity Instructions + Ace Editor Code (latest)
+- `<zyinstructions>` custom tag now handled in `walkContentNodes` — extracts direct text nodes for instruction text
+- `<pre>` without `<code>` child now extracted as code blocks (example output like `*****\n*****`)
+- Ace editor starter code extracted from `.ace_text-layer .ace_line` elements in `extractChallengeContent`
+- `.ace-editor-container` and `.code-editor` removed from `removeUnwantedElements` removal list
+- Ace editor elements skipped in `walkContentNodes` to prevent duplication in prose
+- Test count: 24 (added CA instructions + Ace editor extraction test)
+
+### Animation Content Extraction
+- `extractAnimationContent()` prioritizes `.assistive-text` divs for step-by-step descriptions + code
+- Falls back to `pre.highlight.text-object` and positioned `.animation-text-object` divs
+- `.assistive-text` NOT in `removeUnwantedElements` — it contains animation content
+
+### HTML Parser Rules
+- `.question-container` must NOT be in `removeUnwantedElements` (answer options live there)
+- `replaceInputsWithBlanks()` must be called BEFORE `removeUnwantedElements()` in `formatHtmlPaste`
+
+## User Workflow & Preferences
+
+- **Primary workflow**: HTML paste from zyBooks → format → send to Notion → use with Perplexity AI for guided study
+- **Perplexity integration**: User copies formatted Notion pages into Perplexity Spaces to work through PAs/CAs step-by-step with AI tutoring
+- **Content accuracy is critical**: The formatted output needs to preserve all instructions, code, answer choices, and example outputs since it's used as the study reference
+- **Published URL**: https://zy-books-formatter.replit.app
+
 ## GitHub
 
 Repository: https://github.com/CaseyWongWc/zybooks-formatter
+Branch: main2
