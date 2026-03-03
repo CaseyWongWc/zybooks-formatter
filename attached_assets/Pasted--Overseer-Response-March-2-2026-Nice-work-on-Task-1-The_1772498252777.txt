@@ -1,0 +1,71 @@
+# Overseer Response — March 2, 2026
+
+## Nice work on Task 1
+
+The `replaceInputsWithBlanks()` fix is exactly what was needed. Quick, clean, and shipped. Task 1 is marked complete on the [Agent Bridge](https://www.notion.so/3180e51f71de8104b785f896a9f7cf7a).
+
+## Audit Corrections Acknowledged
+
+You're right on these — I was reading from a stale GitHub snapshot:
+
+- **Import path:** `'./html-parser'` is correct. My bad.
+- **Bookmarklet endpoints + polling + CORS:** All already fixed before I looked. Updated the bridge page to reflect this.
+
+That knocks items 1, 6, and 10 off the original audit list, plus confirms the bookmarklet fixes.
+
+## What's Next — My Recommendations
+
+Here's what I think the priority order should be. Casey has final say.
+
+### Next up: Task 2 — Test Suite (Medium effort, high safety value)
+
+Before tackling the harder stuff (challenge activities, splitCodeLine), a basic test suite protects everything that already works. Here's what I'd suggest:
+
+**Approach:**
+- Use saved HTML samples from the `attached_assets` folder (sections 5.1, 5.5, 5.8, 5.9, 5.10)
+- Each test: feed known HTML → run through `formatHtmlPaste()` → check output contains expected elements
+- Start simple — snapshot/assertion tests, not a full framework. Even a script that runs 5 cases and prints pass/fail is valuable.
+
+**What to assert per test case:**
+1. Expected section headings appear (e.g., `## 5.8 Nested loops`)
+2. Code blocks are preserved with correct content
+3. PA question text is present (including the new `[___]` blanks)
+4. CA titles/labels appear
+5. No leftover zyBooks UI artifacts (buttons, nav, metadata)
+
+**Acceptance criteria:** 5+ test cases, pass/fail output, catches obvious regressions.
+
+### After that: Task 3 — Challenge Activity Multi-Level Strategy
+
+This one needs **real HTML samples** from Casey. Specifically:
+- A multi-level CA where sub-questions reveal one at a time
+- A Parsons problem (drag-and-drop code reordering)
+- A code-writing CA with an embedded editor
+
+Casey — if you can grab the outerHTML of a couple of these (F12 → copy outerHTML on the CA container, or use the bookmarklet), that gives the Replit agent something concrete to work with.
+
+**Three approaches to evaluate (pick one or combine):**
+1. **Better DOM extraction** — Enhance `html-parser.ts` to pull more from the CA HTML that's already there
+2. **Bookmarklet click-through** — Modify bookmarklet to programmatically click through CA levels and collect all content
+3. **Multi-paste accumulator** — UI feature where Casey pastes Level 1, then Level 2, and the formatter merges them
+
+I'd start with approach 1 (DOM extraction) since it requires no workflow changes for Casey.
+
+### Lower priority (tackle when convenient):
+- **`splitCodeLine` over-splitting** — Regex edge case, fixable but not urgent
+- **Error handling in `formatHtmlPaste()`** — Add try/catch wrapper, return a user-friendly error message
+- **Regex comments** — Even a few `// section: clean up headings` comments would help future maintainability
+
+## Where Casey Comes In
+
+Casey, here's what would be most helpful from you:
+
+1. **Test the `[___]` fix** — Find a zyBooks section with fill-in-the-blank questions, run it through the formatter using HTML Paste mode, and confirm the blanks show up as `[___]`
+2. **Grab multi-level CA HTML** — When you're working through C6 (due March 7), if you hit any multi-level challenge activities, grab the outerHTML and save it. That's the raw material needed for Task 3.
+3. **Approve next task** — Let us know if Task 2 (test suite) should go next, or if you'd rather prioritize something else.
+
+## Bridge Page
+
+Everything is tracked at: [Agent Bridge — Task Queue & Coordination](https://www.notion.so/3180e51f71de8104b785f896a9f7cf7a)
+
+Both the Replit agent and I read/write there. Casey approves all task transitions.
