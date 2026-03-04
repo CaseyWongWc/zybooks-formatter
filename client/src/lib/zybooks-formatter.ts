@@ -273,6 +273,8 @@ function formatRegularPaste(input: string): string {
   text = text.replace(/\\\]/g, ']');
   text = text.replace(/\\\|/g, '|');
 
+  text = protectPythonAsterisks(text);
+
   return collapseWhitespace(text);
 }
 
@@ -507,6 +509,9 @@ function formatMarkdownPaste(input: string): string {
     return '```python\n' + codeLines.join('\n') + '\n```';
   });
 
+  text = text.replace(/\\\*\\\*([a-zA-Z_]\w*)/g, '`**$1`');
+  text = text.replace(/(?<!\\\*)\\\*([a-zA-Z_]\w*)/g, '`*$1`');
+
   text = text.replace(/\\=/g, '=');
   text = text.replace(/\\\[/g, '[');
   text = text.replace(/\\\]/g, ']');
@@ -572,6 +577,8 @@ function formatMarkdownPaste(input: string): string {
   }
 
   text = formatAnswerChoices(text);
+
+  text = protectPythonAsterisks(text);
 
   return collapseWhitespace(text);
 }
@@ -804,4 +811,22 @@ function collapseWhitespace(text: string): string {
   let final = result.join('\n').trim();
   final = final.replace(/\n{3,}/g, '\n\n');
   return final;
+}
+
+function protectPythonAsterisks(text: string): string {
+  const lines = text.split('\n');
+  let inCodeBlock = false;
+
+  return lines.map(line => {
+    if (line.trim().startsWith('```')) {
+      inCodeBlock = !inCodeBlock;
+      return line;
+    }
+    if (inCodeBlock) return line;
+
+    line = line.replace(/(?<=[(,])\s*\*\*([a-zA-Z_]\w*)\b/g, '`**$1`');
+    line = line.replace(/(?<=[(,])\s*(?<!\*)\*([a-zA-Z_]\w*)\b/g, '`*$1`');
+
+    return line;
+  }).join('\n');
 }
