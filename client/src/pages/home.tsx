@@ -40,9 +40,17 @@ export default function Home() {
   const [sessionStartModalOpen, setSessionStartModalOpen] = useState(false);
   const [sessionSectionId, setSessionSectionId] = useState("");
 
+  const [showResumePrompt, setShowResumePrompt] = useState(false);
+  const pendingSessionRef = useRef<SessionState | null>(null);
+
   useEffect(() => {
     const saved = loadSession();
-    if (saved) setSession(saved);
+    if (saved && saved.activities.length > 0) {
+      pendingSessionRef.current = saved;
+      setShowResumePrompt(true);
+    } else if (saved) {
+      setSession(saved);
+    }
   }, []);
 
   const handleStartSession = useCallback(() => {
@@ -86,6 +94,11 @@ export default function Home() {
     };
     setSession(updated);
     saveSession(updated);
+    if (updated.activities.length > 0) {
+      setOutput(combineActivities(updated));
+    } else {
+      setOutput("");
+    }
   }, [session]);
 
   const addToSession = useCallback((formatted: string, rawInput: string, mode: PasteMode) => {
@@ -122,6 +135,7 @@ export default function Home() {
     };
     setSession(updated);
     saveSession(updated);
+    setOutput(combineActivities(updated));
     toast({ title: "Activity captured!", description: `${activity.label} added (${updated.activities.length} total)` });
   }, [session, toast]);
 
@@ -142,7 +156,6 @@ export default function Home() {
           if (session?.active) {
             addToSession(formatted, data.html, "html");
             setInput("");
-            setOutput(formatted);
             toast({ title: "Activity captured from bookmarklet!", description: `${session.activities.length + 1} activities in session. Send another or click 'End Session'.` });
           } else {
             setInput(data.html);
@@ -187,7 +200,6 @@ export default function Home() {
     if (session?.active) {
       addToSession(formatted, input, pasteMode);
       setInput("");
-      setOutput(formatted);
     } else {
       setOutput(formatted);
     }
@@ -730,6 +742,49 @@ export default function Home() {
           <span data-testid="text-footer-preserves">Keeps participation &amp; challenge activity headers</span>
         </div>
       </footer>
+
+      {showResumePrompt && pendingSessionRef.current && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" data-testid="modal-resume-session">
+          <div className="bg-background border rounded-lg shadow-lg w-full max-w-sm mx-4 p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <RotateCcw className="w-5 h-5" />
+              <h2 className="text-lg font-semibold">Resume Session?</h2>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              You have an unfinished session for Section {pendingSessionRef.current.sectionId} with {pendingSessionRef.current.activities.length} captured activities.
+            </p>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  clearSession();
+                  pendingSessionRef.current = null;
+                  setShowResumePrompt(false);
+                }}
+                data-testid="button-discard-resume"
+              >
+                <Trash2 className="w-4 h-4 mr-1.5" />
+                Discard
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  const s = pendingSessionRef.current!;
+                  setSession(s);
+                  setOutput(combineActivities(s));
+                  pendingSessionRef.current = null;
+                  setShowResumePrompt(false);
+                }}
+                data-testid="button-resume-session"
+              >
+                <RotateCcw className="w-4 h-4 mr-1.5" />
+                Resume
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {sessionStartModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" data-testid="modal-start-session">
