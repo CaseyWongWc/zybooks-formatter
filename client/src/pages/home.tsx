@@ -9,7 +9,12 @@ import {
   downloadNotebook,
   generateFilename,
 } from "@/lib/notebook-generator";
-import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown, Eye, EyeOff, Bookmark, Zap } from "lucide-react";
+import {
+  loadSession, saveSession, clearSession, createSession,
+  detectActivityLabel, detectSectionTitle, computeSimilarity, combineActivities,
+  type SessionState, type ActivityBlock,
+} from "@/lib/session";
+import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown, Eye, EyeOff, Bookmark, Zap, Plus, Square, ListPlus, RotateCcw } from "lucide-react";
 import { SiNotion } from "react-icons/si";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
@@ -31,10 +36,99 @@ export default function Home() {
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { toast } = useToast();
 
+  const [session, setSession] = useState<SessionState | null>(null);
+  const [sessionStartModalOpen, setSessionStartModalOpen] = useState(false);
+  const [sessionSectionId, setSessionSectionId] = useState("");
+
+  useEffect(() => {
+    const saved = loadSession();
+    if (saved) setSession(saved);
+  }, []);
+
+  const handleStartSession = useCallback(() => {
+    if (!sessionSectionId.trim()) return;
+    const newSession = createSession(sessionSectionId.trim());
+    setSession(newSession);
+    saveSession(newSession);
+    setSessionStartModalOpen(false);
+    setSessionSectionId("");
+    setOutput("");
+    toast({ title: "Session started", description: `Capturing activities for Section ${newSession.sectionId}` });
+  }, [sessionSectionId, toast]);
+
+  const handleEndSession = useCallback(() => {
+    if (!session || session.activities.length === 0) {
+      clearSession();
+      setSession(null);
+      toast({ title: "Session ended", description: "No activities were captured." });
+      return;
+    }
+    const combined = combineActivities(session);
+    setOutput(combined);
+    setInput("");
+    clearSession();
+    setSession(null);
+    toast({ title: "Session complete!", description: `${session.activities.length} activities combined. Use export buttons to save.` });
+  }, [session, toast]);
+
+  const handleDiscardSession = useCallback(() => {
+    clearSession();
+    setSession(null);
+    setOutput("");
+    toast({ title: "Session discarded" });
+  }, [toast]);
+
+  const handleRemoveActivity = useCallback((index: number) => {
+    if (!session) return;
+    const updated = {
+      ...session,
+      activities: session.activities.filter((_, i) => i !== index).map((a, i) => ({ ...a, index: i + 1 })),
+    };
+    setSession(updated);
+    saveSession(updated);
+  }, [session]);
+
+  const addToSession = useCallback((formatted: string, rawInput: string, mode: PasteMode) => {
+    if (!session) return;
+
+    const lastActivity = session.activities[session.activities.length - 1];
+    if (lastActivity) {
+      const similarity = computeSimilarity(lastActivity.formattedOutput, formatted);
+      if (similarity > 0.8) {
+        if (!window.confirm("This looks very similar to the last captured activity. Add anyway?")) {
+          return;
+        }
+      }
+    }
+
+    const label = detectActivityLabel(formatted);
+    if (!session.sectionTitle) {
+      const title = detectSectionTitle(formatted);
+      if (title) session.sectionTitle = title;
+    }
+
+    const activity: ActivityBlock = {
+      index: session.activities.length + 1,
+      label: label || `Activity ${session.activities.length + 1}`,
+      rawInput,
+      formattedOutput: formatted,
+      pasteMode: mode,
+      capturedAt: new Date().toISOString(),
+    };
+
+    const updated = {
+      ...session,
+      activities: [...session.activities, activity],
+    };
+    setSession(updated);
+    saveSession(updated);
+    toast({ title: "Activity captured!", description: `${activity.label} added (${updated.activities.length} total)` });
+  }, [session, toast]);
+
   const defaultAppUrl = typeof window !== "undefined" ? window.location.origin : "";
   const [bookmarkletUrl, setBookmarkletUrl] = useState(defaultAppUrl);
 
-  const bookmarkletCode = `javascript:void((function(){var d=document,h=d.documentElement.outerHTML;var x=new XMLHttpRequest();x.open('POST','${bookmarkletUrl}/api/bookmarklet',true);x.setRequestHeader('Content-Type','application/json');x.onload=function(){if(x.status===200){var b=d.createElement('div');b.style.cssText='position:fixed;top:20px;right:20px;background:#22c55e;color:white;padding:12px 20px;border-radius:8px;font:14px sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,0.3)';b.textContent='Sent to zyBooks Formatter!';d.body.appendChild(b);setTimeout(function(){b.remove()},3000)}else{alert('Error sending to formatter')}};x.onerror=function(){alert('Could not reach zyBooks Formatter app')};x.send(JSON.stringify({html:h}))})())`;
+  const bookmarkletCode = `javascript:void((function(){var u='${bookmarkletUrl}/api/bookmarklet';var h=document.documentElement.outerHTML;fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({html:h})}).then(function(r){if(r.ok){var b=document.createElement('div');b.style.cssText='position:fixed;top:20px;right:20px;background:%2322c55e;color:white;padding:12px 20px;border-radius:8px;font:14px sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,0.3)';b.textContent='Sent to zyBooks Formatter!';document.body.appendChild(b);setTimeout(function(){b.remove()},3000)}else{alert('Error: '+r.status+' '+r.statusText)}}).catch(function(e){alert('Could not reach zyBooks Formatter app. URL: '+u+' Error: '+e.message)})})())`;
 
   const startPolling = useCallback(() => {
     if (pollingRef.current) return;
@@ -44,20 +138,27 @@ export default function Home() {
         const res = await fetch("/api/bookmarklet/pending");
         const data = await res.json();
         if (data.html) {
-          setInput(data.html);
-          setPasteMode("html");
           const formatted = formatZybooksText(data.html, "html");
-          setOutput(formatted);
-          if (pollingRef.current) {
-            clearInterval(pollingRef.current);
-            pollingRef.current = null;
+          if (session?.active) {
+            addToSession(formatted, data.html, "html");
+            setInput("");
+            setOutput(formatted);
+            toast({ title: "Activity captured from bookmarklet!", description: `${session.activities.length + 1} activities in session. Send another or click 'End Session'.` });
+          } else {
+            setInput(data.html);
+            setPasteMode("html");
+            setOutput(formatted);
+            if (pollingRef.current) {
+              clearInterval(pollingRef.current);
+              pollingRef.current = null;
+            }
+            setBookmarkletPolling(false);
+            toast({ title: "zyBooks page received!", description: "Content auto-formatted from bookmarklet. Click 'Start Listening' again for another page." });
           }
-          setBookmarkletPolling(false);
-          toast({ title: "zyBooks page received!", description: "Content auto-formatted from bookmarklet. Click 'Start Listening' again for another page." });
         }
       } catch {}
     }, 2000);
-  }, [toast]);
+  }, [toast, session, addToSession]);
 
   const stopPolling = useCallback(() => {
     if (pollingRef.current) {
@@ -83,8 +184,14 @@ export default function Home() {
       return;
     }
     const formatted = formatZybooksText(input, pasteMode);
-    setOutput(formatted);
-  }, [input, pasteMode, toast]);
+    if (session?.active) {
+      addToSession(formatted, input, pasteMode);
+      setInput("");
+      setOutput(formatted);
+    } else {
+      setOutput(formatted);
+    }
+  }, [input, pasteMode, toast, session, addToSession]);
 
   const handleCopy = useCallback(async () => {
     if (!output) return;
@@ -259,6 +366,32 @@ export default function Home() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {!session?.active ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSessionStartModalOpen(true)}
+                data-testid="button-start-session"
+              >
+                <ListPlus className="w-4 h-4 mr-1.5" />
+                Session Mode
+              </Button>
+            ) : (
+              <div className="flex items-center gap-2" data-testid="session-controls">
+                <span className="text-xs font-medium px-2 py-1 rounded bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 flex items-center gap-1.5" data-testid="text-session-status">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  Session: {session.sectionId} ({session.activities.length} captured)
+                </span>
+                <Button variant="default" size="sm" onClick={handleEndSession} data-testid="button-end-session">
+                  <Square className="w-3.5 h-3.5 mr-1.5" />
+                  End Session
+                </Button>
+                <Button variant="ghost" size="sm" onClick={handleDiscardSession} data-testid="button-discard-session" className="text-destructive hover:text-destructive">
+                  <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+                  Discard
+                </Button>
+              </div>
+            )}
             <Button
               variant="outline"
               size="sm"
@@ -357,6 +490,44 @@ export default function Home() {
         </div>
       )}
 
+      {session?.active && session.activities.length > 0 && (
+        <div className="border-b bg-muted/20 px-6 py-3" data-testid="panel-session-activities">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold flex items-center gap-2">
+                <ListPlus className="w-4 h-4" />
+                Captured Activities ({session.activities.length})
+              </h3>
+              <span className="text-xs text-muted-foreground">
+                {session.sectionTitle ? `${session.sectionId} — ${session.sectionTitle}` : `Section ${session.sectionId}`}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {session.activities.map((activity, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-1.5 text-xs bg-background border rounded-md px-2.5 py-1.5"
+                  data-testid={`session-activity-${i}`}
+                >
+                  <span className="font-medium">{activity.label}</span>
+                  <span className="text-muted-foreground">
+                    {new Date(activity.capturedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                  <button
+                    onClick={() => handleRemoveActivity(i)}
+                    className="ml-1 text-muted-foreground hover:text-destructive transition-colors"
+                    title="Remove this activity"
+                    data-testid={`button-remove-activity-${i}`}
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto flex flex-col h-full gap-4">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4 flex-1 min-h-0">
@@ -432,8 +603,8 @@ export default function Home() {
                 data-testid="button-format"
                 className="gap-1.5"
               >
-                Format
-                <ArrowRight className="w-4 h-4" />
+                {session?.active ? "Capture" : "Format"}
+                {session?.active ? <Plus className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
               </Button>
             </div>
 
@@ -559,6 +730,51 @@ export default function Home() {
           <span data-testid="text-footer-preserves">Keeps participation &amp; challenge activity headers</span>
         </div>
       </footer>
+
+      {sessionStartModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" data-testid="modal-start-session">
+          <div className="bg-background border rounded-lg shadow-lg w-full max-w-sm mx-4 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <ListPlus className="w-5 h-5" />
+                <h2 className="text-lg font-semibold">Start Session</h2>
+              </div>
+              <button
+                onClick={() => setSessionStartModalOpen(false)}
+                className="text-muted-foreground hover:text-foreground"
+                data-testid="button-close-session-modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Session mode captures multiple pastes and combines them into one document. Great for multi-level CAs or building a complete section notebook.
+            </p>
+            <div className="mb-4">
+              <label className="text-sm font-medium mb-2 block">Section ID</label>
+              <input
+                type="text"
+                value={sessionSectionId}
+                onChange={(e) => setSessionSectionId(e.target.value)}
+                placeholder="e.g., 6.3"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                data-testid="input-session-section-id"
+                autoFocus
+                onKeyDown={(e) => { if (e.key === 'Enter') handleStartSession(); }}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="sm" onClick={() => setSessionStartModalOpen(false)} data-testid="button-cancel-session">
+                Cancel
+              </Button>
+              <Button size="sm" onClick={handleStartSession} disabled={!sessionSectionId.trim()} data-testid="button-confirm-start-session">
+                <Plus className="w-4 h-4 mr-1.5" />
+                Start
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {notionModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" data-testid="modal-notion">
