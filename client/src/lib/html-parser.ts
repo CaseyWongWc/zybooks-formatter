@@ -213,9 +213,24 @@ function extractInlineText(el: Element): string {
       } else if (child.classList?.contains('term')) {
         text += '**' + child.textContent + '**';
       } else if (child.tagName === 'STRONG' || child.tagName === 'B') {
-        text += '**' + extractInlineText(child) + '**';
+        const inner = extractInlineText(child);
+        if (/^[a-zA-Z_]\w*$/.test(inner.trim()) && text.endsWith('*')) {
+          text += '`' + inner + '`';
+        } else {
+          text += '**' + inner + '**';
+        }
       } else if (child.tagName === 'EM' || child.tagName === 'I') {
-        text += '*' + extractInlineText(child) + '*';
+        const inner = extractInlineText(child);
+        if (/^[a-zA-Z_]\w*$/.test(inner.trim())) {
+          const prevChar = text.length > 0 ? text[text.length - 1] : '';
+          if (prevChar === '*' || prevChar === '(') {
+            text += '`' + inner + '`';
+          } else {
+            text += '*' + inner + '*';
+          }
+        } else {
+          text += '*' + inner + '*';
+        }
       } else if (child.tagName === 'A') {
         text += extractInlineText(child);
       } else if (child.tagName === 'IMG') {

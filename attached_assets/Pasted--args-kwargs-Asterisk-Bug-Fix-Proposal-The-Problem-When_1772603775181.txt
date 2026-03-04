@@ -1,0 +1,130 @@
+*args / **kwargs Asterisk Bug — Fix Proposal
+The Problem
+When Python code containing *args or **kwargs passes through the ZyBooks Formatter, the asterisks get mangled by markdown formatting logic. This happens because * is a markdown syntax character (used for bold **text** and italic *text*), and the formatter's regex patterns don't distinguish between markdown asterisks and Python unpacking operators.
+
+Root Cause Analysis (Two Files)
+1. html-parser.ts — HTML Paste Mode
+Lines 200–204: The extractInlineText() function wraps <strong>/<b> in ** and <em>/<i> in *. If zyBooks renders *args or **kwargs with emphasis tags (which is common for inline text), they'll get double-wrapped:
+
+typescript
+} else if (child.tagName === 'STRONG' || child.tagName === 'B') {
+  text += '**' + extractInlineText(child) + '**';
+} else if (child.tagName === 'EM' || child.tagName === 'I') {
+  text += '*' + extractInlineText(child) + '*';
+}
+However, when *args appears inside a <code> tag, it gets backtick-wrapped (\*args`), which **protects** the asterisks. So HTML Paste mode is actually safe **when the content is inside code elements**. The risk is when *argsappears in prose text outside of<code>` tags.
+
+Verdict: HTML Paste mode is mostly safe because *args/**kwargs in zyBooks are almost always inside <code> elements. Low priority fix.
+
+2. zybooks-formatter.ts — Regular & Markdown Paste Modes (HIGH PRIORITY)
+Several patterns in this file can mangle asterisks:
+
+a) Line 222 — Arithmetic expression removal
+typescript
+text = text.replace(/^(?:sum|num|val|max|count|avg)\s*=\s*(?:sum|num|val|avg|max|count)\s*[\+\-\*\/]\s*(?:sum|num|val|avg|max|count|\d+)\s*$/gm, '');
+This removes lines like sum = val * num. While it uses a strict whitelist of variable names (sum, num, val, etc.), * is explicitly in the character class [\+\-\*\/]. This won't match *args directly (since args isn't in the whitelist), but it's worth noting.
+
+Risk level: LOW — the variable whitelist prevents false matches.
+
+b) Line 247 — Markdown list link removal
+typescript
+text = text.replace(/^(\s*)\*\s+\[([^\]]+)\](https:\/\/learn\.zybooks\.com[^)]*)\s*$/gm, '');
+This removes lines starting with * followed by a zyBooks link. If a line somehow started with *args and contained a link, it could match.
+
+Risk level: VERY LOW — requires a link in the same line.
+
+c) Lines 515 — Asterisk unescaping in markdown mode
+typescript
+text = text.replace(/\\\\*/g, '*');  // Unescape \\* to *
+This is actually helpful — it restores escaped asterisks. The Copy as Markdown extension may escape * as \*, so this restores them. But if the escaping is inconsistent (e.g., \*\*kwargs becoming **kwargs which then gets interpreted as bold), it could cause issues.
+
+Risk level: MEDIUM — depends on how the Copy as Markdown extension escapes things.
+
+d) Bold wrapping patterns (Lines 102-103, 199-206)
+typescript
+text = text.replace(/^(Construct \d+\.\d+\.\d+:.*)$/gm, '**$1**');
+text = text.replace(/^(Figure \d+\.\d+\.\d+:.*)$/gm, '**$1**');
+If *args appears on a line that also matches these patterns, the ** wrapping combined with existing * could create malformed markdown.
+
+Risk level: LOW — these match very specific patterns.
+
+e) The REAL issue — Markdown rendering after output
+When the formatter outputs text containing *args, any downstream markdown renderer (Notion, Colab, GitHub) will interpret:
+
+*args as the start of italic text
+
+**kwargs as the start of bold text
+
+def func(*args, **kwargs): could turn into def func( + italic args, + bold kwargs):
+
+This is the core problem: the formatter doesn't protect bare asterisks in Python code that appears outside of fenced code blocks.
+
+Proposed Fixes
+Fix 1: Protect asterisks inside code contexts (HIGH PRIORITY)
+In zybooks-formatter.ts, add a step that detects Python code patterns containing *args/**kwargs and ensures they're inside fenced code blocks:
+
+typescript
+// After code block detection but before any asterisk processing:
+// Escape bare asterisks in Python-like content outside of code blocks
+function protectPythonAsterisks(text: string): string {
+  const lines = text.split('\n');
+  let inCodeBlock = false;
+  
+  return lines.map(line => {
+    if (line.trim().startsWith('```')) {
+      inCodeBlock = !inCodeBlock;
+      return line;
+    }
+    if (inCodeBlock) return line; // Don't touch code blocks
+    
+    // Protect *args and **kwargs patterns outside code blocks
+    // Match: *identifier or **identifier where it looks like Python unpacking
+    line = line.replace(/(?<![\\`])\*\*([a-zA-Z_]\w*)/g, '`**$1`');
+    line = line.replace(/(?<![\\`*])\*([a-zA-Z_]\w*)/g, '`*$1`');
+    
+    return line;
+  }).join('\n');
+}
+Fix 2: Improve the splitCodeLine function
+The splitCodeLine function already detects code-like content using * as an operator. Enhance it to also recognize *args/**kwargs as Python patterns:
+
+typescript
+// Add to the code detection patterns:
+const pythonUnpackingPattern = /\*{1,2}[a-zA-Z_]\w*/;
+Fix 3: Handle the markdown unescape chain properly
+In formatMarkdownPaste, the unescape step should be aware that \*args should become `*args` (backtick-protected) rather than bare *args:
+
+typescript
+// Instead of blindly unescaping:
+text = text.replace(/\\\\*/g, '*');  // Current
+
+// Use context-aware unescaping:
+text = text.replace(/\\\*\\\*([a-zA-Z_]\w*)/g, '`**$1`');  // \*\*kwargs -> `**kwargs`
+text = text.replace(/\\\*([a-zA-Z_]\w*)/g, '`*$1`');       // \*args -> `*args`
+text = text.replace(/\\\\*/g, '*');                          // Then unescape the rest
+Fix 4: Add test cases
+Add to the existing test suite:
+
+typescript
+describe('*args/**kwargs handling', () => {
+  it('should preserve *args in function signatures', () => {
+    const input = 'def func(*args, **kwargs):';
+    // Should come through as code or with protected asterisks
+  });
+  
+  it('should not mangle **kwargs in prose', () => {
+    const input = 'The **kwargs parameter accepts keyword arguments';
+    // Should not render "kwargs" as bold text
+  });
+});
+Recommended Implementation Order
+Fix 3 first — handle the unescape chain in formatMarkdownPaste since Copy as Markdown is the most-used mode
+
+Fix 1 next — add the protectPythonAsterisks post-processing step to both Regular and Markdown modes
+
+Fix 4 — add test cases to the existing 19-test suite
+
+Fix 2 last — refine splitCodeLine detection (nice-to-have)
+
+Who Should Implement This
+This is a spec for the Replit agent on the ZyBooks Formatter project. It can be posted to the Agent Bridge on Notion, or pasted directly into the Replit agent chat.

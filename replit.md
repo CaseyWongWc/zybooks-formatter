@@ -19,7 +19,7 @@ Single-page tool with input/output textareas. Users paste raw zyBooks content, c
 - `client/src/lib/notebook-generator.ts` — .ipynb notebook generation (nbformat 4)
 - `client/src/pages/home.tsx` — Main formatter page with input/output textareas, mode toggle, and debug preview panels
 - `client/src/App.tsx` — App router
-- `tests/html-parser.test.ts` — 24 automated tests for the HTML parser (run with `npx tsx tests/html-parser.test.ts`)
+- `tests/html-parser.test.ts` — 25 automated tests for the HTML parser (run with `npx tsx tests/html-parser.test.ts`)
 
 ## Paste Modes
 
@@ -222,7 +222,15 @@ Parses raw zyBooks page HTML using DOM selectors for maximum accuracy:
 
 ## Recent Changes
 
-### Challenge Activity Instructions + Ace Editor Code (latest)
+### *args/**kwargs Asterisk Protection (latest)
+- `protectPythonAsterisks()` function added to `zybooks-formatter.ts` — wraps `*args`/`**kwargs` in backticks when preceded by `(` or `,` (function signature context)
+- Applied at end of both `formatRegularPaste` and `formatMarkdownPaste`
+- Markdown unescape chain updated: `\*\*kwargs` → `` `**kwargs` `` and `\*args` → `` `*args` `` BEFORE blanket unescape
+- HTML parser `extractInlineText` updated: detects when `<em>`/`<strong>` wraps Python-like identifiers after `*` context
+- Normal markdown **bold** and *italic* formatting preserved (only matches after `(` or `,`)
+- Test count: 25
+
+### Challenge Activity Instructions + Ace Editor Code
 - `<zyinstructions>` custom tag now handled in `walkContentNodes` — extracts direct text nodes for instruction text
 - `<pre>` without `<code>` child now extracted as code blocks (example output like `*****\n*****`)
 - Ace editor starter code extracted from `.ace_text-layer .ace_line` elements in `extractChallengeContent`

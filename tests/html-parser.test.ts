@@ -2,6 +2,7 @@ import { JSDOM } from 'jsdom';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { formatZybooksText } from '../client/src/lib/zybooks-formatter';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -353,6 +354,20 @@ test('Section 6.1: Challenge Activity instructions and Ace editor code', () => {
   const ca614Section = output.substring(ca614Idx, ca614Idx + 500);
   assert(contains(ca614Section, 'compute_num()'), 'CA 6.1.4 should contain instructions about compute_num()');
   assert(contains(ca614Section, 'Your code goes here'), 'CA 6.1.4 should contain starter code placeholder');
+});
+
+test('*args/**kwargs asterisk protection', () => {
+  const sig = formatZybooksText('def func(*args, **kwargs):', 'regular');
+  assert(sig.includes('`*args`'), 'Should protect *args in function signature');
+  assert(sig.includes('`**kwargs`'), 'Should protect **kwargs in function signature');
+
+  const bold = formatZybooksText('A **bold term** and *italic* text', 'regular');
+  assert(bold.includes('**bold term**'), 'Should preserve markdown bold');
+  assert(bold.includes('*italic*'), 'Should preserve markdown italic');
+
+  const md = formatZybooksText('The \\*args parameter and \\*\\*kwargs parameter', 'markdown');
+  assert(md.includes('`*args`'), 'Markdown mode should protect unescaped *args');
+  assert(md.includes('`**kwargs`'), 'Markdown mode should protect unescaped **kwargs');
 });
 
 console.log('\n' + '='.repeat(50));
