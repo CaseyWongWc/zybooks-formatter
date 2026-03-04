@@ -1,0 +1,136 @@
+Hey! New feature request from the Perplexity Overseer thread (Navi) + Casey.
+
+Full spec is also on the Agent Bridge Notion page as a child page if you want the formatted version: https://www.notion.so/3190e51f71de816594b0d0e5f35246f7
+
+---
+
+# Spec: Stateful Pipeline for Activity Accumulation (Phase A)
+
+**Priority:** Medium — no rush, but we want to get started
+**Type:** New Feature
+
+## Summary
+
+Add a **stateful session mode** to the formatter so that multiple paste/bookmarklet submissions accumulate into a single document instead of replacing each other. When the user finalizes the session, the accumulated content exports as one complete notebook/Notion page.
+
+## Problem
+
+Currently, every paste or bookmarklet submission is independent — next paste overwrites the previous one. For building a complete study notebook per section, Casey has to format each activity separately and manually combine them. Multi-level CAs are the worst case — each level loads only after the previous one is completed, so you can't capture all levels in one paste.
+
+## Proposed Solution
+
+### New UI: Session Mode
+
+Add a "Session Mode" toggle or panel. When active:
+
+**1. Start Session button:**
+- Prompts for section identifier (e.g., "6.3")
+- Initializes an empty accumulator (array of formatted content blocks)
+- Shows a session status panel: section name, activity count, timestamp
+
+**2. Each submission (paste or bookmarklet) while session is active:**
+- Format the content as usual using whichever paste mode
+- Instead of replacing the output, APPEND to the accumulator
+- Auto-label with sequential activity number if not detected from content
+- Show the running document in the preview panel (scrolled to latest addition)
+- Show count: "3 activities captured"
+
+**3. End Session button:**
+- Combine all accumulated content blocks into a single markdown document
+- Add a header with section number and title
+- Add a footer with activity count and date
+- Trigger normal export options (Copy, .ipynb, Colab, Notion, GitHub)
+- Clear the accumulator
+
+### Data Model
+
+```typescript
+interface SessionState {
+  active: boolean;
+  sectionId: string;           // e.g., "6.3"
+  sectionTitle?: string;       // auto-detected or manual
+  activities: ActivityBlock[];
+  startedAt: Date;
+}
+
+interface ActivityBlock {
+  index: number;               // sequential: 1, 2, 3...
+  label?: string;              // e.g., "PA 6.3.1" or "CA 6.3.2 Level 3"
+  rawInput: string;
+  formattedOutput: string;
+  pasteMode: 'regular' | 'markdown' | 'html';
+  capturedAt: Date;
+}
+```
+
+### Session Persistence
+- Store session state in localStorage so it survives page refreshes
+- "Resume Session" option if there's an incomplete session on load
+- "Discard Session" option to throw away accumulated content
+
+### Accumulation Logic
+1. Format content through the existing pipeline (NO changes to formatters)
+2. Auto-detect activity label from formatted output (look for "Participation Activity X.X.X" or "Challenge Activity X.X.X" patterns)
+3. If not found, use "Activity [N]" where N is sequential index
+4. Duplicate detection: if new content is >80% similar to last block, warn "This looks like a duplicate — add anyway?"
+5. Append to activities array
+6. Update preview panel
+
+### Finalization Logic
+Combined markdown format:
+```
+# Section [sectionId] — [sectionTitle]
+
+[Activity 1 formatted content]
+
+---
+
+[Activity 2 formatted content]
+
+---
+
+[Activity N formatted content]
+
+---
+Captured [N] activities on [date/time]
+```
+
+Then put combined markdown into the main output textarea. All existing export buttons work normally on the combined content.
+
+## Integration with Bookmarklet
+
+When session mode is active, the "Start Listening" polling flow should append instead of replace. NO changes needed to the bookmarklet itself or the API endpoint.
+
+## What NOT to Change
+
+- DO NOT modify zybooks-formatter.ts or html-parser.ts — they work correctly
+- DO NOT change the export logic — just feed it the combined markdown
+- DO NOT change the bookmarklet or API endpoints — session mode is purely client-side state
+- DO NOT break single-paste mode — when session OFF, everything works exactly as before
+
+## Files Likely Affected
+
+- `client/src/pages/home.tsx` — session UI, state management, accumulation logic
+- Possibly new: `client/src/lib/session.ts` — session state types and localStorage helpers
+
+## Acceptance Criteria
+
+1. Session mode toggle exists and defaults to OFF
+2. "Start Session" prompts for section ID and initializes accumulator
+3. Each paste/bookmarklet submission in session mode appends to accumulator
+4. Session panel shows count and list of captured activities
+5. "End Session" combines all activities and puts combined markdown in output
+6. All export buttons work on the combined output
+7. Session state persists across page refresh (localStorage)
+8. Duplicate detection warns on similar consecutive submissions
+9. Single-paste mode (session OFF) works exactly as before — no regressions
+10. Existing test suite still passes (25+ tests)
+
+## Nice-to-Haves (NOT required for v1)
+- Auto-detect section title from first PA content
+- Reorder activities via drag-and-drop
+- Edit individual activity content before finalizing
+- Activity-level delete
+
+## Context
+This is Phase A of the "Dream Workflow" vision. It doesn't require browser control — just the ability to accumulate multiple submissions into one document. The full vision doc is on Notion under Project Overview if you're curious.
