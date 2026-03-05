@@ -75,7 +75,13 @@ export async function registerRoutes(
       }
       const url = `https://zyserver.zybooks.com/v1/zybook/${zybook_code}/chapter/${chapter}/section/${section}?auth_token=${auth_token}`;
       const apiRes = await fetch(url, {
-        headers: { "Accept": "application/json" },
+        headers: {
+          "Accept": "application/json, text/javascript, */*; q=0.01",
+          "Content-Type": "application/json",
+          "Origin": "https://learn.zybooks.com",
+          "Referer": "https://learn.zybooks.com/",
+          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        },
       });
       if (apiRes.status === 401) {
         return res.status(401).json({ error: "Invalid or expired auth token. Please refresh your zyBooks session and try again." });
