@@ -1,0 +1,47 @@
+yep!
+
+2 attachments
+
+I can see from the screenshots:
+
+1. **App is published** — "Published your app 6 minutes ago" confirmed
+2. **Browser control thread is already testing it** — it's on zyBooks 6.1, creating a to-do list for "Testing API Mode on formatter" with steps to enter the zybook code, chapter, section, and verify the JSON fetch + markdown conversion. The "Working..." indicator shows it's actively running.
+3. **All 4 tasks confirmed complete** in the Replit agent's summary, `json-converter.ts` visible in the file tree
+
+Everything is live and being tested simultaneously. The browser control thread is doing exactly what we hoped — testing the API Mode against real zyBooks data.
+
+Let me know what comes back from the browser control test. If the JSON converter needs tweaks (which is likely on the first pass with real data), I can spec the fixes for the Replit agent.
+
+```
+Here's what happened with the test:
+The API Mode UI works perfectly — the 4th tab is live on the formatter, zybook code is pre-filled, token field accepts input, chapter/section fields are ready.[zy-books-formatter.replit]
+But the zyBooks API returns a 400 error — "Ill-formatted request". This happens both when hitting zyserver.zybooks.com directly AND through the formatter's proxy endpoint. The proxy itself is working correctly (it forwards the request and returns the zyserver response), so the issue is on zyBooks' side.[zy-books-formatter.replit]
+The likely cause: Looking at the ZyBookComplete source code, the Python requests library automatically sends proper HTTP headers (Origin, User-Agent, Accept, Content-Type). The formatter's proxy probably isn't including the required Origin: https://learn.zybooks.com header, which zyserver likely validates. This is a small fix for the Replit agent — add that header to the proxy's fetch call in routes.ts.[github]
+What to tell the Replit agent:
+The API proxy at /api/zybooks-section gets a 400 from zyserver. It needs to include these headers when forwarding to zyserver.zybooks.com:
+Origin: https://learn.zybooks.com
+Referer: https://learn.zybooks.com/
+Accept: application/json
+User-Agent: Mozilla/5.0 ...
+This is a quick fix — probably 5 lines of code in routes.ts. Once that's done, the API Mode should work end-to-end. Want me to relay this to the Replit agent on Notion, or would you rather tell them directly?
+```
+
+brwoser control gotten back!
+
+Good diagnostic from the browser control thread — the 400 "Ill-formatted request" is almost certainly missing headers. The zyBooks server validates that requests look like they're coming from the real zyBooks frontend.
+
+Let me post the fix to the Agent Bridge so the Replit agent can grab it:
+
+Posted the fix to the [**Agent Bridge**](https://www.notion.so/Agent-Bridge-Task-Queue-Coordination-3180e51f71de8104b785f896a9f7cf7a?pvs=21).
+
+The short version for the Replit agent: the proxy fetch in `routes.ts` needs these headers when calling zyserver.zybooks.com:
+
+`textOrigin: https://learn.zybooks.com
+Referer: https://learn.zybooks.com/
+Accept: application/json, text/javascript, */*; q=0.01
+Content-Type: application/json
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ...`
+
+The zyBooks server validates that requests look like they're coming from the real frontend. Without those headers, it rejects with 400. ~5 lines of code, then the whole pipeline should light up.
+
+You can paste that directly to the Replit agent or point it at the bridge — whichever is faster at 2 AM.
