@@ -47,6 +47,17 @@ The application is a single-page web tool built with a frontend-only architectur
 - Auto-detects activity labels (PA/CA X.X.X) and section titles from formatted content
 - Single-paste mode (session OFF) works exactly as before — no regressions
 
+## API Mode (Direct zyBooks API Fetch)
+
+- Fourth paste mode tab in the UI — bypasses paste/regex/HTML parsing entirely
+- `GET /api/zybooks-section` — Server-side proxy to `zyserver.zybooks.com/v1/zybook/{code}/chapter/{ch}/section/{sec}` (solves CORS)
+- `POST /api/zybooks-json` — Browser control endpoint that accepts raw JSON and stores via bookmarklet pipeline
+- `client/src/lib/json-converter.ts` — Converts `content_resources[]` array to markdown (handles html, question, animation, code, table, image, custom/challenge resource types)
+- API Mode UI: auth token (password field, persisted in localStorage), zybook code (persisted, default: CPPCS2520NguyenSpring2026), chapter/section number inputs
+- Works with Session Mode — "Fetch & Capture" when session is active
+- Bookmarklet polling auto-detects `_apiMode` JSON payloads and routes to JSON converter instead of HTML parser
+- Auth token stored only in browser localStorage, never in server storage
+
 ## Submit Page (Browser Control Integration)
 
 - `GET /submit` — Standalone HTML form page at `/submit` for browser control automation

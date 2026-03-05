@@ -1,6 +1,6 @@
 import { formatHtmlPaste } from './html-parser';
 
-export type PasteMode = 'regular' | 'markdown' | 'html';
+export type PasteMode = 'regular' | 'markdown' | 'html' | 'api';
 
 export function formatZybooksText(input: string, mode: PasteMode = 'regular'): string {
   if (mode === 'html') {
