@@ -14,7 +14,8 @@ import {
   detectActivityLabel, detectSectionTitle, computeSimilarity, combineActivities,
   type SessionState, type ActivityBlock,
 } from "@/lib/session";
-import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown, Eye, EyeOff, Bookmark, Zap, Plus, Square, ListPlus, RotateCcw } from "lucide-react";
+import { convertZybooksJson, type ZyBooksSectionResponse } from "@/lib/json-converter";
+import { Copy, Check, Trash2, FileText, ArrowRight, Download, ExternalLink, Loader2, Send, X, ChevronDown, Eye, EyeOff, Bookmark, Zap, Plus, Square, ListPlus, RotateCcw, Database } from "lucide-react";
 import { SiNotion } from "react-icons/si";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
@@ -42,6 +43,18 @@ export default function Home() {
 
   const [showResumePrompt, setShowResumePrompt] = useState(false);
   const pendingSessionRef = useRef<SessionState | null>(null);
+
+  const [apiToken, setApiToken] = useState(() => {
+    if (typeof window !== "undefined") return localStorage.getItem("zybooks_api_token") || "";
+    return "";
+  });
+  const [apiZybookCode, setApiZybookCode] = useState(() => {
+    if (typeof window !== "undefined") return localStorage.getItem("zybooks_zybook_code") || "CPPCS2520NguyenSpring2026";
+    return "CPPCS2520NguyenSpring2026";
+  });
+  const [apiChapter, setApiChapter] = useState("");
+  const [apiSection, setApiSection] = useState("");
+  const [apiFetching, setApiFetching] = useState(false);
 
   useEffect(() => {
     const saved = loadSession();
@@ -152,14 +165,28 @@ export default function Home() {
         const res = await fetch("/api/bookmarklet/pending");
         const data = await res.json();
         if (data.html) {
-          const formatted = formatZybooksText(data.html, "html");
+          let formatted: string;
+          let isApiMode = false;
+          try {
+            const parsed = JSON.parse(data.html);
+            if (parsed._apiMode && parsed.data) {
+              isApiMode = true;
+              formatted = convertZybooksJson(parsed.data, parsed.chapter, parsed.section);
+            } else {
+              formatted = formatZybooksText(data.html, "html");
+            }
+          } catch {
+            formatted = formatZybooksText(data.html, "html");
+          }
           if (session?.active) {
-            addToSession(formatted, data.html, "html");
+            addToSession(formatted, data.html, isApiMode ? "api" : "html");
             setInput("");
             toast({ title: "Activity captured from bookmarklet!", description: `${session.activities.length + 1} activities in session. Send another or click 'End Session'.` });
           } else {
-            setInput(data.html);
-            setPasteMode("html");
+            if (!isApiMode) {
+              setInput(data.html);
+              setPasteMode("html");
+            }
             setOutput(formatted);
             if (pollingRef.current) {
               clearInterval(pollingRef.current);
@@ -204,6 +231,39 @@ export default function Home() {
       setOutput(formatted);
     }
   }, [input, pasteMode, toast, session, addToSession]);
+
+  const handleApiFetch = useCallback(async () => {
+    if (!apiToken.trim() || !apiChapter.trim() || !apiSection.trim()) {
+      toast({ title: "Missing fields", description: "Please fill in auth token, chapter, and section.", variant: "destructive" });
+      return;
+    }
+    localStorage.setItem("zybooks_api_token", apiToken);
+    localStorage.setItem("zybooks_zybook_code", apiZybookCode);
+    setApiFetching(true);
+    try {
+      const params = new URLSearchParams({
+        auth_token: apiToken,
+        zybook_code: apiZybookCode,
+        chapter: apiChapter,
+        section: apiSection,
+      });
+      const res = await fetch(`/api/zybooks-section?${params}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `Server returned ${res.status}`);
+      const formatted = convertZybooksJson(data as ZyBooksSectionResponse, parseInt(apiChapter), parseInt(apiSection));
+      if (session?.active) {
+        addToSession(formatted, JSON.stringify(data), "api");
+        toast({ title: "Section fetched & captured!", description: `Chapter ${apiChapter}.${apiSection} added to session.` });
+      } else {
+        setOutput(formatted);
+        toast({ title: "Section fetched!", description: `Chapter ${apiChapter}.${apiSection} formatted successfully.` });
+      }
+    } catch (err: any) {
+      toast({ title: "API fetch failed", description: err.message, variant: "destructive" });
+    } finally {
+      setApiFetching(false);
+    }
+  }, [apiToken, apiZybookCode, apiChapter, apiSection, session, addToSession, toast]);
 
   const handleCopy = useCallback(async () => {
     if (!output) return;
@@ -586,39 +646,138 @@ export default function Home() {
                     >
                       HTML Paste
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => { setPasteMode("api"); setShowPreviews(false); }}
+                      className={`px-3 py-1.5 transition-colors border-l border-input ${
+                        pasteMode === "api"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background text-muted-foreground hover:bg-muted"
+                      }`}
+                      data-testid="button-mode-api"
+                    >
+                      API Mode
+                    </button>
                   </div>
                   <span className="text-xs text-muted-foreground" data-testid="text-input-lines">
                     {inputLineCount} lines
                   </span>
                 </div>
               </div>
-              <Textarea
-                id="input-area"
-                data-testid="input-raw-text"
-                placeholder={
-                  pasteMode === "regular"
-                    ? "Paste your zyBooks content here (Ctrl+A, Ctrl+C from zyBooks)..."
-                    : pasteMode === "markdown"
-                    ? "Paste content from the 'Copy as Markdown' browser extension..."
-                    : "Paste raw HTML from zyBooks page source (View Source or Inspect)..."
-                }
-                className="flex-1 min-h-[400px] lg:min-h-[600px] font-mono text-sm resize-none"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-              />
+              {pasteMode === "api" ? (
+                <div className="flex-1 min-h-[400px] lg:min-h-[600px] border rounded-md p-4 bg-muted/20 flex flex-col gap-4" data-testid="panel-api-mode">
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground block mb-1">Auth Token</label>
+                    <input
+                      type="password"
+                      value={apiToken}
+                      onChange={(e) => setApiToken(e.target.value)}
+                      placeholder="Paste your zyBooks auth_token here..."
+                      className="w-full text-xs px-3 py-2 border rounded-md bg-background font-mono"
+                      data-testid="input-api-token"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">From localStorage: ember_simple_auth-session-5 → authenticated → session → auth_token</p>
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground block mb-1">Zybook Code</label>
+                    <input
+                      type="text"
+                      value={apiZybookCode}
+                      onChange={(e) => setApiZybookCode(e.target.value)}
+                      placeholder="e.g. CPPCS2520NguyenSpring2026"
+                      className="w-full text-xs px-3 py-2 border rounded-md bg-background font-mono"
+                      data-testid="input-api-zybook-code"
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-1">
+                      <label className="text-xs font-medium text-muted-foreground block mb-1">Chapter</label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={apiChapter}
+                        onChange={(e) => setApiChapter(e.target.value)}
+                        placeholder="6"
+                        className="w-full text-xs px-3 py-2 border rounded-md bg-background"
+                        data-testid="input-api-chapter"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <label className="text-xs font-medium text-muted-foreground block mb-1">Section</label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={apiSection}
+                        onChange={(e) => setApiSection(e.target.value)}
+                        placeholder="1"
+                        className="w-full text-xs px-3 py-2 border rounded-md bg-background"
+                        data-testid="input-api-section"
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    onClick={handleApiFetch}
+                    disabled={apiFetching || !apiToken.trim() || !apiChapter.trim() || !apiSection.trim()}
+                    className="gap-1.5"
+                    data-testid="button-api-fetch"
+                  >
+                    {apiFetching ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Fetching...
+                      </>
+                    ) : (
+                      <>
+                        <Database className="w-4 h-4" />
+                        {session?.active ? "Fetch & Capture" : "Fetch & Format"}
+                      </>
+                    )}
+                  </Button>
+                  <div className="flex-1 flex flex-col justify-end">
+                    <div className="text-xs text-muted-foreground bg-background border rounded-md p-3 space-y-1">
+                      <p className="font-medium">How API Mode works:</p>
+                      <ol className="list-decimal list-inside space-y-0.5">
+                        <li>Log in to zyBooks in your browser</li>
+                        <li>Open DevTools → Application → Local Storage</li>
+                        <li>Find ember_simple_auth-session-5</li>
+                        <li>Copy the auth_token value and paste above</li>
+                        <li>Enter chapter & section numbers, then click Fetch</li>
+                      </ol>
+                      <p className="mt-2 text-muted-foreground/80">Or use the bookmarklet — it auto-grabs the token for you.</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Textarea
+                  id="input-area"
+                  data-testid="input-raw-text"
+                  placeholder={
+                    pasteMode === "regular"
+                      ? "Paste your zyBooks content here (Ctrl+A, Ctrl+C from zyBooks)..."
+                      : pasteMode === "markdown"
+                      ? "Paste content from the 'Copy as Markdown' browser extension..."
+                      : "Paste raw HTML from zyBooks page source (View Source or Inspect)..."
+                  }
+                  className="flex-1 min-h-[400px] lg:min-h-[600px] font-mono text-sm resize-none"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                />
+              )}
             </div>
 
-            <div className="flex lg:flex-col items-center justify-center gap-2 py-2">
-              <Button
-                onClick={handleFormat}
-                disabled={!input.trim()}
-                data-testid="button-format"
-                className="gap-1.5"
-              >
-                {session?.active ? "Capture" : "Format"}
-                {session?.active ? <Plus className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-              </Button>
-            </div>
+            {pasteMode !== "api" && (
+              <div className="flex lg:flex-col items-center justify-center gap-2 py-2">
+                <Button
+                  onClick={handleFormat}
+                  disabled={!input.trim()}
+                  data-testid="button-format"
+                  className="gap-1.5"
+                >
+                  {session?.active ? "Capture" : "Format"}
+                  {session?.active ? <Plus className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                </Button>
+              </div>
+            )}
 
             <div className="flex flex-col gap-2 min-h-0">
               <div className="flex items-center justify-between gap-2">
