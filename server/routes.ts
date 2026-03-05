@@ -67,6 +67,49 @@ export async function registerRoutes(
     }
     return res.json({ html: null });
   });
+  app.get("/api/zybooks-section", async (req, res) => {
+    try {
+      const { auth_token, zybook_code, chapter, section } = req.query;
+      if (!auth_token || !zybook_code || !chapter || !section) {
+        return res.status(400).json({ error: "Missing required params: auth_token, zybook_code, chapter, section" });
+      }
+      const url = `https://zyserver.zybooks.com/v1/zybook/${zybook_code}/chapter/${chapter}/section/${section}?auth_token=${auth_token}`;
+      const apiRes = await fetch(url, {
+        headers: { "Accept": "application/json" },
+      });
+      if (apiRes.status === 401) {
+        return res.status(401).json({ error: "Invalid or expired auth token. Please refresh your zyBooks session and try again." });
+      }
+      if (apiRes.status === 404) {
+        return res.status(404).json({ error: `Section ${chapter}.${section} not found in ${zybook_code}.` });
+      }
+      if (!apiRes.ok) {
+        return res.status(502).json({ error: `zyBooks server returned ${apiRes.status}` });
+      }
+      const data = await apiRes.json();
+      return res.json(data);
+    } catch (err: any) {
+      return res.status(502).json({ error: err.message || "Failed to reach zyBooks server" });
+    }
+  });
+
+  app.post("/api/zybooks-json", express.json({ limit: "5mb" }), (req, res) => {
+    const { json, chapter, section } = req.body;
+    if (!json) {
+      return res.status(400).json({ error: "Missing json field" });
+    }
+    try {
+      const parsed = typeof json === 'string' ? JSON.parse(json) : json;
+      pendingBookmarkletHtml = {
+        html: JSON.stringify({ _apiMode: true, data: parsed, chapter, section }),
+        timestamp: Date.now(),
+      };
+      return res.json({ ok: true });
+    } catch (err: any) {
+      return res.status(400).json({ error: "Invalid JSON: " + err.message });
+    }
+  });
+
   app.get("/submit", (_req, res) => {
     res.type("html").send(`<!DOCTYPE html>
 <html lang="en">
