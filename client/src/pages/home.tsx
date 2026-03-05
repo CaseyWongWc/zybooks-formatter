@@ -250,6 +250,13 @@ export default function Home() {
       const res = await fetch(`/api/zybooks-section?${params}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Server returned ${res.status}`);
+      if (data.success === false || data.error) {
+        const errMsg = data.error?.message || data.error || "Unknown zyBooks error";
+        throw new Error(`zyBooks API: ${errMsg}`);
+      }
+      if (!data.section?.content_resources) {
+        throw new Error("No content_resources found in response. The section may not exist or the token may be invalid.");
+      }
       const formatted = convertZybooksJson(data as ZyBooksSectionResponse, parseInt(apiChapter), parseInt(apiSection));
       if (session?.active) {
         addToSession(formatted, JSON.stringify(data), "api");
@@ -259,6 +266,8 @@ export default function Home() {
         toast({ title: "Section fetched!", description: `Chapter ${apiChapter}.${apiSection} formatted successfully.` });
       }
     } catch (err: any) {
+      const errorText = `ERROR: ${err.message}\n\nTroubleshooting:\n- Check that your auth_token is valid (tokens expire)\n- Log in to zyBooks, then re-copy the token from localStorage\n- Verify the zybook code, chapter, and section are correct`;
+      setOutput(errorText);
       toast({ title: "API fetch failed", description: err.message, variant: "destructive" });
     } finally {
       setApiFetching(false);
