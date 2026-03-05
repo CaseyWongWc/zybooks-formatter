@@ -47,6 +47,20 @@ The application is a single-page web tool built with a frontend-only architectur
 - Auto-detects activity labels (PA/CA X.X.X) and section titles from formatted content
 - Single-paste mode (session OFF) works exactly as before — no regressions
 
+## Submit Page (Browser Control Integration)
+
+- `GET /submit` — Standalone HTML form page at `/submit` for browser control automation
+- Big textarea for pasting zyBooks content, source URL field, paste mode selector
+- Submits via POST to `/api/bookmarklet` — same pipeline as bookmarklet
+- Browser control can navigate to `/submit`, fill the textarea, and click Submit without needing POST capability or DevTools
+- Shows success/error status messages after submission
+
+## Bookmarklet API
+
+- `POST /api/bookmarklet` — Receives HTML content from bookmarklet or `/submit` form (5MB limit, CORS enabled)
+- `GET /api/bookmarklet/pending` — Polls for pending content (60-second expiry, consumed on read)
+- Both endpoints confirmed working on local and deployed app
+
 ## External Dependencies
 
 - **React:** Frontend JavaScript library for building user interfaces.
