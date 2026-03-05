@@ -92,6 +92,11 @@ export async function registerRoutes(
         return res.status(502).json({ error: `zyBooks server returned ${apiRes.status}` });
       }
       const data = await apiRes.json();
+      if (data.success === false || data.error) {
+        const errMsg = data.error?.message || data.error || "Unknown zyBooks error";
+        const errCode = data.error?.code || apiRes.status;
+        return res.status(errCode >= 400 && errCode < 600 ? errCode : 400).json({ error: errMsg });
+      }
       return res.json(data);
     } catch (err: any) {
       return res.status(502).json({ error: err.message || "Failed to reach zyBooks server" });
