@@ -110,12 +110,19 @@ function convertResource(resource: ZyBooksContentResource): string {
   if (type.includes('html') || type === 'reading_content' || type === 'text_content') {
     return convertHtmlResource(resource.payload);
   }
-  if (type.includes('question') || type.includes('quiz') || type.includes('participation')
-      || type === 'short_answer_question' || type === 'multiple_choice_question'
-      || type === 'true_false_question') {
+  if (type === 'multiple_choice' || type === 'multiple_choice_question'
+      || type === 'true_false' || type === 'true_false_question'
+      || type === 'short_answer' || type === 'short_answer_question'
+      || type.includes('question') || type.includes('quiz') || type.includes('participation')) {
     return convertQuestionResource(resource);
   }
-  if (type.includes('animation') || type === 'zy_animation' || type === 'ZyAnimationPlayer') {
+  if (type === 'container') {
+    return convertContainerResource(resource);
+  }
+  if (type === 'zystudio' || type === 'zy_studio') {
+    return convertZyStudioResource(resource);
+  }
+  if (type.includes('animation') || type === 'zy_animation' || type === 'zyanimationplayer') {
     return convertAnimationResource(resource.payload);
   }
   if (type.includes('code') || type === 'ace_live_code' || type === 'coding_activity') {
@@ -127,7 +134,7 @@ function convertResource(resource: ZyBooksContentResource): string {
   if (type.includes('image') || type.includes('figure')) {
     return convertImageResource(resource.payload);
   }
-  if (type.includes('custom') || type.includes('challenge')) {
+  if (type === 'custom' || type === 'custom_content_resource' || type.includes('challenge')) {
     return convertCustomResource(resource);
   }
 
@@ -145,19 +152,21 @@ function convertQuestionResource(resource: ZyBooksContentResource): string {
   const lines: string[] = [];
   const payload = resource.payload || {};
 
-  const activityLabel = extractText(payload.activity_label || payload.label || '');
+  const activityLabel = extractText(payload.activity_label || payload.label || payload.title || '');
   const activityType = 'PARTICIPATION ACTIVITY';
 
   if (activityLabel) {
     lines.push(`### ${activityType}: ${stripHtmlTags(activityLabel)}`);
+  } else {
+    lines.push(`### ${activityType}`);
   }
 
-  const questionText = extractText(payload.question || payload.prompt || payload.text || '');
+  const questionText = extractText(payload.question || payload.prompt || payload.text || payload.content || '');
   if (questionText) {
     lines.push('', stripHtmlTags(questionText));
   }
 
-  const choices = payload.choices || payload.options || payload.answers || [];
+  const choices = payload.choices || payload.options || payload.distractors || [];
   if (Array.isArray(choices) && choices.length > 0) {
     lines.push('');
     choices.forEach((choice: any, idx: number) => {
@@ -168,20 +177,155 @@ function convertQuestionResource(resource: ZyBooksContentResource): string {
     });
   }
 
-  const parts = payload.parts || payload.sub_questions || [];
+  if (payload.correct_answer !== undefined || payload.answer !== undefined) {
+    const answer = extractText(payload.correct_answer || payload.answer || '');
+    if (answer) {
+      lines.push('', `**Answer:** ${stripHtmlTags(answer)}`);
+    }
+  }
+
+  const parts = payload.parts || payload.sub_questions || payload.questions || [];
   if (Array.isArray(parts) && parts.length > 0) {
     for (const part of parts) {
-      const partText = extractText(part.question || part.prompt || part.text || part);
+      if (!part || typeof part !== 'object') continue;
+      const partText = extractText(part.question || part.prompt || part.text || part.content || '');
       if (partText) {
         lines.push('', stripHtmlTags(partText));
       }
-      const partChoices = part.choices || part.options || part.answers || [];
-      if (Array.isArray(partChoices)) {
+      const partChoices = part.choices || part.options || part.distractors || part.answers || [];
+      if (Array.isArray(partChoices) && partChoices.length > 0) {
         lines.push('');
         partChoices.forEach((choice: any, idx: number) => {
           const text = extractText(choice);
           if (text) lines.push(`${idx + 1}. ${stripHtmlTags(text)}`);
         });
+      }
+      if (part.correct_answer !== undefined || part.answer !== undefined) {
+        const ans = extractText(part.correct_answer || part.answer || '');
+        if (ans) lines.push(`**Answer:** ${stripHtmlTags(ans)}`);
+      }
+    }
+  }
+
+  if (payload.content_resources && Array.isArray(payload.content_resources)) {
+    for (const child of payload.content_resources) {
+      if (child && typeof child === 'object') {
+        const childRes: ZyBooksContentResource = {
+          id: child.id || '',
+          type: child.type || 'generic',
+          payload: child.payload !== undefined ? child.payload : child,
+        };
+        const converted = convertResource(childRes);
+        if (converted.trim()) lines.push('', converted);
+      }
+    }
+  }
+
+  if (lines.length <= 1) {
+    const allText = extractAllTextFields(payload);
+    for (const t of allText) {
+      const cleaned = stripHtmlTags(t);
+      if (cleaned.length > 10) lines.push('', cleaned);
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function convertContainerResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const lines: string[] = [];
+
+  const title = extractText(payload.title || payload.label || payload.heading || '');
+  if (title) {
+    lines.push(`### ${stripHtmlTags(title)}`);
+  }
+
+  const description = extractText(payload.description || payload.text || payload.content || '');
+  if (description) {
+    lines.push('', stripHtmlTags(description));
+  }
+
+  const children = payload.content_resources || payload.children || payload.items || payload.elements || [];
+  if (Array.isArray(children) && children.length > 0) {
+    for (const child of children) {
+      if (child && typeof child === 'object') {
+        try {
+          const childResource: ZyBooksContentResource = {
+            id: child.id || '',
+            type: child.type || 'generic',
+            payload: child.payload !== undefined ? child.payload : child,
+          };
+          const converted = convertResource(childResource);
+          if (converted.trim()) {
+            lines.push('', converted);
+          }
+        } catch {
+          const fallback = extractText(child);
+          if (fallback) lines.push('', stripHtmlTags(fallback));
+        }
+      }
+    }
+  }
+
+  if (lines.length === 0) {
+    const allText = extractAllTextFields(payload);
+    for (const t of allText) {
+      const cleaned = stripHtmlTags(t);
+      if (cleaned.length > 10) lines.push(cleaned);
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function convertZyStudioResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const lines: string[] = [];
+
+  const label = extractText(payload.activity_label || payload.label || payload.title || '');
+  if (label) {
+    lines.push(`### CHALLENGE ACTIVITY: ${stripHtmlTags(label)}`);
+  } else {
+    lines.push('### CHALLENGE ACTIVITY');
+  }
+
+  const instructions = extractText(payload.instructions || payload.description || payload.prompt || payload.text || '');
+  if (instructions) {
+    lines.push('', stripHtmlTags(instructions));
+  }
+
+  for (const key of ['starter_code', 'initial_code', 'code', 'source', 'default_code']) {
+    if (payload[key]) {
+      const code = extractText(payload[key]);
+      if (code) {
+        const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
+        lines.push('', '```' + lang, stripHtmlTags(code).trim(), '```');
+        break;
+      }
+    }
+  }
+
+  if (payload.test_activity || payload.tests) {
+    const tests = payload.test_activity || payload.tests;
+    if (typeof tests === 'object') {
+      const testDesc = extractText(tests.description || tests.text || tests.instructions || '');
+      if (testDesc) {
+        lines.push('', '**Testing:**', stripHtmlTags(testDesc));
+      }
+    }
+  }
+
+  if (payload.files && Array.isArray(payload.files)) {
+    for (const file of payload.files) {
+      const fname = extractText(file.name || file.filename || '');
+      const fcontent = extractText(file.content || file.code || file.source || '');
+      if (fname || fcontent) {
+        if (fname) lines.push('', `**File: ${stripHtmlTags(fname)}**`);
+        if (fcontent) {
+          const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
+          lines.push('```' + lang, stripHtmlTags(fcontent).trim(), '```');
+        }
       }
     }
   }
@@ -268,22 +412,26 @@ function convertCustomResource(resource: ZyBooksContentResource): string {
   const label = extractText(payload.activity_label || payload.label || payload.title || '');
   if (label) {
     lines.push(`### CHALLENGE ACTIVITY: ${stripHtmlTags(label)}`);
+  } else {
+    lines.push('### CHALLENGE ACTIVITY');
   }
 
-  const prompt = extractText(payload.prompt || payload.question || payload.text || payload.description || '');
+  const prompt = extractText(payload.prompt || payload.question || payload.text || payload.description
+    || payload.instructions || payload.content || '');
   if (prompt) {
     lines.push('', stripHtmlTags(prompt));
   }
 
   let code = '';
-  for (const key of ['starter_code', 'code', 'initial_code', 'source']) {
+  for (const key of ['starter_code', 'code', 'initial_code', 'source', 'default_code']) {
     if (payload[key]) {
       code = extractText(payload[key]);
       if (code) break;
     }
   }
   if (code) {
-    lines.push('', '```python', stripHtmlTags(code).trim(), '```');
+    const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
+    lines.push('', '```' + lang, stripHtmlTags(code).trim(), '```');
   }
 
   if (payload.test_cases && Array.isArray(payload.test_cases)) {
@@ -297,11 +445,63 @@ function convertCustomResource(resource: ZyBooksContentResource): string {
     }
   }
 
+  if (payload.content_resources && Array.isArray(payload.content_resources)) {
+    for (const child of payload.content_resources) {
+      if (child && typeof child === 'object') {
+        const childRes: ZyBooksContentResource = {
+          id: child.id || '',
+          type: child.type || 'generic',
+          payload: child.payload !== undefined ? child.payload : child,
+        };
+        const converted = convertResource(childRes);
+        if (converted.trim()) lines.push('', converted);
+      }
+    }
+  }
+
+  if (payload.files && Array.isArray(payload.files)) {
+    for (const file of payload.files) {
+      const fname = extractText(file.name || file.filename || '');
+      const fcontent = extractText(file.content || file.code || file.source || '');
+      if (fname || fcontent) {
+        if (fname) lines.push('', `**File: ${stripHtmlTags(fname)}**`);
+        if (fcontent) {
+          const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
+          lines.push('```' + lang, stripHtmlTags(fcontent).trim(), '```');
+        }
+      }
+    }
+  }
+
+  if (lines.length <= 1) {
+    const allText = extractAllTextFields(payload);
+    for (const t of allText) {
+      const cleaned = stripHtmlTags(t);
+      if (cleaned.length > 10) lines.push('', cleaned);
+    }
+  }
+
   return lines.join('\n');
 }
 
 function convertGenericResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
+  const lines: string[] = [];
+
+  if (payload.content_resources && Array.isArray(payload.content_resources)) {
+    for (const child of payload.content_resources) {
+      if (child && typeof child === 'object') {
+        const childRes: ZyBooksContentResource = {
+          id: child.id || '',
+          type: child.type || 'generic',
+          payload: child.payload !== undefined ? child.payload : child,
+        };
+        const converted = convertResource(childRes);
+        if (converted.trim()) lines.push(converted);
+      }
+    }
+    if (lines.length > 0) return lines.join('\n\n');
+  }
 
   const textContent = extractText(payload);
   if (textContent) {
