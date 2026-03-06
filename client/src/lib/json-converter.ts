@@ -60,9 +60,16 @@ function convertResource(resource: ZyBooksContentResource): string {
   }
 }
 
+function safeStr(val: any): string {
+  if (val === null || val === undefined) return '';
+  if (typeof val === 'string') return val;
+  if (typeof val === 'object') return JSON.stringify(val);
+  return String(val);
+}
+
 function convertHtmlResource(payload: any): string {
   if (!payload) return '';
-  const content = payload.content || payload.html || payload.text || '';
+  const content = safeStr(payload.content) || safeStr(payload.html) || safeStr(payload.text) || '';
   if (!content) return '';
   return stripHtmlTags(content);
 }
@@ -71,16 +78,16 @@ function convertQuestionResource(resource: ZyBooksContentResource): string {
   const lines: string[] = [];
   const payload = resource.payload || {};
 
-  const activityLabel = payload.activity_label || payload.label || '';
+  const activityLabel = safeStr(payload.activity_label) || safeStr(payload.label) || '';
   const activityType = resource.type === 'multiple_choice_question' ? 'PARTICIPATION ACTIVITY' :
     resource.type === 'true_false_question' ? 'PARTICIPATION ACTIVITY' :
     resource.type === 'short_answer_question' ? 'PARTICIPATION ACTIVITY' : 'ACTIVITY';
 
   if (activityLabel) {
-    lines.push(`### ${activityType}: ${activityLabel}`);
+    lines.push(`### ${activityType}: ${stripHtmlTags(activityLabel)}`);
   }
 
-  const questionText = payload.question || payload.prompt || payload.text || '';
+  const questionText = safeStr(payload.question) || safeStr(payload.prompt) || safeStr(payload.text) || '';
   if (questionText) {
     lines.push('', stripHtmlTags(questionText));
   }
@@ -88,7 +95,7 @@ function convertQuestionResource(resource: ZyBooksContentResource): string {
   if (payload.choices && Array.isArray(payload.choices)) {
     lines.push('');
     payload.choices.forEach((choice: any, idx: number) => {
-      const text = typeof choice === 'string' ? choice : (choice.text || choice.content || choice.label || '');
+      const text = typeof choice === 'string' ? choice : safeStr(choice.text || choice.content || choice.label || '');
       lines.push(`${idx + 1}. ${stripHtmlTags(text)}`);
     });
   }
@@ -96,21 +103,21 @@ function convertQuestionResource(resource: ZyBooksContentResource): string {
   if (payload.answers && Array.isArray(payload.answers)) {
     lines.push('');
     payload.answers.forEach((answer: any, idx: number) => {
-      const text = typeof answer === 'string' ? answer : (answer.text || answer.content || '');
+      const text = typeof answer === 'string' ? answer : safeStr(answer.text || answer.content || '');
       lines.push(`${idx + 1}. ${stripHtmlTags(text)}`);
     });
   }
 
   if (payload.parts && Array.isArray(payload.parts)) {
     for (const part of payload.parts) {
-      const partText = part.question || part.prompt || part.text || '';
+      const partText = safeStr(part.question) || safeStr(part.prompt) || safeStr(part.text) || '';
       if (partText) {
         lines.push('', stripHtmlTags(partText));
       }
       if (part.choices && Array.isArray(part.choices)) {
         lines.push('');
         part.choices.forEach((choice: any, idx: number) => {
-          const text = typeof choice === 'string' ? choice : (choice.text || choice.content || '');
+          const text = typeof choice === 'string' ? choice : safeStr(choice.text || choice.content || '');
           lines.push(`${idx + 1}. ${stripHtmlTags(text)}`);
         });
       }
@@ -123,11 +130,11 @@ function convertQuestionResource(resource: ZyBooksContentResource): string {
 function convertAnimationResource(payload: any): string {
   if (!payload) return '';
   const lines: string[] = [];
-  const title = payload.title || payload.label || '';
+  const title = safeStr(payload.title) || safeStr(payload.label) || '';
   if (title) {
     lines.push(`**Animation: ${stripHtmlTags(title)}**`);
   }
-  const description = payload.description || payload.caption || '';
+  const description = safeStr(payload.description) || safeStr(payload.caption) || '';
   if (description) {
     lines.push(stripHtmlTags(description));
   }
@@ -137,14 +144,14 @@ function convertAnimationResource(payload: any): string {
 function convertCodeResource(payload: any): string {
   if (!payload) return '';
   const lines: string[] = [];
-  const title = payload.title || payload.label || '';
+  const title = safeStr(payload.title) || safeStr(payload.label) || '';
   if (title) {
     lines.push(`**${stripHtmlTags(title)}**`);
     lines.push('');
   }
-  const code = payload.code || payload.content || payload.source || payload.starter_code || '';
+  const code = safeStr(payload.code) || safeStr(payload.content) || safeStr(payload.source) || safeStr(payload.starter_code) || '';
   if (code) {
-    const lang = payload.language || 'python';
+    const lang = safeStr(payload.language) || 'python';
     lines.push('```' + lang);
     lines.push(code.trim());
     lines.push('```');
@@ -154,21 +161,22 @@ function convertCodeResource(payload: any): string {
 
 function convertTableResource(payload: any): string {
   if (!payload) return '';
-  const title = payload.title || '';
+  const title = safeStr(payload.title) || '';
   const lines: string[] = [];
   if (title) {
     lines.push(`**${stripHtmlTags(title)}**`);
     lines.push('');
   }
-  if (payload.content || payload.html) {
-    lines.push(stripHtmlTags(payload.content || payload.html));
+  const content = safeStr(payload.content) || safeStr(payload.html) || '';
+  if (content) {
+    lines.push(stripHtmlTags(content));
   }
   return lines.join('\n');
 }
 
 function convertImageResource(payload: any): string {
   if (!payload) return '';
-  const caption = payload.caption || payload.alt || payload.title || '';
+  const caption = safeStr(payload.caption) || safeStr(payload.alt) || safeStr(payload.title) || '';
   if (caption) {
     return `**Figure:** ${stripHtmlTags(caption)}`;
   }
@@ -179,26 +187,26 @@ function convertCustomResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
   const lines: string[] = [];
 
-  const label = payload.activity_label || payload.label || payload.title || '';
+  const label = safeStr(payload.activity_label) || safeStr(payload.label) || safeStr(payload.title) || '';
   if (label) {
     lines.push(`### CHALLENGE ACTIVITY: ${stripHtmlTags(label)}`);
   }
 
-  const prompt = payload.prompt || payload.question || payload.text || payload.description || '';
+  const prompt = safeStr(payload.prompt) || safeStr(payload.question) || safeStr(payload.text) || safeStr(payload.description) || '';
   if (prompt) {
     lines.push('', stripHtmlTags(prompt));
   }
 
   if (payload.starter_code || payload.code) {
-    const code = payload.starter_code || payload.code;
+    const code = safeStr(payload.starter_code) || safeStr(payload.code);
     lines.push('', '```python', code.trim(), '```');
   }
 
   if (payload.test_cases && Array.isArray(payload.test_cases)) {
     lines.push('', '**Test Cases:**');
     for (const tc of payload.test_cases) {
-      const input = tc.input || '';
-      const expected = tc.expected_output || tc.output || '';
+      const input = safeStr(tc.input);
+      const expected = safeStr(tc.expected_output) || safeStr(tc.output);
       if (input || expected) {
         lines.push(`- Input: \`${input}\` → Expected: \`${expected}\``);
       }
@@ -210,14 +218,19 @@ function convertCustomResource(resource: ZyBooksContentResource): string {
 
 function convertGenericResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
-  const text = payload.content || payload.html || payload.text || payload.description || '';
+  const text = safeStr(payload.content) || safeStr(payload.html) || safeStr(payload.text) || safeStr(payload.description) || '';
   if (text) {
     return stripHtmlTags(text);
   }
   return '';
 }
 
-function stripHtmlTags(html: string): string {
+function stripHtmlTags(html: any): string {
+  if (html === null || html === undefined) return '';
+  if (typeof html !== 'string') {
+    if (typeof html === 'object') return JSON.stringify(html);
+    return String(html);
+  }
   let text = html;
 
   text = text.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, (_, code) => {
@@ -252,7 +265,9 @@ function stripHtmlTags(html: string): string {
   return text.trim();
 }
 
-function decodeEntities(text: string): string {
+function decodeEntities(text: any): string {
+  if (text === null || text === undefined) return '';
+  if (typeof text !== 'string') return String(text);
   return text
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
