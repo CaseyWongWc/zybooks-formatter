@@ -52,8 +52,8 @@ export default function Home() {
     if (typeof window !== "undefined") return localStorage.getItem("zybooks_zybook_code") || "CPPCS2520NguyenSpring2026";
     return "CPPCS2520NguyenSpring2026";
   });
-  const [apiChapter, setApiChapter] = useState("");
-  const [apiSection, setApiSection] = useState("");
+  const [apiChapter, setApiChapter] = useState("6");
+  const [apiSection, setApiSection] = useState("1");
   const [apiFetching, setApiFetching] = useState(false);
 
   useEffect(() => {
