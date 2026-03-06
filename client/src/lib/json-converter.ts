@@ -1,7 +1,10 @@
 export interface ZyBooksContentResource {
-  id: string;
+  id: string | number;
   type: string;
   payload: any;
+  caption?: string | null;
+  instructions?: string | null;
+  activity_type?: string | null;
   parts?: number;
 }
 
@@ -12,9 +15,82 @@ export interface ZyBooksSectionResponse {
   };
 }
 
+function extractAttributedText(val: any): string {
+  if (val === null || val === undefined) return '';
+  if (typeof val === 'string') return val;
+  if (Array.isArray(val)) {
+    return val
+      .map(item => {
+        if (typeof item === 'string') return item;
+        if (item && typeof item === 'object' && 'text' in item) {
+          return typeof item.text === 'string' ? item.text : extractAttributedText(item.text);
+        }
+        return '';
+      })
+      .join('');
+  }
+  if (typeof val === 'object' && 'text' in val) {
+    return extractAttributedText(val.text);
+  }
+  return '';
+}
+
+function decodeEntities(text: string): string {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(parseInt(num, 10)));
+}
+
+function stripHtml(html: string): string {
+  if (!html || typeof html !== 'string') return '';
+  let text = html;
+
+  text = text.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, (_, code) => {
+    return '\n```python\n' + decodeEntities(code).trim() + '\n```\n';
+  });
+  text = text.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_, code) => {
+    return '\n```\n' + decodeEntities(code).trim() + '\n```\n';
+  });
+  text = text.replace(/<code[^>]*>(.*?)<\/code>/gi, (_, code) => '`' + decodeEntities(code) + '`');
+
+  text = text.replace(/<h1[^>]*>([\s\S]*?)<\/h1>/gi, '# $1');
+  text = text.replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, '## $1');
+  text = text.replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, '### $1');
+  text = text.replace(/<h4[^>]*>([\s\S]*?)<\/h4>/gi, '#### $1');
+
+  text = text.replace(/<strong[^>]*>([\s\S]*?)<\/strong>/gi, '**$1**');
+  text = text.replace(/<b[^>]*>([\s\S]*?)<\/b>/gi, '**$1**');
+  text = text.replace(/<em[^>]*>([\s\S]*?)<\/em>/gi, '*$1*');
+  text = text.replace(/<i[^>]*>([\s\S]*?)<\/i>/gi, '*$1*');
+
+  text = text.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '- $1');
+  text = text.replace(/<br\s*\/?>/gi, '\n');
+  text = text.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n');
+  text = text.replace(/<zyInstructions[^>]*>/gi, '');
+  text = text.replace(/<\/zyInstructions>/gi, '');
+  text = text.replace(/<[^>]+>/g, '');
+
+  text = decodeEntities(text);
+  text = text.replace(/\n{3,}/g, '\n\n');
+
+  return text.trim();
+}
+
+function cleanText(val: any): string {
+  const raw = extractAttributedText(val);
+  return stripHtml(raw);
+}
+
 export function convertZybooksJson(data: ZyBooksSectionResponse, chapter?: number, section?: number): string {
   const lines: string[] = [];
-  const sectionTitle = extractText(data.section?.title);
+  const sectionTitle = data.section?.title || '';
 
   if (sectionTitle || (chapter && section)) {
     const header = sectionTitle
@@ -39,193 +115,99 @@ export function convertZybooksJson(data: ZyBooksSectionResponse, chapter?: numbe
   return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
-function extractText(val: any): string {
-  if (val === null || val === undefined) return '';
-  if (typeof val === 'string') return val;
-  if (typeof val === 'number' || typeof val === 'boolean') return String(val);
-
-  if (Array.isArray(val)) {
-    return val.map(extractText).filter(Boolean).join('\n');
-  }
-
-  if (typeof val === 'object') {
-    if ('text' in val && typeof val.text === 'string') return val.text;
-    if ('html' in val && typeof val.html === 'string') return val.html;
-    if ('content' in val && typeof val.content === 'string') return val.content;
-
-    if ('text' in val && val.text !== null && typeof val.text === 'object') {
-      return extractText(val.text);
-    }
-    if ('html' in val && val.html !== null && typeof val.html === 'object') {
-      return extractText(val.html);
-    }
-    if ('content' in val && val.content !== null && typeof val.content === 'object') {
-      return extractText(val.content);
-    }
-
-    if ('question' in val) return extractText(val.question);
-    if ('prompt' in val) return extractText(val.prompt);
-    if ('description' in val) return extractText(val.description);
-    if ('label' in val && typeof val.label === 'string') return val.label;
-    if ('value' in val && typeof val.value === 'string') return val.value;
-    if ('caption' in val && typeof val.caption === 'string') return val.caption;
-    if ('title' in val && typeof val.title === 'string') return val.title;
-
-    if ('body' in val) return extractText(val.body);
-
-    const textKeys = Object.keys(val).filter(k =>
-      !['attributes', 'type', 'id', 'metadata', 'analytics', 'style', 'class',
-       'resource_id', 'canonical_section_id', 'content_resource_id',
-       'autoplay', 'loop', 'controls', 'width', 'height'].includes(k)
-    );
-    for (const key of textKeys) {
-      const result = extractText(val[key]);
-      if (result && result.length > 5) return result;
-    }
-  }
-
-  return '';
-}
-
-function extractAllTextFields(obj: any): string[] {
-  const results: string[] = [];
-  if (!obj || typeof obj !== 'object') return results;
-
-  for (const [key, val] of Object.entries(obj)) {
-    if (['attributes', 'metadata', 'analytics', 'id', 'resource_id',
-         'canonical_section_id', 'content_resource_id', 'type'].includes(key)) continue;
-
-    if (typeof val === 'string' && val.length > 3) {
-      results.push(val);
-    } else if (typeof val === 'object' && val !== null) {
-      results.push(...extractAllTextFields(val));
-    }
-  }
-  return results;
-}
-
 function convertResource(resource: ZyBooksContentResource): string {
   const type = (resource.type || '').toLowerCase();
 
-  if (type.includes('html') || type === 'reading_content' || type === 'text_content') {
-    return convertHtmlResource(resource.payload);
+  switch (type) {
+    case 'html':
+      return convertHtmlResource(resource);
+    case 'multiple_choice':
+    case 'multiple_choice_question':
+    case 'true_false':
+    case 'true_false_question':
+    case 'short_answer':
+    case 'short_answer_question':
+      return convertMultipleChoiceResource(resource);
+    case 'container':
+      return convertContainerResource(resource);
+    case 'zystudio':
+    case 'zy_studio':
+      return convertZyStudioResource(resource);
+    case 'custom':
+      return convertCustomResource(resource);
+    case 'animation':
+      return convertAnimationResource(resource);
+    default:
+      if (type.includes('code') || type === 'ace_live_code') {
+        return convertCodeResource(resource);
+      }
+      if (type.includes('image') || type.includes('figure')) {
+        return convertImageResource(resource);
+      }
+      if (type.includes('table')) {
+        return convertTableResource(resource);
+      }
+      return convertGenericResource(resource);
   }
-  if (type === 'multiple_choice' || type === 'multiple_choice_question'
-      || type === 'true_false' || type === 'true_false_question'
-      || type === 'short_answer' || type === 'short_answer_question'
-      || type.includes('question') || type.includes('quiz') || type.includes('participation')) {
-    return convertQuestionResource(resource);
-  }
-  if (type === 'container') {
-    return convertContainerResource(resource);
-  }
-  if (type === 'zystudio' || type === 'zy_studio') {
-    return convertZyStudioResource(resource);
-  }
-  if (type.includes('animation') || type === 'zy_animation' || type === 'zyanimationplayer') {
-    return convertAnimationResource(resource.payload);
-  }
-  if (type.includes('code') || type === 'ace_live_code' || type === 'coding_activity') {
-    return convertCodeResource(resource.payload);
-  }
-  if (type.includes('table')) {
-    return convertTableResource(resource.payload);
-  }
-  if (type.includes('image') || type.includes('figure')) {
-    return convertImageResource(resource.payload);
-  }
-  if (type === 'custom' || type === 'custom_content_resource' || type.includes('challenge')) {
-    return convertCustomResource(resource);
-  }
-
-  return convertGenericResource(resource);
 }
 
-function convertHtmlResource(payload: any): string {
-  if (!payload) return '';
-  const content = extractText(payload);
-  if (!content) return '';
-  return stripHtmlTags(content);
+function convertHtmlResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const htmlArray = payload.html;
+  if (Array.isArray(htmlArray)) {
+    const text = htmlArray.map((item: any) => extractAttributedText(item)).join('');
+    return stripHtml(text);
+  }
+  const content = extractAttributedText(payload.content || payload.html || payload.text || payload);
+  return stripHtml(content);
 }
 
-function convertQuestionResource(resource: ZyBooksContentResource): string {
+function convertMultipleChoiceResource(resource: ZyBooksContentResource): string {
   const lines: string[] = [];
   const payload = resource.payload || {};
 
-  const activityLabel = extractText(payload.activity_label || payload.label || payload.title || '');
-  const activityType = 'PARTICIPATION ACTIVITY';
+  const caption = resource.caption || '';
+  const activityType = resource.activity_type || 'participation';
+  const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' : 'PARTICIPATION ACTIVITY';
 
-  if (activityLabel) {
-    lines.push(`### ${activityType}: ${stripHtmlTags(activityLabel)}`);
-  } else {
-    lines.push(`### ${activityType}`);
-  }
+  lines.push(`### ${label}: ${caption}`);
 
-  const questionText = extractText(payload.question || payload.prompt || payload.text || payload.content || '');
-  if (questionText) {
-    lines.push('', stripHtmlTags(questionText));
-  }
-
-  const choices = payload.choices || payload.options || payload.distractors || [];
-  if (Array.isArray(choices) && choices.length > 0) {
-    lines.push('');
-    choices.forEach((choice: any, idx: number) => {
-      const text = extractText(choice);
-      if (text) {
-        lines.push(`${idx + 1}. ${stripHtmlTags(text)}`);
+  const questions = payload.questions || [];
+  if (Array.isArray(questions) && questions.length > 0) {
+    for (let qi = 0; qi < questions.length; qi++) {
+      const q = questions[qi];
+      const questionText = cleanText(q.text);
+      if (questionText) {
+        if (questions.length > 1) {
+          lines.push('', `**${qi + 1}.** ${questionText}`);
+        } else {
+          lines.push('', questionText);
+        }
       }
-    });
-  }
 
-  if (payload.correct_answer !== undefined || payload.answer !== undefined) {
-    const answer = extractText(payload.correct_answer || payload.answer || '');
-    if (answer) {
-      lines.push('', `**Answer:** ${stripHtmlTags(answer)}`);
-    }
-  }
-
-  const parts = payload.parts || payload.sub_questions || payload.questions || [];
-  if (Array.isArray(parts) && parts.length > 0) {
-    for (const part of parts) {
-      if (!part || typeof part !== 'object') continue;
-      const partText = extractText(part.question || part.prompt || part.text || part.content || '');
-      if (partText) {
-        lines.push('', stripHtmlTags(partText));
-      }
-      const partChoices = part.choices || part.options || part.distractors || part.answers || [];
-      if (Array.isArray(partChoices) && partChoices.length > 0) {
-        lines.push('');
-        partChoices.forEach((choice: any, idx: number) => {
-          const text = extractText(choice);
-          if (text) lines.push(`${idx + 1}. ${stripHtmlTags(text)}`);
-        });
-      }
-      if (part.correct_answer !== undefined || part.answer !== undefined) {
-        const ans = extractText(part.correct_answer || part.answer || '');
-        if (ans) lines.push(`**Answer:** ${stripHtmlTags(ans)}`);
-      }
-    }
-  }
-
-  if (payload.content_resources && Array.isArray(payload.content_resources)) {
-    for (const child of payload.content_resources) {
-      if (child && typeof child === 'object') {
-        const childRes: ZyBooksContentResource = {
-          id: child.id || '',
-          type: child.type || 'generic',
-          payload: child.payload !== undefined ? child.payload : child,
-        };
-        const converted = convertResource(childRes);
-        if (converted.trim()) lines.push('', converted);
+      const choices = q.choices || q.options || [];
+      if (Array.isArray(choices) && choices.length > 0) {
+        for (const choice of choices) {
+          const choiceLabel = choice.label || cleanText(choice.text) || '';
+          const isCorrect = choice.correct === true;
+          const marker = isCorrect ? ' ✓' : '';
+          if (choiceLabel) {
+            lines.push(`- ${choiceLabel}${marker}`);
+          }
+        }
       }
     }
   }
 
   if (lines.length <= 1) {
-    const allText = extractAllTextFields(payload);
-    for (const t of allText) {
-      const cleaned = stripHtmlTags(t);
-      if (cleaned.length > 10) lines.push('', cleaned);
+    const questionText = cleanText(payload.question || payload.prompt || payload.text || '');
+    if (questionText) lines.push('', questionText);
+    const choices = payload.choices || payload.options || [];
+    if (Array.isArray(choices)) {
+      for (const choice of choices) {
+        const text = cleanText(choice);
+        if (text) lines.push(`- ${text}`);
+      }
     }
   }
 
@@ -236,43 +218,20 @@ function convertContainerResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
   const lines: string[] = [];
 
-  const title = extractText(payload.title || payload.label || payload.heading || '');
-  if (title) {
-    lines.push(`### ${stripHtmlTags(title)}`);
+  const caption = resource.caption || '';
+  const containerType = payload.type || '';
+
+  if (caption) {
+    lines.push(`> **${caption}**`);
   }
 
-  const description = extractText(payload.description || payload.text || payload.content || '');
-  if (description) {
-    lines.push('', stripHtmlTags(description));
-  }
-
-  const children = payload.content_resources || payload.children || payload.items || payload.elements || [];
-  if (Array.isArray(children) && children.length > 0) {
-    for (const child of children) {
-      if (child && typeof child === 'object') {
-        try {
-          const childResource: ZyBooksContentResource = {
-            id: child.id || '',
-            type: child.type || 'generic',
-            payload: child.payload !== undefined ? child.payload : child,
-          };
-          const converted = convertResource(childResource);
-          if (converted.trim()) {
-            lines.push('', converted);
-          }
-        } catch {
-          const fallback = extractText(child);
-          if (fallback) lines.push('', stripHtmlTags(fallback));
-        }
-      }
-    }
-  }
-
-  if (lines.length === 0) {
-    const allText = extractAllTextFields(payload);
-    for (const t of allText) {
-      const cleaned = stripHtmlTags(t);
-      if (cleaned.length > 10) lines.push(cleaned);
+  const htmlArray = payload.html;
+  if (Array.isArray(htmlArray)) {
+    const text = htmlArray.map((item: any) => extractAttributedText(item)).join('');
+    const cleaned = stripHtml(text);
+    if (cleaned) {
+      const prefixed = cleaned.split('\n').map(line => `> ${line}`).join('\n');
+      lines.push(prefixed);
     }
   }
 
@@ -280,292 +239,248 @@ function convertContainerResource(resource: ZyBooksContentResource): string {
 }
 
 function convertZyStudioResource(resource: ZyBooksContentResource): string {
-  const payload = resource.payload || {};
   const lines: string[] = [];
 
-  const label = extractText(payload.activity_label || payload.label || payload.title || '');
-  if (label) {
-    lines.push(`### CHALLENGE ACTIVITY: ${stripHtmlTags(label)}`);
-  } else {
-    lines.push('### CHALLENGE ACTIVITY');
-  }
+  const caption = resource.caption || '';
+  lines.push(`### CHALLENGE ACTIVITY: ${caption}`);
 
-  const instructions = extractText(payload.instructions || payload.description || payload.prompt || payload.text || '');
-  if (instructions) {
-    lines.push('', stripHtmlTags(instructions));
-  }
-
-  for (const key of ['starter_code', 'initial_code', 'code', 'source', 'default_code']) {
-    if (payload[key]) {
-      const code = extractText(payload[key]);
-      if (code) {
-        const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
-        lines.push('', '```' + lang, stripHtmlTags(code).trim(), '```');
-        break;
-      }
-    }
-  }
-
-  if (payload.test_activity || payload.tests) {
-    const tests = payload.test_activity || payload.tests;
-    if (typeof tests === 'object') {
-      const testDesc = extractText(tests.description || tests.text || tests.instructions || '');
-      if (testDesc) {
-        lines.push('', '**Testing:**', stripHtmlTags(testDesc));
-      }
-    }
-  }
-
-  if (payload.files && Array.isArray(payload.files)) {
-    for (const file of payload.files) {
-      const fname = extractText(file.name || file.filename || '');
-      const fcontent = extractText(file.content || file.code || file.source || '');
-      if (fname || fcontent) {
-        if (fname) lines.push('', `**File: ${stripHtmlTags(fname)}**`);
-        if (fcontent) {
-          const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
-          lines.push('```' + lang, stripHtmlTags(fcontent).trim(), '```');
-        }
-      }
-    }
+  const instructions = resource.instructions;
+  if (instructions && typeof instructions === 'string') {
+    lines.push('', stripHtml(instructions));
   }
 
   return lines.join('\n');
-}
-
-function convertAnimationResource(payload: any): string {
-  if (!payload) return '';
-  const lines: string[] = [];
-  const title = extractText(payload.title || payload.label || '');
-  if (title) {
-    lines.push(`**Animation: ${stripHtmlTags(title)}**`);
-  }
-  const description = extractText(payload.description || payload.caption || '');
-  if (description) {
-    lines.push(stripHtmlTags(description));
-  }
-  if (!title && !description) {
-    const fallback = extractText(payload);
-    if (fallback) lines.push(`**[Animation]** ${stripHtmlTags(fallback)}`);
-  }
-  return lines.join('\n');
-}
-
-function convertCodeResource(payload: any): string {
-  if (!payload) return '';
-  const lines: string[] = [];
-  const title = extractText(payload.title || payload.label || '');
-  if (title) {
-    lines.push(`**${stripHtmlTags(title)}**`);
-    lines.push('');
-  }
-
-  let code = '';
-  for (const key of ['code', 'source', 'starter_code', 'initial_code', 'solution', 'content']) {
-    if (payload[key] && typeof payload[key] === 'string') {
-      code = payload[key];
-      break;
-    }
-    if (payload[key] && typeof payload[key] === 'object') {
-      const extracted = extractText(payload[key]);
-      if (extracted) { code = extracted; break; }
-    }
-  }
-
-  if (code) {
-    const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
-    lines.push('```' + lang);
-    lines.push(stripHtmlTags(code).trim());
-    lines.push('```');
-  }
-  return lines.join('\n');
-}
-
-function convertTableResource(payload: any): string {
-  if (!payload) return '';
-  const title = extractText(payload.title || '');
-  const lines: string[] = [];
-  if (title) {
-    lines.push(`**${stripHtmlTags(title)}**`);
-    lines.push('');
-  }
-  const content = extractText(payload.content || payload.html || payload);
-  if (content) {
-    lines.push(stripHtmlTags(content));
-  }
-  return lines.join('\n');
-}
-
-function convertImageResource(payload: any): string {
-  if (!payload) return '';
-  const caption = extractText(payload.caption || payload.alt || payload.title || '');
-  if (caption) {
-    return `**Figure:** ${stripHtmlTags(caption)}`;
-  }
-  return '';
 }
 
 function convertCustomResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
+  const tool = (payload.tool || '').toLowerCase();
+  const caption = resource.caption || '';
+  const activityType = resource.activity_type || '';
+
+  if (tool.includes('python-tutor') || tool.includes('pythontutor')) {
+    return convertPythonTutorResource(resource);
+  }
+  if (tool === 'zyanimator') {
+    return convertZyAnimatorResource(resource);
+  }
+  if (tool === 'homeworksystem') {
+    return convertHomeworkResource(resource);
+  }
+  if (tool === 'codewriting') {
+    return convertCodeWritingResource(resource);
+  }
+
   const lines: string[] = [];
+  const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' :
+    activityType === 'participation' ? 'PARTICIPATION ACTIVITY' : 'ACTIVITY';
 
-  const label = extractText(payload.activity_label || payload.label || payload.title || '');
-  if (label) {
-    lines.push(`### CHALLENGE ACTIVITY: ${stripHtmlTags(label)}`);
-  } else {
-    lines.push('### CHALLENGE ACTIVITY');
+  lines.push(`### ${label}: ${caption}`);
+
+  if (payload.alt_text) {
+    lines.push('', payload.alt_text);
   }
 
-  const prompt = extractText(payload.prompt || payload.question || payload.text || payload.description
-    || payload.instructions || payload.content || '');
-  if (prompt) {
-    lines.push('', stripHtmlTags(prompt));
+  if (payload.instructions) {
+    lines.push('', stripHtml(typeof payload.instructions === 'string' ? payload.instructions : extractAttributedText(payload.instructions)));
   }
 
-  let code = '';
-  for (const key of ['starter_code', 'code', 'initial_code', 'source', 'default_code']) {
-    if (payload[key]) {
-      code = extractText(payload[key]);
-      if (code) break;
-    }
-  }
-  if (code) {
-    const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
-    lines.push('', '```' + lang, stripHtmlTags(code).trim(), '```');
+  return lines.join('\n');
+}
+
+function convertPythonTutorResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  lines.push(`**${caption}**`);
+
+  if (payload.alt_text) {
+    lines.push('', payload.alt_text);
   }
 
-  if (payload.test_cases && Array.isArray(payload.test_cases)) {
-    lines.push('', '**Test Cases:**');
-    for (const tc of payload.test_cases) {
-      const input = extractText(tc.input || '');
-      const expected = extractText(tc.expected_output || tc.output || '');
-      if (input || expected) {
-        lines.push(`- Input: \`${input}\` → Expected: \`${expected}\``);
+  const traceCode = payload.options?.trace?.code;
+  if (traceCode && typeof traceCode === 'string') {
+    lines.push('', '```python', decodeEntities(traceCode).trim(), '```');
+  }
+
+  return lines.join('\n');
+}
+
+function convertZyAnimatorResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+  const activityType = resource.activity_type || '';
+  const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' :
+    activityType === 'participation' ? 'PARTICIPATION ACTIVITY' : 'ACTIVITY';
+
+  lines.push(`### ${label}: ${caption}`);
+
+  if (payload.alt_text) {
+    lines.push('', payload.alt_text);
+  }
+
+  return lines.join('\n');
+}
+
+function convertHomeworkResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const options = payload.options || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  lines.push(`### CHALLENGE ACTIVITY: ${caption}`);
+
+  const instructions = options.instructions || payload.instructions || '';
+  if (instructions) {
+    lines.push('', stripHtml(typeof instructions === 'string' ? instructions : extractAttributedText(instructions)));
+  }
+
+  if (options.prefix && typeof options.prefix === 'string') {
+    const lang = (options.language || 'python').toLowerCase().replace('python3', 'python');
+    lines.push('', '**Given code:**', '```' + lang, decodeEntities(options.prefix).trim(), '```');
+  }
+
+  if (options.suffix && typeof options.suffix === 'string' && options.suffix.trim()) {
+    lines.push('', '**Suffix code:**', '```python', decodeEntities(options.suffix).trim(), '```');
+  }
+
+  return lines.join('\n');
+}
+
+function convertCodeWritingResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const options = payload.options || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  lines.push(`### CHALLENGE ACTIVITY: ${caption}`);
+
+  if (options.levels && Array.isArray(options.levels)) {
+    for (let i = 0; i < options.levels.length; i++) {
+      const level = options.levels[i];
+      if (!level || typeof level !== 'object') continue;
+
+      if (options.levels.length > 1) {
+        lines.push('', `**Level ${i + 1}:**`);
       }
-    }
-  }
 
-  if (payload.content_resources && Array.isArray(payload.content_resources)) {
-    for (const child of payload.content_resources) {
-      if (child && typeof child === 'object') {
-        const childRes: ZyBooksContentResource = {
-          id: child.id || '',
-          type: child.type || 'generic',
-          payload: child.payload !== undefined ? child.payload : child,
-        };
-        const converted = convertResource(childRes);
-        if (converted.trim()) lines.push('', converted);
+      const prompt = level.prompt || level.instructions || level.description || '';
+      if (prompt) {
+        lines.push(stripHtml(typeof prompt === 'string' ? prompt : extractAttributedText(prompt)));
       }
-    }
-  }
 
-  if (payload.files && Array.isArray(payload.files)) {
-    for (const file of payload.files) {
-      const fname = extractText(file.name || file.filename || '');
-      const fcontent = extractText(file.content || file.code || file.source || '');
-      if (fname || fcontent) {
-        if (fname) lines.push('', `**File: ${stripHtmlTags(fname)}**`);
-        if (fcontent) {
-          const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
-          lines.push('```' + lang, stripHtmlTags(fcontent).trim(), '```');
-        }
+      if (level.prefix && typeof level.prefix === 'string') {
+        lines.push('', '```python', decodeEntities(level.prefix).trim(), '```');
       }
-    }
-  }
-
-  if (lines.length <= 1) {
-    const allText = extractAllTextFields(payload);
-    for (const t of allText) {
-      const cleaned = stripHtmlTags(t);
-      if (cleaned.length > 10) lines.push('', cleaned);
     }
   }
 
   return lines.join('\n');
+}
+
+function convertAnimationResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  if (caption) {
+    lines.push(`**Animation: ${caption}**`);
+  }
+
+  if (payload.alt_text) {
+    lines.push(payload.alt_text);
+  }
+
+  const htmlArray = payload.html;
+  if (Array.isArray(htmlArray)) {
+    const text = htmlArray.map((item: any) => extractAttributedText(item)).join('');
+    const cleaned = stripHtml(text);
+    if (cleaned) lines.push(cleaned);
+  }
+
+  return lines.join('\n');
+}
+
+function convertCodeResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  if (caption) {
+    lines.push(`**${caption}**`);
+    lines.push('');
+  }
+
+  let code = '';
+  for (const key of ['code', 'source', 'starter_code', 'initial_code', 'content']) {
+    if (payload[key] && typeof payload[key] === 'string') {
+      code = payload[key];
+      break;
+    }
+  }
+
+  if (code) {
+    const lang = (typeof payload.language === 'string' ? payload.language : 'python').toLowerCase();
+    lines.push('```' + lang, decodeEntities(code).trim(), '```');
+  }
+  return lines.join('\n');
+}
+
+function convertTableResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  if (caption) {
+    lines.push(`**${caption}**`);
+    lines.push('');
+  }
+
+  const htmlArray = payload.html;
+  if (Array.isArray(htmlArray)) {
+    const text = htmlArray.map((item: any) => extractAttributedText(item)).join('');
+    lines.push(stripHtml(text));
+  } else {
+    const content = extractAttributedText(payload.content || payload.html || payload.text || '');
+    if (content) lines.push(stripHtml(content));
+  }
+
+  return lines.join('\n');
+}
+
+function convertImageResource(resource: ZyBooksContentResource): string {
+  const caption = resource.caption || '';
+  if (caption) {
+    return `**Figure:** ${caption}`;
+  }
+  return '';
 }
 
 function convertGenericResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
   const lines: string[] = [];
+  const caption = resource.caption || '';
 
-  if (payload.content_resources && Array.isArray(payload.content_resources)) {
-    for (const child of payload.content_resources) {
-      if (child && typeof child === 'object') {
-        const childRes: ZyBooksContentResource = {
-          id: child.id || '',
-          type: child.type || 'generic',
-          payload: child.payload !== undefined ? child.payload : child,
-        };
-        const converted = convertResource(childRes);
-        if (converted.trim()) lines.push(converted);
-      }
-    }
-    if (lines.length > 0) return lines.join('\n\n');
+  if (caption) {
+    lines.push(`**${caption}**`);
   }
 
-  const textContent = extractText(payload);
-  if (textContent) {
-    return stripHtmlTags(textContent);
+  if (payload.alt_text) {
+    lines.push(payload.alt_text);
   }
 
-  const allTexts = extractAllTextFields(payload);
-  if (allTexts.length > 0) {
-    return allTexts.map(t => stripHtmlTags(t)).join('\n\n');
+  const htmlArray = payload.html;
+  if (Array.isArray(htmlArray)) {
+    const text = htmlArray.map((item: any) => extractAttributedText(item)).join('');
+    const cleaned = stripHtml(text);
+    if (cleaned) lines.push(cleaned);
   }
 
-  return '';
-}
-
-function stripHtmlTags(html: any): string {
-  if (html === null || html === undefined) return '';
-  if (typeof html !== 'string') {
-    const extracted = extractText(html);
-    if (extracted && typeof extracted === 'string') return stripHtmlTags(extracted);
-    return '';
+  if (resource.instructions && typeof resource.instructions === 'string') {
+    lines.push(stripHtml(resource.instructions));
   }
-  let text = html;
 
-  text = text.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, (_, code) => {
-    return '\n```python\n' + decodeEntities(code).trim() + '\n```\n';
-  });
-  text = text.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_, code) => {
-    return '\n```\n' + decodeEntities(code).trim() + '\n```\n';
-  });
-
-  text = text.replace(/<code[^>]*>(.*?)<\/code>/gi, (_, code) => '`' + decodeEntities(code) + '`');
-
-  text = text.replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1');
-  text = text.replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1');
-  text = text.replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1');
-  text = text.replace(/<h4[^>]*>(.*?)<\/h4>/gi, '#### $1');
-
-  text = text.replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**');
-  text = text.replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**');
-  text = text.replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*');
-  text = text.replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*');
-
-  text = text.replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1');
-  text = text.replace(/<br\s*\/?>/gi, '\n');
-  text = text.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n');
-
-  text = text.replace(/<[^>]+>/g, '');
-
-  text = decodeEntities(text);
-
-  text = text.replace(/\n{3,}/g, '\n\n');
-
-  return text.trim();
-}
-
-function decodeEntities(text: any): string {
-  if (text === null || text === undefined) return '';
-  if (typeof text !== 'string') return extractText(text);
-  return text
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(parseInt(num, 10)));
+  return lines.join('\n');
 }
