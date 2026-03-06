@@ -52,7 +52,16 @@ The application is a single-page web tool built with a frontend-only architectur
 - Fourth paste mode tab in the UI — bypasses paste/regex/HTML parsing entirely
 - `GET /api/zybooks-section` — Server-side proxy to `zyserver.zybooks.com/v1/zybook/{code}/chapter/{ch}/section/{sec}` (solves CORS)
 - `POST /api/zybooks-json` — Browser control endpoint that accepts raw JSON and stores via bookmarklet pipeline
-- `client/src/lib/json-converter.ts` — Converts `content_resources[]` array to markdown (handles html, question, animation, code, table, image, custom/challenge resource types)
+- `client/src/lib/json-converter.ts` — Converts `content_resources[]` array to markdown with intelligent handling of all zyBooks resource types:
+  - **html**: Attributed string arrays `[{text, attributes}]` → clean markdown
+  - **multiple_choice**: Questions with numbered choices and correct answer markers (✓)
+  - **container**: Aside/elaboration blocks rendered as blockquotes
+  - **zystudio**: Challenge activities with top-level instructions
+  - **custom** resources dispatched by `payload.tool`:
+    - `python-tutor-v5`: Alt text + runnable trace code
+    - `zyAnimator`: Animation descriptions with alt text
+    - `homeworkSystem`: Instructions + given/suffix code blocks
+    - `CodeWriting`: **Smart renderer** that parses Python randomization data to extract all problem variants grouped by category (e.g., 14 conversion types across Mass/Length/Volume/Temperature, 5 geometric shapes with measurements/formulas), shows task/explanation patterns with readable placeholders, and displays code structure templates
 - API Mode UI: auth token (password field, persisted in localStorage), zybook code (persisted, default: CPPCS2520NguyenSpring2026), chapter/section number inputs
 - Works with Session Mode — "Fetch & Capture" when session is active
 - Bookmarklet polling auto-detects `_apiMode` JSON payloads and routes to JSON converter instead of HTML parser
