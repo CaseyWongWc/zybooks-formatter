@@ -75,9 +75,20 @@ function stripHtml(html: string): string {
   text = text.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n');
   text = text.replace(/<zyInstructions[^>]*>/gi, '');
   text = text.replace(/<\/zyInstructions>/gi, '');
+  text = text.replace(/<details[^>]*>[\s\S]*?<\/details>/gi, '');
+  text = text.replace(/<summary[^>]*>[\s\S]*?<\/summary>/gi, '');
+  text = text.replace(/<span[^>]*>([\s\S]*?)<\/span>/gi, '$1');
   text = text.replace(/<[^>]+>/g, '');
 
   text = decodeEntities(text);
+
+  text = text.replace(/<details[^>]*>[\s\S]*?<\/details>/gi, '');
+  text = text.replace(/<summary[^>]*>[\s\S]*?<\/summary>/gi, '');
+  text = text.replace(/<span[^>]*>([\s\S]*?)<\/span>/gi, '$1');
+  text = text.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n');
+  text = text.replace(/<br\s*\/?>/gi, '\n');
+  text = text.replace(/<[^>]+>/g, '');
+
   text = text.replace(/\n{3,}/g, '\n\n');
 
   return text.trim();
@@ -349,30 +360,221 @@ function convertHomeworkResource(resource: ZyBooksContentResource): string {
   return lines.join('\n');
 }
 
+function parseCodeWritingVariants(setupCode: string): { categories: Record<string, string[]>; rawEntries: Record<string, string>[] } | null {
+  const decoded = decodeEntities(setupCode);
+  const categories: Record<string, string[]> = {};
+  const rawEntries: Record<string, string>[] = [];
+
+  const dictListMatch = decoded.match(/conv_list_dict\s*=\s*\[([\s\S]*?)\]\s*(?:\n\n|\ndef |$)/);
+  if (dictListMatch) {
+    const dictBlock = dictListMatch[1];
+    const entryRegex = /\{([^}]+)\}/g;
+    let m;
+    while ((m = entryRegex.exec(dictBlock)) !== null) {
+      const entry: Record<string, string> = {};
+      const fieldRegex = /'([^']+)'\s*:\s*'([^']*)'/g;
+      let fm;
+      while ((fm = fieldRegex.exec(m[1])) !== null) {
+        entry[fm[1]] = fm[2];
+      }
+      if (Object.keys(entry).length > 0) {
+        rawEntries.push(entry);
+        const cat = entry['conv_type'] || 'General';
+        if (!categories[cat]) categories[cat] = [];
+        const param = entry['param'] || '';
+        const param1 = entry['param1'] || '';
+        const param2 = entry['param2'] || '';
+        const retVal = entry['ret_val'] || '';
+        if (param1 && param2 && retVal) {
+          categories[cat].push(`${param1}+${param2} → ${retVal}`);
+        } else if (param && retVal) {
+          categories[cat].push(`${param} → ${retVal}`);
+        } else if (param1 && retVal) {
+          categories[cat].push(`${param1} → ${retVal}`);
+        } else if (param || param1) {
+          categories[cat].push(param || param1);
+        }
+      }
+    }
+    if (rawEntries.length > 0) return { categories, rawEntries };
+  }
+
+  const shapeDictMatch = decoded.match(/shape_dict_dict\s*=\s*\{([\s\S]*?)\n\}\s*(?:\n|$)/);
+  if (shapeDictMatch) {
+    const shapeBlock = shapeDictMatch[1];
+    const shapeNameRegex = /^\s{4}'([A-Z]\w+)'\s*:\s*\{/gm;
+    let sm;
+    while ((sm = shapeNameRegex.exec(shapeBlock)) !== null) {
+      const shapeName = sm[1];
+      if (!categories['Shapes']) categories['Shapes'] = [];
+      const nextShapeMatch = shapeBlock.substring(sm.index + sm[0].length).match(/^\s{4}'[A-Z]\w+'\s*:\s*\{/m);
+      const endIdx = nextShapeMatch
+        ? sm.index + sm[0].length + nextShapeMatch.index
+        : shapeBlock.length;
+      const shapeSection = shapeBlock.substring(sm.index, endIdx);
+      const measurements: string[] = [];
+      const measRegex = /'measurement'\s*:\s*'([^']+)'/g;
+      let mm;
+      while ((mm = measRegex.exec(shapeSection)) !== null) {
+        if (!measurements.includes(mm[1])) measurements.push(mm[1]);
+      }
+      const formulas: string[] = [];
+      const formulaRegex = /'formula'\s*:\s*'([^']+)'/g;
+      let ffm;
+      while ((ffm = formulaRegex.exec(shapeSection)) !== null) {
+        if (!formulas.includes(ffm[1])) formulas.push(ffm[1]);
+      }
+      categories['Shapes'].push(`${shapeName} (${measurements.join(', ')})`);
+      rawEntries.push({ shape: shapeName, measurements: measurements.join(', '), formulas: formulas.join('; ') });
+    }
+    if (rawEntries.length > 0) return { categories, rawEntries };
+  }
+
+  return null;
+}
+
+function extractSolutionPattern(files: any[]): string | null {
+  if (!Array.isArray(files)) return null;
+  for (const file of files) {
+    const content = file.content;
+    if (!Array.isArray(content)) continue;
+    for (const segment of content) {
+      if (segment.editable && segment.solution) {
+        const sol = decodeEntities(typeof segment.solution === 'string' ? segment.solution : '');
+        if (sol && !sol.includes('${')) return sol.trim();
+      }
+    }
+  }
+  return null;
+}
+
+function extractTemplateStructure(files: any[]): string[] {
+  if (!Array.isArray(files)) return [];
+  const parts: string[] = [];
+  for (const file of files) {
+    const content = file.content;
+    if (!Array.isArray(content)) continue;
+    for (const segment of content) {
+      const template = segment.template;
+      if (typeof template === 'string' && template.trim()) {
+        const cleaned = decodeEntities(template)
+          .replace(/\$\{[^}]+\}/g, '___')
+          .trim();
+        if (cleaned && cleaned !== '___') {
+          parts.push(cleaned);
+        }
+      }
+    }
+  }
+  return parts;
+}
+
+function describePromptPattern(prompt: string): string {
+  const cleaned = stripHtml(typeof prompt === 'string' ? prompt : '');
+  if (!cleaned) return '';
+  const hasTemplateVars = /\$\{[^}]+\}/.test(cleaned);
+  if (!hasTemplateVars) return cleaned;
+
+  let described = cleaned;
+  described = described.replace(/\$\{distractor\.method_name\}/g, '[function_name]');
+  described = described.replace(/\$\{distractor\.conv_type_lower\}/g, '[conversion_type]');
+  described = described.replace(/\$\{meaningful\.param_plural\}/g, '[input_unit]');
+  described = described.replace(/\$\{meaningful\.ret_val\}/g, '[output_unit]');
+  described = described.replace(/\$\{meaningful\.conv_factor_formula\}/g, '');
+  described = described.replace(/\$\{distractor\.example_input\}/g, '[example_input]');
+  described = described.replace(/\$\{distractor\.example_output\}/g, '[example_output]');
+  described = described.replace(/\$\{distractor\.note\}/g, '');
+  described = described.replace(/\$\{distractor\.param1_lower\}/g, '[unit_1]');
+  described = described.replace(/\$\{distractor\.param2_lower\}/g, '[unit_2]');
+  described = described.replace(/\$\{distractor\.param1_singular\}/g, '[unit_1_singular]');
+  described = described.replace(/\$\{distractor\.param2_singular\}/g, '[unit_2_singular]');
+  described = described.replace(/\$\{distractor\.conversion1\}/g, '[factor_1]');
+  described = described.replace(/\$\{distractor\.conversion2\}/g, '[factor_2]');
+  described = described.replace(/\$\{distractor\.base_func\}/g, '[base_function]');
+  described = described.replace(/\$\{distractor\.complex_func\}/g, '[complex_function]');
+  described = described.replace(/\$\{distractor\.base_params_list\}/g, '[base_parameters]');
+  described = described.replace(/\$\{distractor\.complex_params_list\}/g, '[complex_parameters]');
+  described = described.replace(/\$\{distractor\.complex_measurement\}/g, '[measurement]');
+  described = described.replace(/\$\{distractor\.base_num_params_in_words\}/g, '[N]');
+  described = described.replace(/\$\{distractor\.complex_num_params_in_words\}/g, '[N]');
+  described = described.replace(/\$\{distractor\.base_params_plural_singular\}/g, '(s)');
+  described = described.replace(/\$\{distractor\.complex_params_plural_singular\}/g, '(s)');
+  described = described.replace(/\$\{distractor\.latex_base_formula\}/g, '[formula]');
+  described = described.replace(/\$\{distractor\.latex_complex_formula\}/g, '[formula]');
+  described = described.replace(/\$\{meaningful\.shape_lower\}/g, '[shape]');
+  described = described.replace(/\$\{[^}]+\}/g, '[...]');
+  described = described.replace(/\[\.\.\.\]\s*\[\.\.\.\]/g, '[...]');
+  described = described.replace(/\s{2,}/g, ' ');
+
+  return described.trim();
+}
+
 function convertCodeWritingResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
   const options = payload.options || {};
   const lines: string[] = [];
   const caption = resource.caption || '';
+  const lang = (options.language || 'python').toLowerCase().replace('python3', 'python');
+  const numLevels = Array.isArray(options.levels) ? options.levels.length : 0;
 
-  lines.push(`### CHALLENGE ACTIVITY: ${caption}`);
+  lines.push(`### CHALLENGE ACTIVITY: ${caption}` + (numLevels > 1 ? ` (${numLevels} Levels)` : ''));
 
   if (options.levels && Array.isArray(options.levels)) {
     for (let i = 0; i < options.levels.length; i++) {
       const level = options.levels[i];
       if (!level || typeof level !== 'object') continue;
 
-      if (options.levels.length > 1) {
+      if (numLevels > 1) {
         lines.push('', `**Level ${i + 1}:**`);
+      }
+
+      const variants = level.randomization ? parseCodeWritingVariants(
+        decodeEntities(level.randomization.setup || '')
+      ) : null;
+
+      if (variants && Object.keys(variants.categories).length > 0) {
+        const catSummaries: string[] = [];
+        for (const [cat, items] of Object.entries(variants.categories)) {
+          if (cat === 'Shapes') {
+            catSummaries.push(`**${cat}:** ${items.join(', ')}`);
+          } else {
+            catSummaries.push(`**${cat}:** ${items.join(', ')}`);
+          }
+        }
+        const totalVariants = variants.rawEntries.length;
+        lines.push(`*Randomized activity with ${totalVariants} problem variant${totalVariants !== 1 ? 's' : ''}:*`);
+        for (const summary of catSummaries) {
+          lines.push(`- ${summary}`);
+        }
       }
 
       const prompt = level.prompt || level.instructions || level.description || '';
       if (prompt) {
-        lines.push(stripHtml(typeof prompt === 'string' ? prompt : extractAttributedText(prompt)));
+        const described = describePromptPattern(prompt);
+        if (described) {
+          lines.push('', '**Task pattern:**', described);
+        }
       }
 
-      if (level.prefix && typeof level.prefix === 'string') {
-        lines.push('', '```python', decodeEntities(level.prefix).trim(), '```');
+      const explanation = level.explanation || '';
+      if (explanation && typeof explanation === 'string') {
+        const expText = describePromptPattern(explanation);
+        if (expText && expText.length > 10) {
+          lines.push('', '**Explanation pattern:**', expText);
+        }
+      }
+
+      const solution = extractSolutionPattern(level.files);
+      if (solution) {
+        lines.push('', '**Solution pattern:**', '```' + lang, solution, '```');
+      }
+
+      const templateParts = extractTemplateStructure(level.files);
+      if (templateParts.length > 0 && !solution) {
+        const codeTemplate = templateParts.join('\n');
+        if (codeTemplate.length > 10) {
+          lines.push('', '**Code structure:**', '```' + lang, codeTemplate, '```');
+        }
       }
     }
   }
