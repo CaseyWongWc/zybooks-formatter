@@ -248,22 +248,46 @@ export default function Home() {
         section: apiSection,
       });
       const res = await fetch(`/api/zybooks-section?${params}`);
-      const data = await res.json();
+      const rawText = await res.text();
+      let data: any;
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        throw new Error(`Invalid JSON response from server:\n${rawText.substring(0, 500)}`);
+      }
       if (!res.ok) throw new Error(data.error || `Server returned ${res.status}`);
       if (data.success === false || data.error) {
         const errMsg = data.error?.message || data.error || "Unknown zyBooks error";
         throw new Error(`zyBooks API: ${errMsg}`);
       }
-      if (!data.section?.content_resources) {
-        throw new Error("No content_resources found in response. The section may not exist or the token may be invalid.");
+
+      const topKeys = Object.keys(data);
+      const sectionData = data.section;
+      if (!sectionData) {
+        throw new Error(`No 'section' key in response. Top-level keys: [${topKeys.join(', ')}]\n\nRaw response preview:\n${JSON.stringify(data, null, 2).substring(0, 2000)}`);
       }
+      const sectionKeys = Object.keys(sectionData);
+      const resources = sectionData.content_resources;
+      if (!resources || !Array.isArray(resources)) {
+        throw new Error(`No 'content_resources' array in section. Section keys: [${sectionKeys.join(', ')}]\n\nSection preview:\n${JSON.stringify(sectionData, null, 2).substring(0, 2000)}`);
+      }
+
+      const resourceTypes = resources.map((r: any) => r.type || 'unknown');
+      const typeCounts: Record<string, number> = {};
+      for (const t of resourceTypes) typeCounts[t] = (typeCounts[t] || 0) + 1;
+
       const formatted = convertZybooksJson(data as ZyBooksSectionResponse, parseInt(apiChapter), parseInt(apiSection));
+
+      const debugInfo = `\n\n---\n_API Debug: ${resources.length} resources fetched. Types: ${Object.entries(typeCounts).map(([t,c]) => `${t}(${c})`).join(', ')}_`;
+
+      const finalOutput = formatted ? formatted + debugInfo : `[Empty conversion result]\n\nAPI returned ${resources.length} content_resources with types: ${JSON.stringify(typeCounts, null, 2)}\n\nFirst 3 resources:\n${JSON.stringify(resources.slice(0, 3), null, 2).substring(0, 3000)}`;
+
       if (session?.active) {
-        addToSession(formatted, JSON.stringify(data), "api");
-        toast({ title: "Section fetched & captured!", description: `Chapter ${apiChapter}.${apiSection} added to session.` });
+        addToSession(formatted || finalOutput, JSON.stringify(data), "api");
+        toast({ title: "Section fetched & captured!", description: `Chapter ${apiChapter}.${apiSection} — ${resources.length} resources.` });
       } else {
-        setOutput(formatted);
-        toast({ title: "Section fetched!", description: `Chapter ${apiChapter}.${apiSection} formatted successfully.` });
+        setOutput(finalOutput);
+        toast({ title: "Section fetched!", description: `Chapter ${apiChapter}.${apiSection} — ${resources.length} resources converted.` });
       }
     } catch (err: any) {
       const errorText = `ERROR: ${err.message}\n\nTroubleshooting:\n- Check that your auth_token is valid (tokens expire)\n- Log in to zyBooks, then re-copy the token from localStorage\n- Verify the zybook code, chapter, and section are correct`;
