@@ -35,7 +35,7 @@ async function getGitHubToken(): Promise<{ token: string; login: string } | null
   return { token, login: userData.login };
 }
 
-let pendingBookmarkletHtml: { html: string; timestamp: number } | null = null;
+let pendingBookmarkletHtml: { html: string; timestamp: number; auth_token?: string | null } | null = null;
 
 export async function registerRoutes(
   httpServer: Server,
@@ -51,21 +51,21 @@ export async function registerRoutes(
 
   app.post("/api/bookmarklet", express.json({ limit: "5mb" }), (req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
-    const { html } = req.body;
+    const { html, auth_token } = req.body;
     if (!html || typeof html !== "string") {
       return res.status(400).json({ error: "Missing html" });
     }
-    pendingBookmarkletHtml = { html, timestamp: Date.now() };
+    pendingBookmarkletHtml = { html, timestamp: Date.now(), auth_token: auth_token || null };
     return res.json({ ok: true });
   });
 
   app.get("/api/bookmarklet/pending", (_req, res) => {
     if (pendingBookmarkletHtml && Date.now() - pendingBookmarkletHtml.timestamp < 60000) {
-      const html = pendingBookmarkletHtml.html;
+      const { html, auth_token } = pendingBookmarkletHtml;
       pendingBookmarkletHtml = null;
-      return res.json({ html });
+      return res.json({ html, auth_token: auth_token || null });
     }
-    return res.json({ html: null });
+    return res.json({ html: null, auth_token: null });
   });
   app.get("/api/zybooks-section", async (req, res) => {
     try {
@@ -159,6 +159,10 @@ button:disabled{background:#333;color:#666;cursor:not-allowed}
     <label for="contentArea">Page Content</label>
     <textarea id="contentArea" name="html" placeholder="Paste zyBooks content here..." data-testid="input-submit-content"></textarea>
   </div>
+  <div>
+    <label for="authToken">Auth Token (auto-detected if on zyBooks)</label>
+    <input type="text" id="authToken" name="auth_token" placeholder="Auto-extracted from zyBooks localStorage..." data-testid="input-submit-token">
+  </div>
   <div class="row">
     <div>
       <label for="sourceUrl">Source URL (optional)</label>
@@ -183,14 +187,17 @@ document.getElementById("submitForm").addEventListener("submit", async function(
   const status = document.getElementById("status");
   const html = document.getElementById("contentArea").value;
   const url = document.getElementById("sourceUrl").value;
+  const authToken = document.getElementById("authToken").value;
   if (!html.trim()) { status.className="status error"; status.textContent="Content is empty."; return; }
   btn.disabled = true; btn.textContent = "Submitting...";
   status.className="status"; status.style.display="none";
   try {
+    var payload = { html: html, url: url || undefined };
+    if (authToken) payload.auth_token = authToken;
     const res = await fetch("/api/bookmarklet", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ html: html, url: url || undefined })
+      body: JSON.stringify(payload)
     });
     if (!res.ok) throw new Error("Server returned " + res.status);
     status.className="status success";
