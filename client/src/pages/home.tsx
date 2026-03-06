@@ -155,7 +155,7 @@ export default function Home() {
   const defaultAppUrl = typeof window !== "undefined" ? window.location.origin : "";
   const [bookmarkletUrl, setBookmarkletUrl] = useState(defaultAppUrl);
 
-  const bookmarkletCode = `javascript:void((function(){var u='${bookmarkletUrl}/api/bookmarklet';var h=document.documentElement.outerHTML;fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({html:h})}).then(function(r){if(r.ok){var b=document.createElement('div');b.style.cssText='position:fixed;top:20px;right:20px;background:%2322c55e;color:white;padding:12px 20px;border-radius:8px;font:14px sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,0.3)';b.textContent='Sent to zyBooks Formatter!';document.body.appendChild(b);setTimeout(function(){b.remove()},3000)}else{alert('Error: '+r.status+' '+r.statusText)}}).catch(function(e){alert('Could not reach zyBooks Formatter app. URL: '+u+' Error: '+e.message)})})())`;
+  const bookmarkletCode = `javascript:void((function(){var u='${bookmarkletUrl}/api/bookmarklet';var h=document.documentElement.outerHTML;var t=null;try{var s=localStorage.getItem('ember_simple_auth-session-5');if(s){var p=JSON.parse(s);t=p&&p.authenticated&&p.authenticated.session&&p.authenticated.session.auth_token||null}}catch(e){}var payload={html:h};if(t)payload.auth_token=t;fetch(u,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(function(r){if(r.ok){var b=document.createElement('div');b.style.cssText='position:fixed;top:20px;right:20px;background:%2322c55e;color:white;padding:12px 20px;border-radius:8px;font:14px sans-serif;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,0.3)';b.textContent=t?'Sent to Formatter (with auth token!)':'Sent to zyBooks Formatter!';document.body.appendChild(b);setTimeout(function(){b.remove()},3000)}else{alert('Error: '+r.status+' '+r.statusText)}}).catch(function(e){alert('Could not reach zyBooks Formatter app. URL: '+u+' Error: '+e.message)})})())`;
 
   const startPolling = useCallback(() => {
     if (pollingRef.current) return;
@@ -164,6 +164,10 @@ export default function Home() {
       try {
         const res = await fetch("/api/bookmarklet/pending");
         const data = await res.json();
+        if (data.auth_token) {
+          setApiToken(data.auth_token);
+          localStorage.setItem("zybooks_auth_token", data.auth_token);
+        }
         if (data.html) {
           let formatted: string;
           let isApiMode = false;
@@ -177,6 +181,9 @@ export default function Home() {
             }
           } catch {
             formatted = formatZybooksText(data.html, "html");
+          }
+          if (data.auth_token) {
+            toast({ title: "Auth token captured!", description: "Your zyBooks token has been auto-filled in API Mode." });
           }
           if (session?.active) {
             addToSession(formatted, data.html, isApiMode ? "api" : "html");
@@ -558,7 +565,7 @@ export default function Home() {
                     <Bookmark className="w-3.5 h-3.5" />
                     zyBooks → Formatter
                   </a>
-                  <span className="text-xs text-muted-foreground">← Drag this to your bookmarks bar</span>
+                  <span className="text-xs text-muted-foreground">← Drag this to your bookmarks bar (auto-grabs auth token!)</span>
                 </div>
                 <div className="mt-3 flex items-center gap-2">
                   {bookmarkletPolling ? (
