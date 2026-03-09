@@ -62,6 +62,16 @@ The application is a single-page web tool built with a frontend-only architectur
     - `zyAnimator`: Animation descriptions with alt text
     - `homeworkSystem`: Instructions + given/suffix code blocks
     - `CodeWriting`: **Smart renderer** that parses Python randomization data to extract all problem variants grouped by category (e.g., 14 conversion types across Mass/Length/Volume/Temperature, 5 geometric shapes with measurements/formulas), shows task/explanation patterns with readable placeholders, and displays code structure templates
+    - `codeOutput`: Multi-level "what is the output?" challenges with code blocks
+    - `ParsonsCodingPA`: Parsons problems with prompt and solution code
+    - `defnMatch`: Term-definition matching activities
+    - `CodingProgression`: Multi-level coding challenges
+    - `ProgressionPlayerInteractiveAndAccessible`: Interactive progression activities
+  - **short_answer** resources: Question text with text_before/text_after context, correct answers, hints, and explanations
+  - **detect_answer** resources: Content extraction with alt text
+  - **image** resources: Figure captions with alt text
+  - All `alt_text` fields run through HTML stripper (fixes entity/tag leaks)
+  - Full Chapter 1-8 scan: 143 sections, 736K chars clean markdown, 0 errors, 0 HTML leaks
 - API Mode UI: auth token (password field, persisted in localStorage), zybook code (persisted, default: CPPCS2520NguyenSpring2026), chapter/section number inputs
 - Works with Session Mode — "Fetch & Capture" when session is active
 - Bookmarklet polling auto-detects `_apiMode` JSON payloads and routes to JSON converter instead of HTML parser

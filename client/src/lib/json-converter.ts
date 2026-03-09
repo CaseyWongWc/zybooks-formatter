@@ -138,7 +138,11 @@ function convertResource(resource: ZyBooksContentResource): string {
     case 'true_false_question':
     case 'short_answer':
     case 'short_answer_question':
-      return convertMultipleChoiceResource(resource);
+      return convertShortAnswerResource(resource);
+    case 'detect_answer':
+      return convertDetectAnswerResource(resource);
+    case 'image':
+      return convertImageResource(resource);
     case 'container':
       return convertContainerResource(resource);
     case 'zystudio':
@@ -281,6 +285,21 @@ function convertCustomResource(resource: ZyBooksContentResource): string {
   if (tool === 'codewriting') {
     return convertCodeWritingResource(resource);
   }
+  if (tool === 'codeoutput') {
+    return convertCodeOutputResource(resource);
+  }
+  if (tool === 'parsonscodingpa') {
+    return convertParsonsResource(resource);
+  }
+  if (tool === 'defnmatch') {
+    return convertDefnMatchResource(resource);
+  }
+  if (tool === 'codingprogression') {
+    return convertCodingProgressionResource(resource);
+  }
+  if (tool === 'progressionplayerinteractiveandaccessible') {
+    return convertProgressionResource(resource);
+  }
 
   const lines: string[] = [];
   const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' :
@@ -289,7 +308,7 @@ function convertCustomResource(resource: ZyBooksContentResource): string {
   lines.push(`### ${label}: ${caption}`);
 
   if (payload.alt_text) {
-    lines.push('', payload.alt_text);
+    lines.push('', stripHtml(payload.alt_text));
   }
 
   if (payload.instructions) {
@@ -307,7 +326,7 @@ function convertPythonTutorResource(resource: ZyBooksContentResource): string {
   lines.push(`**${caption}**`);
 
   if (payload.alt_text) {
-    lines.push('', payload.alt_text);
+    lines.push('', stripHtml(payload.alt_text));
   }
 
   const traceCode = payload.options?.trace?.code;
@@ -329,7 +348,7 @@ function convertZyAnimatorResource(resource: ZyBooksContentResource): string {
   lines.push(`### ${label}: ${caption}`);
 
   if (payload.alt_text) {
-    lines.push('', payload.alt_text);
+    lines.push('', stripHtml(payload.alt_text));
   }
 
   return lines.join('\n');
@@ -582,6 +601,204 @@ function convertCodeWritingResource(resource: ZyBooksContentResource): string {
   return lines.join('\n');
 }
 
+function convertShortAnswerResource(resource: ZyBooksContentResource): string {
+  const lines: string[] = [];
+  const payload = resource.payload || {};
+  const caption = resource.caption || '';
+  const activityType = resource.activity_type || 'participation';
+  const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' : 'PARTICIPATION ACTIVITY';
+
+  lines.push(`### ${label}: ${caption}`);
+
+  const questions = payload.questions || [];
+  if (Array.isArray(questions)) {
+    for (let qi = 0; qi < questions.length; qi++) {
+      const q = questions[qi];
+      const questionText = cleanText(q.text);
+      const textBefore = q.text_before ? cleanText(q.text_before) : '';
+      const textAfter = q.text_after ? cleanText(q.text_after) : '';
+      const hint = q.hint ? cleanText(q.hint) : '';
+
+      const prompt = [textBefore, questionText, textAfter].filter(Boolean).join(' ');
+      if (prompt) {
+        if (questions.length > 1) {
+          lines.push('', `**${qi + 1}.** ${prompt}`);
+        } else {
+          lines.push('', prompt);
+        }
+      }
+
+      const answers = q.answers || [];
+      if (Array.isArray(answers) && answers.length > 0) {
+        const answerTexts = answers.map((a: any) => typeof a === 'string' ? a : cleanText(a)).filter(Boolean);
+        if (answerTexts.length > 0) {
+          lines.push(`Answer: ${answerTexts.join(' or ')}`);
+        }
+      }
+
+      if (hint) {
+        lines.push(`*Hint: ${hint}*`);
+      }
+
+      if (q.explanation) {
+        const exp = cleanText(q.explanation);
+        if (exp) lines.push(`*${exp}*`);
+      }
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function convertDetectAnswerResource(resource: ZyBooksContentResource): string {
+  const lines: string[] = [];
+  const payload = resource.payload || {};
+  const caption = resource.caption || '';
+  const activityType = resource.activity_type || 'participation';
+  const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' : 'PARTICIPATION ACTIVITY';
+
+  lines.push(`### ${label}: ${caption}`);
+
+  if (payload.alt_text) {
+    lines.push('', stripHtml(payload.alt_text));
+  }
+
+  const questions = payload.questions || [];
+  if (Array.isArray(questions)) {
+    for (const q of questions) {
+      if (q.contents) {
+        const content = cleanText(q.contents);
+        if (content) lines.push('', content);
+      }
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function convertCodeOutputResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const options = payload.options || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+  const activityType = resource.activity_type || 'challenge';
+  const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' : 'PARTICIPATION ACTIVITY';
+
+  lines.push(`### ${label}: ${caption}`);
+
+  const lang = (options.language || 'python').toLowerCase().replace('python3', 'python');
+  const levels = options.levels || [];
+  if (Array.isArray(levels)) {
+    for (let i = 0; i < levels.length; i++) {
+      const level = levels[i];
+      if (!level || typeof level !== 'object') continue;
+      if (levels.length > 1) {
+        lines.push('', `**Level ${i + 1}:**`);
+      }
+      if (level.code && typeof level.code === 'string') {
+        lines.push('', 'What is the output?', '', '```' + lang, decodeEntities(level.code).trim(), '```');
+      }
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function convertParsonsResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const options = payload.options || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  lines.push(`### CHALLENGE ACTIVITY: ${caption}`);
+
+  if (options.prompt) {
+    lines.push('', stripHtml(typeof options.prompt === 'string' ? options.prompt : extractAttributedText(options.prompt)));
+  }
+
+  const lang = (options.language || 'python').toLowerCase().replace('python3', 'python');
+  const files = options.files || [];
+  if (Array.isArray(files)) {
+    for (const file of files) {
+      if (file.solution && typeof file.solution === 'string') {
+        lines.push('', '**Solution:**', '```' + lang, decodeEntities(file.solution).trim(), '```');
+      }
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function convertDefnMatchResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const options = payload.options || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  lines.push(`### PARTICIPATION ACTIVITY: ${caption}`);
+
+  const terms = options.terms || [];
+  if (Array.isArray(terms)) {
+    for (const term of terms) {
+      const word = typeof term.word === 'string' ? term.word : cleanText(term.word);
+      const defn = typeof term.definition === 'string' ? term.definition : cleanText(term.definition);
+      if (word && defn) {
+        lines.push(`- **${stripHtml(word)}**: ${stripHtml(defn)}`);
+      }
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function convertCodingProgressionResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const options = payload.options || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  lines.push(`### CHALLENGE ACTIVITY: ${caption}`);
+
+  const lang = (options.language || 'python').toLowerCase().replace('python3', 'python');
+  const levels = options.levels || [];
+  if (Array.isArray(levels)) {
+    for (let i = 0; i < levels.length; i++) {
+      const level = levels[i];
+      if (!level) continue;
+      if (levels.length > 1) {
+        lines.push('', `**Level ${i + 1}:**`);
+      }
+      if (level.prompt) {
+        lines.push(stripHtml(typeof level.prompt === 'string' ? level.prompt : extractAttributedText(level.prompt)));
+      }
+      if (level.code && typeof level.code === 'string') {
+        lines.push('', '```' + lang, decodeEntities(level.code).trim(), '```');
+      }
+    }
+  }
+
+  return lines.join('\n');
+}
+
+function convertProgressionResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const options = payload.options || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+
+  lines.push(`### CHALLENGE ACTIVITY: ${caption}`);
+
+  if (resource.instructions && typeof resource.instructions === 'string') {
+    lines.push('', stripHtml(resource.instructions));
+  }
+
+  if (payload.alt_text) {
+    lines.push('', stripHtml(payload.alt_text));
+  }
+
+  return lines.join('\n');
+}
+
 function convertAnimationResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
   const lines: string[] = [];
@@ -592,7 +809,7 @@ function convertAnimationResource(resource: ZyBooksContentResource): string {
   }
 
   if (payload.alt_text) {
-    lines.push(payload.alt_text);
+    lines.push(stripHtml(payload.alt_text));
   }
 
   const htmlArray = payload.html;
@@ -653,11 +870,20 @@ function convertTableResource(resource: ZyBooksContentResource): string {
 }
 
 function convertImageResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const lines: string[] = [];
   const caption = resource.caption || '';
-  if (caption) {
-    return `**Figure:** ${caption}`;
+  const title = payload.title || '';
+
+  if (caption || title) {
+    lines.push(`**Figure:** ${caption || title}`);
   }
-  return '';
+
+  if (payload.alt_text) {
+    lines.push('', stripHtml(payload.alt_text));
+  }
+
+  return lines.join('\n');
 }
 
 function convertGenericResource(resource: ZyBooksContentResource): string {
@@ -670,7 +896,7 @@ function convertGenericResource(resource: ZyBooksContentResource): string {
   }
 
   if (payload.alt_text) {
-    lines.push(payload.alt_text);
+    lines.push(stripHtml(payload.alt_text));
   }
 
   const htmlArray = payload.html;
