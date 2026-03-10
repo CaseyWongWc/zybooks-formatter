@@ -300,6 +300,9 @@ function convertCustomResource(resource: ZyBooksContentResource): string {
   if (tool === 'progressionplayerinteractiveandaccessible') {
     return convertProgressionResource(resource);
   }
+  if (tool === 'arrangeinst') {
+    return convertArrangeInstResource(resource);
+  }
 
   const lines: string[] = [];
   const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' :
@@ -614,12 +617,28 @@ function convertShortAnswerResource(resource: ZyBooksContentResource): string {
   if (Array.isArray(questions)) {
     for (let qi = 0; qi < questions.length; qi++) {
       const q = questions[qi];
-      const questionText = cleanText(q.text);
-      const textBefore = q.text_before ? cleanText(q.text_before) : '';
-      const textAfter = q.text_after ? cleanText(q.text_after) : '';
+      const rawText = extractAttributedText(q.text);
+      const hasCodeBlock = rawText.includes('class="highlight"') || rawText.includes('class="code');
+      const questionText = stripHtml(rawText.replace(/<\/br>/gi, '<br/>'));
+
+      const rawBefore = q.text_before ? extractAttributedText(q.text_before).replace(/<\/br>/gi, '<br/>') : '';
+      const rawAfter = q.text_after ? extractAttributedText(q.text_after).replace(/<\/br>/gi, '<br/>') : '';
+      const beforeHasCode = rawBefore.includes('class="highlight"') || rawBefore.includes('class="code');
+      const afterHasCode = rawAfter.includes('class="highlight"') || rawAfter.includes('class="code');
+      const textBefore = rawBefore ? stripHtml(rawBefore) : '';
+      const textAfter = rawAfter ? stripHtml(rawAfter) : '';
       const hint = q.hint ? cleanText(q.hint) : '';
 
-      const prompt = [textBefore, questionText, textAfter].filter(Boolean).join(' ');
+      if (beforeHasCode && textBefore) {
+        lines.push('', textBefore);
+      }
+
+      const prompt = [
+        (beforeHasCode ? '' : textBefore),
+        questionText,
+        (afterHasCode ? '' : textAfter)
+      ].filter(Boolean).join(' ');
+
       if (prompt) {
         if (questions.length > 1) {
           lines.push('', `**${qi + 1}.** ${prompt}`);
@@ -628,11 +647,22 @@ function convertShortAnswerResource(resource: ZyBooksContentResource): string {
         }
       }
 
+      if (afterHasCode && textAfter) {
+        lines.push('', textAfter);
+      }
+
       const answers = q.answers || [];
       if (Array.isArray(answers) && answers.length > 0) {
         const answerTexts = answers.map((a: any) => typeof a === 'string' ? a : cleanText(a)).filter(Boolean);
         if (answerTexts.length > 0) {
-          lines.push(`Answer: ${answerTexts.join(' or ')}`);
+          if (answerTexts.some(a => a.includes('\n'))) {
+            lines.push('', '**Answer:**', '```', answerTexts[0], '```');
+            if (answerTexts.length > 1) {
+              lines.push('Also accepted: ' + answerTexts.slice(1).join(' or '));
+            }
+          } else {
+            lines.push(`Answer: ${answerTexts.join(' or ')}`);
+          }
         }
       }
 
@@ -695,8 +725,25 @@ function convertCodeOutputResource(resource: ZyBooksContentResource): string {
       if (levels.length > 1) {
         lines.push('', `**Level ${i + 1}:**`);
       }
-      if (level.code && typeof level.code === 'string') {
-        lines.push('', 'What is the output?', '', '```' + lang, decodeEntities(level.code).trim(), '```');
+
+      let code = '';
+      if (level.template && typeof level.template === 'string') {
+        code = level.template;
+        const params = level.parameters || {};
+        for (const [key, values] of Object.entries(params)) {
+          const firstVal = Array.isArray(values) ? (values as string[])[0] : String(values);
+          code = code.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), firstVal);
+        }
+      } else if (level.code && typeof level.code === 'string') {
+        code = level.code;
+      }
+
+      if (code) {
+        lines.push('', 'What is the output?', '', '```' + lang, decodeEntities(code).trim(), '```');
+      }
+
+      if (level.explanation) {
+        lines.push('', '*' + stripHtml(level.explanation) + '*');
       }
     }
   }
@@ -722,6 +769,26 @@ function convertParsonsResource(resource: ZyBooksContentResource): string {
     for (const file of files) {
       if (file.solution && typeof file.solution === 'string') {
         lines.push('', '**Solution:**', '```' + lang, decodeEntities(file.solution).trim(), '```');
+      } else if (Array.isArray(file.contents) && file.contents.length > 0) {
+        const solutionLines = file.contents
+          .map((c: any) => {
+            const sol = decodeEntities(c.solution || '');
+            const indent = '  '.repeat(c.indents || 0);
+            return indent + sol;
+          })
+          .filter((s: string) => s.trim());
+        if (solutionLines.length > 0) {
+          lines.push('', '**Solution:**', '```' + lang, solutionLines.join('\n'), '```');
+          const distractors = file.contents
+            .filter((c: any) => Array.isArray(c.distractors) && c.distractors.length > 0)
+            .flatMap((c: any) => c.distractors.map((d: string) => decodeEntities(d)));
+          if (distractors.length > 0) {
+            lines.push('', '**Distractor lines (wrong answers):**');
+            for (const d of distractors) {
+              lines.push(`- \`${d}\``);
+            }
+          }
+        }
       }
     }
   }
@@ -794,6 +861,49 @@ function convertProgressionResource(resource: ZyBooksContentResource): string {
 
   if (payload.alt_text) {
     lines.push('', stripHtml(payload.alt_text));
+  }
+
+  return lines.join('\n');
+}
+
+function convertArrangeInstResource(resource: ZyBooksContentResource): string {
+  const payload = resource.payload || {};
+  const options = payload.options || {};
+  const lines: string[] = [];
+  const caption = resource.caption || '';
+  const activityType = resource.activity_type || 'participation';
+  const label = activityType === 'challenge' ? 'CHALLENGE ACTIVITY' : 'PARTICIPATION ACTIVITY';
+
+  lines.push(`### ${label}: ${caption}`);
+
+  if (resource.instructions) {
+    const instrText = cleanText(resource.instructions);
+    if (instrText) lines.push('', instrText);
+  }
+
+  const vars = options.vars || [];
+  if (Array.isArray(vars) && vars.length > 0) {
+    lines.push('', `Variables: ${vars.join(', ')}`);
+  }
+
+  const instrs = options.instrs || [];
+  if (Array.isArray(instrs) && instrs.length > 0) {
+    const fixed = instrs.filter((i: any) => i.sortable === 'unsortable' || i.sortable === false);
+    const sortable = instrs.filter((i: any) => i.sortable === 'sortable' || i.sortable === true);
+
+    if (fixed.length > 0) {
+      lines.push('', '**Fixed instructions (in order):**');
+      for (const instr of fixed) {
+        lines.push('```', decodeEntities(instr.code || '').trim(), '```');
+      }
+    }
+
+    if (sortable.length > 0) {
+      lines.push('', '**Drag-and-drop instructions (arrange these):**');
+      for (let i = 0; i < sortable.length; i++) {
+        lines.push(`${i + 1}. \`${decodeEntities(sortable[i].code || '').replace(/\n/g, ' / ')}\``);
+      }
+    }
   }
 
   return lines.join('\n');
