@@ -279,7 +279,8 @@ document.getElementById("submitForm").addEventListener("submit", async function(
 
   app.get("/api/zybooks-markdown", async (req, res) => {
     try {
-      const { auth_token, zybook_code, chapter, section } = req.query;
+      const auth_token = req.query.auth_token || (req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : null);
+      const { zybook_code, chapter, section } = req.query;
       if (!auth_token || !zybook_code || !chapter || !section) {
         return res.status(400).json({ error: "Missing required parameters: auth_token, zybook_code, chapter, section" });
       }
@@ -387,12 +388,12 @@ function generateColabNotebook(appUrl: string) {
         "def fetch_section(chapter, section, display_markdown=True):\n",
         '    """Fetch a formatted zyBooks section as markdown."""\n',
         "    params = {\n",
-        '        "auth_token": AUTH_TOKEN,\n',
         '        "zybook_code": ZYBOOK_CODE,\n',
         '        "chapter": chapter,\n',
         '        "section": section\n',
         "    }\n",
-        '    resp = requests.get(f"{FORMATTER_URL}/api/zybooks-markdown", params=params)\n',
+        '    headers = {"Authorization": f"Bearer {AUTH_TOKEN}"}\n',
+        '    resp = requests.get(f"{FORMATTER_URL}/api/zybooks-markdown", params=params, headers=headers)\n',
         "    if resp.status_code != 200:\n",
         '        print(f"Error {resp.status_code}: {resp.json().get(\'error\', \'Unknown error\')}")\n',
         "        return None\n",
