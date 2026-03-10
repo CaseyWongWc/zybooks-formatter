@@ -621,8 +621,8 @@ function convertShortAnswerResource(resource: ZyBooksContentResource): string {
       const hasCodeBlock = rawText.includes('class="highlight"') || rawText.includes('class="code');
       const questionText = stripHtml(rawText.replace(/<\/br>/gi, '<br/>'));
 
-      const rawBefore = q.text_before ? extractAttributedText(q.text_before) : '';
-      const rawAfter = q.text_after ? extractAttributedText(q.text_after) : '';
+      const rawBefore = q.text_before ? extractAttributedText(q.text_before).replace(/<\/br>/gi, '<br/>') : '';
+      const rawAfter = q.text_after ? extractAttributedText(q.text_after).replace(/<\/br>/gi, '<br/>') : '';
       const beforeHasCode = rawBefore.includes('class="highlight"') || rawBefore.includes('class="code');
       const afterHasCode = rawAfter.includes('class="highlight"') || rawAfter.includes('class="code');
       const textBefore = rawBefore ? stripHtml(rawBefore) : '';
@@ -888,8 +888,8 @@ function convertArrangeInstResource(resource: ZyBooksContentResource): string {
 
   const instrs = options.instrs || [];
   if (Array.isArray(instrs) && instrs.length > 0) {
-    const fixed = instrs.filter((i: any) => i.sortable === 'unsortable');
-    const sortable = instrs.filter((i: any) => i.sortable === 'sortable');
+    const fixed = instrs.filter((i: any) => i.sortable === 'unsortable' || i.sortable === false);
+    const sortable = instrs.filter((i: any) => i.sortable === 'sortable' || i.sortable === true);
 
     if (fixed.length > 0) {
       lines.push('', '**Fixed instructions (in order):**');
