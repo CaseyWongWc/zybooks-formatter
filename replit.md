@@ -78,6 +78,9 @@ The application is a single-page web tool built with a frontend-only architectur
 - Works with Session Mode — "Fetch & Capture" when session is active
 - Bookmarklet polling auto-detects `_apiMode` JSON payloads and routes to JSON converter instead of HTML parser
 - Auth token stored only in browser localStorage, never in server storage
+- Server-side markdown endpoint: `GET /api/zybooks-markdown?auth_token=X&zybook_code=X&chapter=N&section=N` — fetches and converts in one call
+- Colab notebook template: `GET /api/notebook-template` — downloads .ipynb with `fetch_section()`, `fetch_chapter()`, `save_chapter_md()`, `publish_to_notion()` functions
+- Notebook pushed to GitHub: `notebooks/zybooks_study_notebook.ipynb` — opens directly in Colab via GitHub link
 
 ## Submit Page (Browser Control Integration)
 
