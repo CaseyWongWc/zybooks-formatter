@@ -124,20 +124,23 @@ export async function registerRoutes(
     }
     return res.json({ html: null, auth_token: null });
   });
+  const adminKey = process.env.SESSION_SECRET || '';
+
+  function requireAdmin(req: any, res: any): boolean {
+    const provided = req.headers['x-admin-key'] || req.query.admin_key;
+    if (!adminKey || !provided || provided !== adminKey) {
+      res.status(403).json({ error: "Forbidden — provide X-Admin-Key header" });
+      return false;
+    }
+    return true;
+  }
+
   app.post("/api/token", express.json(), async (req, res) => {
+    if (!requireAdmin(req, res)) return;
     try {
-      const { refresh_token, auth_token } = req.body;
+      const { refresh_token } = req.body;
       if (!refresh_token) {
         return res.status(400).json({ error: "Missing refresh_token" });
-      }
-
-      if (auth_token) {
-        storedTokens = {
-          auth_token,
-          refresh_token,
-          expiry_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-          user_id: 0,
-        };
       }
 
       const refreshed = await refreshZybooksToken(refresh_token);
@@ -169,7 +172,8 @@ export async function registerRoutes(
     });
   });
 
-  app.delete("/api/token", (_req, res) => {
+  app.delete("/api/token", (req, res) => {
+    if (!requireAdmin(req, res)) return;
     storedTokens = null;
     return res.json({ ok: true });
   });
@@ -408,7 +412,8 @@ document.getElementById("submitForm").addEventListener("submit", async function(
           "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
         },
       });
-      if (apiRes.status === 401 && storedTokens) {
+      const usedStoredToken = !req.query.auth_token && !req.headers.authorization;
+      if (apiRes.status === 401 && storedTokens && usedStoredToken) {
         console.log(`[Token] Got 401, attempting refresh...`);
         const refreshed = await refreshZybooksToken(storedTokens.refresh_token);
         if (refreshed) {
