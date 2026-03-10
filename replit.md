@@ -78,8 +78,16 @@ The application is a single-page web tool built with a frontend-only architectur
 - Works with Session Mode — "Fetch & Capture" when session is active
 - Bookmarklet polling auto-detects `_apiMode` JSON payloads and routes to JSON converter instead of HTML parser
 - Auth token stored only in browser localStorage, never in server storage
-- Server-side markdown endpoint: `GET /api/zybooks-markdown?auth_token=X&zybook_code=X&chapter=N&section=N` — fetches and converts in one call
-- Colab notebook template: `GET /api/notebook-template` — downloads .ipynb with `fetch_section()`, `fetch_chapter()`, `save_chapter_md()`, `publish_to_notion()` functions
+- **Token Management** (auto-refresh):
+  - `POST /api/token` — Store refresh_token once; server auto-refreshes auth tokens before they expire
+  - `GET /api/token/status` — Check if token is configured, when it expires, hours remaining
+  - `DELETE /api/token` — Clear stored tokens
+  - Auto-retry: If a 401 is received during fetch, automatically refreshes token and retries
+  - zyBooks refresh endpoint: `GET https://zyserver.zybooks.com/v1/refresh?refresh_token=X`
+  - Refresh tokens are long-lived (no expiry); auth tokens expire in ~24h
+- Server-side markdown endpoint: `GET /api/zybooks-markdown` — fetches and converts in one call; uses stored token if no explicit auth provided
+- **LLM API access**: `GET /api` returns full API guide with all endpoints, params, and quickstart instructions
+- Colab notebook template: `GET /api/notebook-template` — downloads .ipynb with `fetch_section()`, `fetch_chapter()`, `save_chapter_md()`, `publish_to_notion()` functions; auto-detects server-stored token
 - Notebook pushed to GitHub: `notebooks/zybooks_study_notebook.ipynb` — opens directly in Colab via GitHub link
 
 ## Submit Page (Browser Control Integration)
