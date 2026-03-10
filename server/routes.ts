@@ -38,6 +38,62 @@ async function getGitHubToken(): Promise<{ token: string; login: string } | null
 
 let pendingBookmarkletHtml: { html: string; timestamp: number; auth_token?: string | null } | null = null;
 
+interface TokenStore {
+  auth_token: string;
+  refresh_token: string;
+  expiry_date: string;
+  user_id: number;
+}
+
+let storedTokens: TokenStore | null = null;
+
+async function refreshZybooksToken(refresh_token: string): Promise<TokenStore | null> {
+  try {
+    const res = await fetch(
+      `https://zyserver.zybooks.com/v1/refresh?refresh_token=${encodeURIComponent(refresh_token)}`,
+      {
+        headers: {
+          "Origin": "https://learn.zybooks.com",
+          "Referer": "https://learn.zybooks.com/",
+        },
+      }
+    );
+    const data = await res.json();
+    if (data.success && data.session) {
+      const tokens: TokenStore = {
+        auth_token: data.session.auth_token,
+        refresh_token: data.session.refresh_token,
+        expiry_date: data.session.expiry_date,
+        user_id: data.session.user_id,
+      };
+      storedTokens = tokens;
+      console.log(`[Token] Refreshed. Expires: ${tokens.expiry_date}`);
+      return tokens;
+    }
+    console.error(`[Token] Refresh failed:`, data.error);
+    return null;
+  } catch (err: any) {
+    console.error(`[Token] Refresh error:`, err.message);
+    return null;
+  }
+}
+
+async function getValidAuthToken(): Promise<string | null> {
+  if (!storedTokens) return null;
+
+  const expiry = new Date(storedTokens.expiry_date).getTime();
+  const now = Date.now();
+  const bufferMs = 10 * 60 * 1000;
+
+  if (now + bufferMs < expiry) {
+    return storedTokens.auth_token;
+  }
+
+  console.log(`[Token] Auth token expiring soon, refreshing...`);
+  const refreshed = await refreshZybooksToken(storedTokens.refresh_token);
+  return refreshed?.auth_token || null;
+}
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -68,6 +124,56 @@ export async function registerRoutes(
     }
     return res.json({ html: null, auth_token: null });
   });
+  app.post("/api/token", express.json(), async (req, res) => {
+    try {
+      const { refresh_token, auth_token } = req.body;
+      if (!refresh_token) {
+        return res.status(400).json({ error: "Missing refresh_token" });
+      }
+
+      if (auth_token) {
+        storedTokens = {
+          auth_token,
+          refresh_token,
+          expiry_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          user_id: 0,
+        };
+      }
+
+      const refreshed = await refreshZybooksToken(refresh_token);
+      if (!refreshed) {
+        return res.status(401).json({ error: "Failed to refresh token — refresh_token may be invalid" });
+      }
+      return res.json({
+        ok: true,
+        expires: refreshed.expiry_date,
+        user_id: refreshed.user_id,
+      });
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get("/api/token/status", (_req, res) => {
+    if (!storedTokens) {
+      return res.json({ configured: false });
+    }
+    const expiry = new Date(storedTokens.expiry_date);
+    const now = new Date();
+    return res.json({
+      configured: true,
+      user_id: storedTokens.user_id,
+      expires: storedTokens.expiry_date,
+      expires_in_hours: Math.max(0, (expiry.getTime() - now.getTime()) / (1000 * 60 * 60)).toFixed(1),
+      is_valid: expiry.getTime() > now.getTime(),
+    });
+  });
+
+  app.delete("/api/token", (_req, res) => {
+    storedTokens = null;
+    return res.json({ ok: true });
+  });
+
   app.get("/api/zybooks-section", async (req, res) => {
     try {
       const { auth_token, zybook_code, chapter, section } = req.query;
@@ -279,10 +385,18 @@ document.getElementById("submitForm").addEventListener("submit", async function(
 
   app.get("/api/zybooks-markdown", async (req, res) => {
     try {
-      const auth_token = req.query.auth_token || (req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : null);
+      let auth_token = req.query.auth_token as string || (req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : null);
       const { zybook_code, chapter, section } = req.query;
+
+      if (!auth_token) {
+        const storedToken = await getValidAuthToken();
+        if (storedToken) {
+          auth_token = storedToken;
+        }
+      }
+
       if (!auth_token || !zybook_code || !chapter || !section) {
-        return res.status(400).json({ error: "Missing required parameters: auth_token, zybook_code, chapter, section" });
+        return res.status(400).json({ error: !auth_token ? "No auth token provided and no stored token configured. POST to /api/token with your refresh_token first." : "Missing required parameters: zybook_code, chapter, section" });
       }
       const url = `https://zyserver.zybooks.com/v1/zybook/${zybook_code}/chapter/${chapter}/section/${section}`;
       const apiRes = await fetch(url, {
@@ -294,6 +408,36 @@ document.getElementById("submitForm").addEventListener("submit", async function(
           "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
         },
       });
+      if (apiRes.status === 401 && storedTokens) {
+        console.log(`[Token] Got 401, attempting refresh...`);
+        const refreshed = await refreshZybooksToken(storedTokens.refresh_token);
+        if (refreshed) {
+          auth_token = refreshed.auth_token;
+          const retryRes = await fetch(url, {
+            headers: {
+              "Accept": "application/json, text/javascript, */*; q=0.01",
+              "Authorization": `Bearer ${auth_token}`,
+              "Origin": "https://learn.zybooks.com",
+              "Referer": "https://learn.zybooks.com/",
+            },
+          });
+          if (!retryRes.ok) {
+            return res.status(retryRes.status).json({ error: `zyBooks returned ${retryRes.status} after token refresh` });
+          }
+          const data = await retryRes.json();
+          if (data.success === false || data.error) {
+            return res.status(400).json({ error: data.error?.message || data.error || "Unknown error" });
+          }
+          const markdown = convertZybooksJson(data, Number(chapter), Number(section));
+          const title = data.section?.title || `Section ${chapter}.${section}`;
+          const format = req.query.format || 'json';
+          if (format === 'text') {
+            return res.type('text/plain').send(markdown);
+          }
+          return res.json({ markdown, title, chapter: Number(chapter), section: Number(section) });
+        }
+        return res.status(401).json({ error: "Auth token expired and refresh failed" });
+      }
       if (apiRes.status === 401) {
         return res.status(401).json({ error: "Invalid or expired auth token" });
       }
@@ -350,6 +494,50 @@ document.getElementById("submitForm").addEventListener("submit", async function(
     }
   });
 
+  app.get("/api", (_req, res) => {
+    const baseUrl = `https://${_req.headers.host || 'zy-books-formatter.replit.app'}`;
+    res.json({
+      name: "zyBooks Formatter API",
+      description: "Converts zyBooks textbook sections into clean, readable Markdown. Supports auto token refresh.",
+      endpoints: {
+        "POST /api/token": {
+          description: "Store a zyBooks refresh token for auto-authentication. Only needed once — the app will auto-refresh the auth token.",
+          body: { refresh_token: "string (required)", auth_token: "string (optional, current auth token)" },
+          example: `curl -X POST ${baseUrl}/api/token -H "Content-Type: application/json" -d '{"refresh_token":"YOUR_REFRESH_TOKEN"}'`,
+        },
+        "GET /api/token/status": {
+          description: "Check if a token is configured and when it expires.",
+          example: `curl ${baseUrl}/api/token/status`,
+        },
+        "GET /api/zybooks-markdown": {
+          description: "Fetch and convert a zyBooks section to Markdown. Uses stored token if no auth provided.",
+          params: {
+            zybook_code: "string (required) — e.g. CPPCS2520NguyenSpring2026",
+            chapter: "number (required)",
+            section: "number (required)",
+            format: "string (optional) — 'json' (default) or 'text' for raw markdown",
+          },
+          auth: "Optional. Bearer token in Authorization header, or auth_token query param. Falls back to stored token.",
+          example: `curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1"`,
+          example_text: `curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1&format=text"`,
+        },
+        "GET /api/notebook-template": {
+          description: "Download a Colab-ready Jupyter notebook with study helpers.",
+          example: `curl -O ${baseUrl}/api/notebook-template`,
+        },
+        "POST /api/notion/send": {
+          description: "Publish markdown content to Notion.",
+          body: { markdown: "string (required)", title: "string (required)", parentPageId: "string (optional)" },
+        },
+      },
+      quickstart: [
+        `1. Set your refresh token once: curl -X POST ${baseUrl}/api/token -H "Content-Type: application/json" -d '{"refresh_token":"YOUR_TOKEN"}'`,
+        `2. Fetch any section: curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1&format=text"`,
+        "3. The app auto-refreshes auth tokens — no manual token management needed.",
+      ],
+    });
+  });
+
   return httpServer;
 }
 
@@ -381,9 +569,10 @@ function generateColabNotebook(appUrl: string) {
         `FORMATTER_URL = "${appUrl}"\n`,
         'ZYBOOK_CODE = "CPPCS2520NguyenSpring2026"\n',
         "\n",
-        "# Your zyBooks auth token (get from browser localStorage or bookmarklet)\n",
-        "# To find it: Open zyBooks > F12 > Console > type: localStorage.getItem('zybooks-auth-token')\n",
-        'AUTH_TOKEN = ""  # Paste your token here\n',
+        "# Option 1: Store your refresh token on the server (recommended, auto-refreshes)\n",
+        "#   Run this once: requests.post(f'{FORMATTER_URL}/api/token', json={'refresh_token': 'YOUR_TOKEN'})\n",
+        "# Option 2: Set auth token manually (expires in ~24h)\n",
+        'AUTH_TOKEN = ""  # Leave empty to use server-stored token\n',
         "\n",
         "def fetch_section(chapter, section, display_markdown=True):\n",
         '    """Fetch a formatted zyBooks section as markdown."""\n',
@@ -392,7 +581,7 @@ function generateColabNotebook(appUrl: string) {
         '        "chapter": chapter,\n',
         '        "section": section\n',
         "    }\n",
-        '    headers = {"Authorization": f"Bearer {AUTH_TOKEN}"}\n',
+        '    headers = {"Authorization": f"Bearer {AUTH_TOKEN}"} if AUTH_TOKEN else {}\n',
         '    resp = requests.get(f"{FORMATTER_URL}/api/zybooks-markdown", params=params, headers=headers)\n',
         "    if resp.status_code != 200:\n",
         '        print(f"Error {resp.status_code}: {resp.json().get(\'error\', \'Unknown error\')}")\n',
@@ -448,7 +637,13 @@ function generateColabNotebook(appUrl: string) {
         'print("zyBooks Formatter connected!")\n',
         'print(f"App: {FORMATTER_URL}")\n',
         'print(f"Book: {ZYBOOK_CODE}")\n',
-        'print(f"Token: {\'Set\' if AUTH_TOKEN else \'NOT SET - paste your token above!\'}")'
+        'status = requests.get(f"{FORMATTER_URL}/api/token/status").json()\n',
+        'if status.get("configured"):\n',
+        '    print(f"Server token: ✓ configured (expires in {status[\'expires_in_hours\']}h)")\n',
+        'elif AUTH_TOKEN:\n',
+        '    print("Using manual AUTH_TOKEN")\n',
+        'else:\n',
+        '    print("⚠ No token configured! Set AUTH_TOKEN above or run: requests.post(f\'{FORMATTER_URL}/api/token\', json={\'refresh_token\': \'YOUR_TOKEN\'})")'
       ],
       execution_count: null,
       outputs: []
