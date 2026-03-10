@@ -739,6 +739,121 @@ function convertDetectAnswerResource(resource: ZyBooksContentResource): string {
   return lines.join('\n');
 }
 
+function extractExampleFromPythonParams(paramCode: string): Record<string, string> {
+  const vars: Record<string, string> = {};
+
+  const listMatch = paramCode.match(/\[\s*\(([^)]*)\)/);
+  if (listMatch) {
+    const firstTuple = listMatch[1];
+    const parts = firstTuple.split(',').map(s => s.trim().replace(/^['"]|['"]$/g, ''));
+    if (parts.length >= 2) {
+      vars['category'] = parts[0];
+      vars['name'] = parts[1];
+    }
+  }
+
+  const allTuples: [string, string][] = [];
+  const tupleMatches = paramCode.matchAll(/\(\s*'([^']+)'\s*,\s*'([^']+)'\s*\)/g);
+  for (const m of tupleMatches) {
+    allTuples.push([m[1], m[2]]);
+  }
+
+  const namedTupleLists = paramCode.matchAll(/(\w+)\s*=\s*\[\s*\((['"][^'"]+['"])\s*,\s*(\d+)\)/g);
+  for (const m of namedTupleLists) {
+    const listName = m[1];
+    const firstStr = m[2].replace(/^['"]|['"]$/g, '');
+    const firstNum = m[3];
+    if (listName === 'stride_list') {
+      if (!vars['stride_str']) vars['stride_str'] = firstStr;
+      if (!vars['stride']) vars['stride'] = firstNum;
+    }
+  }
+
+  const dictEntries = paramCode.matchAll(/(-?\d+)\s*:\s*'([^']+)'/g);
+  for (const m of dictEntries) {
+    break;
+  }
+
+  const minWrapMatch = paramCode.matchAll(/(\w+)\s*=\s*min\(\s*(\d+)\s*,\s*pick_from_range\(\s*([^,)]+)\s*,/g);
+  for (const m of minWrapMatch) {
+    const varName = m[1];
+    const minCap = parseInt(m[2]);
+    let rangeStart = parseInt(m[3]);
+    if (isNaN(rangeStart)) {
+      rangeStart = 2;
+    }
+    if (!vars[varName]) {
+      vars[varName] = String(Math.min(minCap, rangeStart + 2));
+    }
+  }
+
+  const pickRangeMatches = paramCode.matchAll(/(\w+)\s*=\s*pick_from_range\(\s*(-?\d+)\s*,/g);
+  for (const m of pickRangeMatches) {
+    if (!vars[m[1]]) vars[m[1]] = m[2];
+  }
+
+  const numAssignsDirect = paramCode.matchAll(/^(\w+)\s*=\s*(\d+)\s*$/gm);
+  for (const m of numAssignsDirect) {
+    if (!vars[m[1]]) vars[m[1]] = m[2];
+  }
+
+  const simpleAssigns = paramCode.matchAll(/(\w+)\s*=\s*['"]([^'"]+)['"]/g);
+  for (const m of simpleAssigns) {
+    if (!vars[m[1]]) vars[m[1]] = m[2];
+  }
+
+  const sampleMatch = paramCode.match(/\[\s*\(\s*\w+\s*,\s*(\w+)\s*\)\s*,\s*\(\s*\w+\s*,\s*(\w+)\s*\)\s*\]\s*=\s*random\.sample/);
+  if (sampleMatch && allTuples.length >= 2) {
+    if (!vars[sampleMatch[1]]) vars[sampleMatch[1]] = allTuples[0][1];
+    if (!vars[sampleMatch[2]]) vars[sampleMatch[2]] = allTuples.length > 1 ? allTuples[1][1] : allTuples[0][1];
+  }
+
+  const name = vars['name'] || vars['name1'] || '';
+  if (name) {
+    const endIdxStr = vars['end_index'];
+    if (endIdxStr) {
+      const endIdx = parseInt(endIdxStr);
+      if (!isNaN(endIdx) && endIdx > 0) {
+        if (!vars['end_index_minus']) vars['end_index_minus'] = String(endIdx - 1);
+        if (!vars['char1'] && name.length > 0) {
+          const startIdx = parseInt(vars['start_index'] || '0');
+          vars['char1'] = name[isNaN(startIdx) ? 0 : startIdx] || name[0];
+        }
+        if (!vars['char2'] && endIdx <= name.length) vars['char2'] = name[endIdx - 1];
+      } else if (!isNaN(endIdx) && endIdx < 0) {
+        const posIdx = name.length + endIdx;
+        if (!vars['end_index_pos']) vars['end_index_pos'] = String(posIdx);
+        if (!vars['end_index_pos_in']) vars['end_index_pos_in'] = String(posIdx - 1);
+        if (!vars['end_val'] && posIdx >= 0 && posIdx < name.length) vars['end_val'] = name[posIdx];
+        if (!vars['start_val_in']) vars['start_val_in'] = name[0];
+        if (!vars['end_val_in'] && posIdx > 0) vars['end_val_in'] = name[posIdx - 1];
+        const ordinals: Record<number, string> = {2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth', 6: 'sixth', 7: 'seventh'};
+        if (!vars['ordinal']) vars['ordinal'] = ordinals[Math.abs(endIdx)] || String(Math.abs(endIdx)) + 'th';
+      }
+    }
+
+    if (vars['start_index'] && vars['end_index']) {
+      const si = parseInt(vars['start_index']);
+      const ei = parseInt(vars['end_index']);
+      if (!isNaN(si) && !isNaN(ei) && ei > si && ei <= name.length) {
+        if (!vars['char1']) vars['char1'] = name[si];
+        if (!vars['char2']) vars['char2'] = name[ei - 1];
+      }
+    }
+  }
+
+  if (vars['name1'] && !vars['name']) vars['name'] = vars['name1'];
+
+  return vars;
+}
+
+function applyDollarVarSubstitution(text: string, vars: Record<string, string>): string {
+  for (const [key, val] of Object.entries(vars)) {
+    text = text.replace(new RegExp(`\\$\\{${key}\\}`, 'g'), val);
+  }
+  return text;
+}
+
 function convertCodeOutputResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
   const options = payload.options || {};
@@ -763,20 +878,45 @@ function convertCodeOutputResource(resource: ZyBooksContentResource): string {
       if (level.template && typeof level.template === 'string') {
         code = level.template;
         const params = level.parameters || {};
-        for (const [key, values] of Object.entries(params)) {
-          const firstVal = Array.isArray(values) ? (values as string[])[0] : String(values);
-          code = code.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), firstVal);
+
+        if (typeof params === 'object' && !Array.isArray(params) && params !== null && typeof params !== 'string') {
+          for (const [key, values] of Object.entries(params)) {
+            const firstVal = Array.isArray(values) ? (values as string[])[0] : String(values);
+            code = code.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), firstVal);
+          }
+        }
+
+        if (typeof params === 'string' && code.includes('${')) {
+          const exampleVars = extractExampleFromPythonParams(params);
+          if (Object.keys(exampleVars).length > 0) {
+            code = applyDollarVarSubstitution(code, exampleVars);
+            if (level.explanation) {
+              level._resolvedExplanation = applyDollarVarSubstitution(level.explanation, exampleVars);
+            }
+          }
         }
       } else if (level.code && typeof level.code === 'string') {
         code = level.code;
       }
 
+      const hasDollarVars = /\$\{[a-zA-Z_]/.test(code);
+
       if (code) {
         lines.push('', 'What is the output?', '', '```' + lang, decodeEntities(code).trim(), '```');
       }
 
-      if (level.explanation) {
-        lines.push('', '*' + stripHtml(level.explanation) + '*');
+      if (hasDollarVars) {
+        lines.push('*Note: `${...}` placeholders are filled with random values at runtime (e.g., different names/numbers each attempt).*');
+      }
+
+      const explanationText = level._resolvedExplanation || level.explanation;
+      if (explanationText) {
+        let expClean = stripHtml(explanationText);
+        const hasUnresolved = /\$\{[a-zA-Z_]/.test(expClean);
+        if (hasUnresolved) {
+          expClean = expClean.replace(/\$\{(\w+)\}/g, '[$1]');
+        }
+        lines.push('', '*' + expClean + '*');
       }
     }
   }
