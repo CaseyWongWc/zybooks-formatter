@@ -67,7 +67,9 @@ The application is a single-page web tool built with a frontend-only architectur
     - `defnMatch`: Term-definition matching activities
     - `CodingProgression`: Multi-level coding challenges
     - `ProgressionPlayerInteractiveAndAccessible`: Interactive progression activities
-  - **short_answer** resources: Question text with text_before/text_after context, correct answers, hints, and explanations
+    - `arrangeInst`: Drag-and-drop instruction arrangement with fixed + sortable code blocks
+  - **zystudio** (zyLab) resources: Lab instructions with HTML-to-markdown conversion + test case table (input/expected output/points), separates visible vs hidden tests
+  - **short_answer** resources: Question text with text_before/text_after context, correct answers, hints, and explanations; handles code blocks in context fields and multi-line answers
   - **detect_answer** resources: Content extraction with alt text
   - **image** resources: Figure captions with alt text
   - All `alt_text` fields run through HTML stripper (fixes entity/tag leaks)
