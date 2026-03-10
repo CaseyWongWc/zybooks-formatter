@@ -52,8 +52,9 @@ function stripHtml(html: string): string {
   if (!html || typeof html !== 'string') return '';
   let text = html;
 
-  text = text.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, (_, code) => {
-    return '\n```python\n' + decodeEntities(code).trim() + '\n```\n';
+  text = text.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code>([\s\S]*?)<\/pre>/gi, (_, code, trailing) => {
+    const combined = (code + (trailing || '')).trim();
+    return '\n```\n' + decodeEntities(combined) + '\n```\n';
   });
   text = text.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_, code) => {
     return '\n```\n' + decodeEntities(code).trim() + '\n```\n';
@@ -255,13 +256,45 @@ function convertContainerResource(resource: ZyBooksContentResource): string {
 
 function convertZyStudioResource(resource: ZyBooksContentResource): string {
   const lines: string[] = [];
-
   const caption = resource.caption || '';
-  lines.push(`### CHALLENGE ACTIVITY: ${caption}`);
+  const activityType = resource.activity_type || 'lab';
+  const label = activityType === 'lab' ? 'LAB ACTIVITY' :
+    activityType === 'challenge' ? 'CHALLENGE ACTIVITY' : 'ACTIVITY';
+
+  lines.push(`### ${label}: ${caption}`);
 
   const instructions = resource.instructions;
-  if (instructions && typeof instructions === 'string') {
-    lines.push('', stripHtml(instructions));
+  if (instructions) {
+    const instrText = typeof instructions === 'string' ? stripHtml(instructions) : cleanText(instructions);
+    if (instrText) lines.push('', instrText);
+  }
+
+  const payload = resource.payload || {};
+  const testCases = payload.testCases || [];
+  if (Array.isArray(testCases) && testCases.length > 0) {
+    const visible = testCases.filter((tc: any) => !tc.hidden);
+    const hidden = testCases.filter((tc: any) => tc.hidden);
+
+    if (visible.length > 0) {
+      lines.push('', '**Test Cases:**');
+      lines.push('| # | Input | Expected Output | Points |');
+      lines.push('|---|-------|-----------------|--------|');
+      for (let i = 0; i < visible.length; i++) {
+        const tc = visible[i];
+        const input = (tc.stdin || '(none)').replace(/\n/g, '\\n').replace(/\|/g, '\\|');
+        const output = (tc.stdout || '').replace(/\n/g, '\\n').replace(/\|/g, '\\|');
+        lines.push(`| ${i + 1} | \`${input}\` | \`${output}\` | ${tc.points || 0} |`);
+      }
+    }
+
+    if (hidden.length > 0) {
+      lines.push('', `*Plus ${hidden.length} hidden test case${hidden.length > 1 ? 's' : ''}.*`);
+    }
+
+    const totalPoints = testCases.reduce((sum: number, tc: any) => sum + (tc.points || 0), 0);
+    if (totalPoints > 0) {
+      lines.push(`*Total: ${totalPoints} points*`);
+    }
   }
 
   return lines.join('\n');
