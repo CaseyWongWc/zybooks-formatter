@@ -4,6 +4,8 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { sendToNotion, listNotionPages } from "./notion";
 import { convertZybooksJson, type ConvertOptions } from "../client/src/lib/json-converter";
+import fs from "fs";
+import path from "path";
 
 async function getGitHubToken(): Promise<{ token: string; login: string } | null> {
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
@@ -45,7 +47,40 @@ interface TokenStore {
   user_id: number;
 }
 
-let storedTokens: TokenStore | null = null;
+const TOKEN_FILE = '.data/zybooks_tokens.json';
+
+function loadTokensFromDisk(): TokenStore | null {
+  try {
+    const filePath = path.resolve(TOKEN_FILE);
+    if (fs.existsSync(filePath)) {
+      const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      console.log(`[Token] Loaded from disk. Expires: ${data.expiry_date}`);
+      return data;
+    }
+  } catch (e: any) {
+    console.error(`[Token] Failed to load from disk:`, e.message);
+  }
+  return null;
+}
+
+function saveTokensToDisk(tokens: TokenStore | null) {
+  try {
+    const dir = path.dirname(path.resolve(TOKEN_FILE));
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    if (tokens) {
+      fs.writeFileSync(path.resolve(TOKEN_FILE), JSON.stringify(tokens, null, 2));
+      console.log(`[Token] Saved to disk.`);
+    } else {
+      const filePath = path.resolve(TOKEN_FILE);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      console.log(`[Token] Removed from disk.`);
+    }
+  } catch (e: any) {
+    console.error(`[Token] Failed to save to disk:`, e.message);
+  }
+}
+
+let storedTokens: TokenStore | null = loadTokensFromDisk();
 
 async function refreshZybooksToken(refresh_token: string): Promise<TokenStore | null> {
   try {
@@ -67,6 +102,7 @@ async function refreshZybooksToken(refresh_token: string): Promise<TokenStore | 
         user_id: data.session.user_id,
       };
       storedTokens = tokens;
+      saveTokensToDisk(tokens);
       console.log(`[Token] Refreshed. Expires: ${tokens.expiry_date}`);
       return tokens;
     }
@@ -175,6 +211,7 @@ export async function registerRoutes(
   app.delete("/api/token", (req, res) => {
     if (!requireAdmin(req, res)) return;
     storedTokens = null;
+    saveTokensToDisk(null);
     return res.json({ ok: true });
   });
 

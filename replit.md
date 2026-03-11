@@ -85,6 +85,7 @@ The application is a single-page web tool built with a frontend-only architectur
   - Auto-retry: If a 401 is received during fetch, automatically refreshes token and retries
   - zyBooks refresh endpoint: `GET https://zyserver.zybooks.com/v1/refresh?refresh_token=X`
   - Refresh tokens are long-lived (no expiry); auth tokens expire in ~24h
+  - **Persistent storage**: Tokens saved to `.data/zybooks_tokens.json` (file-based) — survives server restarts and deploys; no more manual re-seeding after publish
 - Server-side markdown endpoint: `GET /api/zybooks-markdown` — fetches and converts in one call; uses stored token if no explicit auth provided
 - **LLM API access**: `GET /api` returns full API guide with all endpoints, params, and quickstart instructions
 - Colab notebook template: `GET /api/notebook-template` — downloads .ipynb with `fetch_section()`, `fetch_chapter()`, `save_chapter_md()`, `publish_to_notion()` functions; auto-detects server-stored token
