@@ -399,7 +399,7 @@ export default function Home() {
     if (!output.trim()) return;
     setNotionLoading(true);
     try {
-      const titleMatch = output.match(/^#\s+(.+)$/m);
+      const titleMatch = output.match(/^#{1,3}\s+(.+)$/m);
       const title = titleMatch ? titleMatch[1].trim() : "zyBooks Section";
       const res = await fetch("/api/notion/send", {
         method: "POST",
