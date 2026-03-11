@@ -35,6 +35,18 @@ function extractAttributedText(val: any): string {
   return '';
 }
 
+function extractCodeFromHtml(html: string): string {
+  if (!html || typeof html !== 'string') return '';
+  const preMatch = html.match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
+  if (preMatch) {
+    let code = preMatch[1];
+    code = code.replace(/<span[^>]*>/gi, '').replace(/<\/span>/gi, '');
+    code = code.replace(/<[^>]+>/g, '');
+    return decodeEntities(code).trim();
+  }
+  return decodeEntities(html.replace(/<[^>]+>/g, '')).trim();
+}
+
 function decodeEntities(text: string): string {
   if (!text || typeof text !== 'string') return '';
   return text
@@ -45,6 +57,7 @@ function decodeEntities(text: string): string {
     .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'")
     .replace(/&nbsp;/g, ' ')
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(parseInt(num, 10)));
 }
 
@@ -52,14 +65,26 @@ function stripHtml(html: string): string {
   if (!html || typeof html !== 'string') return '';
   let text = html;
 
+  const protectedBlocks: string[] = [];
+  const protectContent = (content: string): string => {
+    const idx = protectedBlocks.length;
+    protectedBlocks.push(content);
+    return `%%PROTECTED_${idx}%%`;
+  };
+
   text = text.replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code>([\s\S]*?)<\/pre>/gi, (_, code, trailing) => {
     const combined = (code + (trailing || '')).trim();
-    return '\n```\n' + decodeEntities(combined) + '\n```\n';
+    const decoded = decodeEntities(combined.replace(/<span[^>]*>/gi, '').replace(/<\/span>/gi, '').replace(/<[^>]+>/g, ''));
+    return '\n```\n' + protectContent(decoded) + '\n```\n';
   });
   text = text.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, (_, code) => {
-    return '\n```\n' + decodeEntities(code).trim() + '\n```\n';
+    const decoded = decodeEntities(code.replace(/<span[^>]*>/gi, '').replace(/<\/span>/gi, '').replace(/<[^>]+>/g, '')).trim();
+    return '\n```\n' + protectContent(decoded) + '\n```\n';
   });
-  text = text.replace(/<code[^>]*>(.*?)<\/code>/gi, (_, code) => '`' + decodeEntities(code) + '`');
+  text = text.replace(/<code[^>]*>(.*?)<\/code>/gi, (_, code) => {
+    const decoded = decodeEntities(code.replace(/<span[^>]*>/gi, '').replace(/<\/span>/gi, '').replace(/<[^>]+>/g, ''));
+    return '`' + protectContent(decoded) + '`';
+  });
 
   text = text.replace(/<h1[^>]*>([\s\S]*?)<\/h1>/gi, '# $1');
   text = text.replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, '## $1');
@@ -89,6 +114,10 @@ function stripHtml(html: string): string {
   text = text.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n');
   text = text.replace(/<br\s*\/?>/gi, '\n');
   text = text.replace(/<[^>]+>/g, '');
+
+  for (let i = 0; i < protectedBlocks.length; i++) {
+    text = text.replace(`%%PROTECTED_${i}%%`, protectedBlocks[i]);
+  }
 
   text = text.replace(/\n{3,}/g, '\n\n');
 
@@ -242,7 +271,6 @@ function convertContainerResource(resource: ZyBooksContentResource): string {
   const lines: string[] = [];
 
   const caption = resource.caption || '';
-  const containerType = payload.type || '';
 
   if (caption) {
     lines.push(`> **${caption}**`);
@@ -250,11 +278,49 @@ function convertContainerResource(resource: ZyBooksContentResource): string {
 
   const htmlArray = payload.html;
   if (Array.isArray(htmlArray)) {
-    const text = htmlArray.map((item: any) => extractAttributedText(item)).join('');
-    const cleaned = stripHtml(text);
-    if (cleaned) {
-      const prefixed = cleaned.split('\n').map(line => `> ${line}`).join('\n');
-      lines.push(prefixed);
+    const rawHtml = htmlArray.map((item: any) => extractAttributedText(item)).join('');
+
+    const consoleParts: string[] = [];
+    const codeParts: string[] = [];
+    const proseParts: string[] = [];
+
+    const consoleRegex = /<div class="console">\s*<pre>([\s\S]*?)<\/pre>\s*<\/div>/gi;
+    const codeRegex = /<div class="code[^"]*">\s*<div class="highlight">\s*<pre>([\s\S]*?)<\/pre>\s*<\/div>\s*<\/div>/gi;
+
+    let workingHtml = rawHtml;
+
+    workingHtml = workingHtml.replace(consoleRegex, (_, content) => {
+      consoleParts.push(stripHtml(content).trim());
+      return '%%CONSOLE_BLOCK%%';
+    });
+
+    workingHtml = workingHtml.replace(codeRegex, (_, content) => {
+      codeParts.push(stripHtml(content).trim());
+      return '%%CODE_BLOCK%%';
+    });
+
+    let consoleIdx = 0;
+    let codeIdx = 0;
+
+    const allParts = workingHtml.split(/(%%CONSOLE_BLOCK%%|%%CODE_BLOCK%%)/);
+    for (const part of allParts) {
+      if (part === '%%CONSOLE_BLOCK%%') {
+        if (consoleIdx < consoleParts.length) {
+          lines.push('> ```', ...consoleParts[consoleIdx].split('\n').map(l => '> ' + l), '> ```');
+          consoleIdx++;
+        }
+      } else if (part === '%%CODE_BLOCK%%') {
+        if (codeIdx < codeParts.length) {
+          lines.push('> ```python', ...codeParts[codeIdx].split('\n').map(l => '> ' + l), '> ```');
+          codeIdx++;
+        }
+      } else {
+        const cleaned = stripHtml(part).trim();
+        if (cleaned) {
+          const prefixed = cleaned.split('\n').map(line => `> ${line}`).join('\n');
+          lines.push(prefixed);
+        }
+      }
     }
   }
 
@@ -659,14 +725,14 @@ function convertShortAnswerResource(resource: ZyBooksContentResource): string {
       const q = questions[qi];
       const rawText = extractAttributedText(q.text);
       const hasCodeBlock = rawText.includes('class="highlight"') || rawText.includes('class="code');
-      const questionText = stripHtml(rawText.replace(/<\/br>/gi, '<br/>'));
+      const questionText = hasCodeBlock ? extractCodeFromHtml(rawText) : stripHtml(rawText.replace(/<\/br>/gi, '<br/>'));
 
       const rawBefore = q.text_before ? extractAttributedText(q.text_before).replace(/<\/br>/gi, '<br/>') : '';
       const rawAfter = q.text_after ? extractAttributedText(q.text_after).replace(/<\/br>/gi, '<br/>') : '';
       const beforeHasCode = rawBefore.includes('class="highlight"') || rawBefore.includes('class="code');
       const afterHasCode = rawAfter.includes('class="highlight"') || rawAfter.includes('class="code');
-      const textBefore = rawBefore ? stripHtml(rawBefore) : '';
-      const textAfter = rawAfter ? stripHtml(rawAfter) : '';
+      const textBefore = rawBefore ? (beforeHasCode ? extractCodeFromHtml(rawBefore) : stripHtml(rawBefore)) : '';
+      const textAfter = rawAfter ? (afterHasCode ? extractCodeFromHtml(rawAfter) : stripHtml(rawAfter)) : '';
       const hint = q.hint ? cleanText(q.hint) : '';
 
       if (beforeHasCode && textBefore) {
@@ -681,9 +747,17 @@ function convertShortAnswerResource(resource: ZyBooksContentResource): string {
 
       if (prompt) {
         if (questions.length > 1) {
-          lines.push('', `**${qi + 1}.** ${prompt}`);
+          if (hasCodeBlock) {
+            lines.push('', `**${qi + 1}.**`, '```', questionText.trim(), '```');
+          } else {
+            lines.push('', `**${qi + 1}.** ${prompt}`);
+          }
         } else {
-          lines.push('', prompt);
+          if (hasCodeBlock) {
+            lines.push('', '```', questionText.trim(), '```');
+          } else {
+            lines.push('', prompt);
+          }
         }
       }
 
@@ -695,11 +769,15 @@ function convertShortAnswerResource(resource: ZyBooksContentResource): string {
       if (Array.isArray(answers) && answers.length > 0) {
         const answerTexts = answers.map((a: any) => typeof a === 'string' ? a : cleanText(a)).filter(Boolean);
         if (answerTexts.length > 0) {
-          if (answerTexts.some(a => a.includes('\n'))) {
+          const needsCodeBlock = answerTexts.some(a => a.includes('\n'));
+          const hasTrailingSpaces = answerTexts.some(a => a !== a.trim());
+          if (needsCodeBlock) {
             lines.push('', '**Answer:**', '```', answerTexts[0], '```');
             if (answerTexts.length > 1) {
               lines.push('Also accepted: ' + answerTexts.slice(1).join(' or '));
             }
+          } else if (hasTrailingSpaces) {
+            lines.push(`Answer: \`${answerTexts.join('` or `')}\``);
           } else {
             lines.push(`Answer: ${answerTexts.join(' or ')}`);
           }

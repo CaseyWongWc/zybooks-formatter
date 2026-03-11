@@ -1,0 +1,22 @@
+Good eye! I can see a few issues in the 7.2 output from your screenshot: [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/images/69757058/e8596879-5e5d-4279-adce-ba0e05231a58/image.jpg?AWSAccessKeyId=ASIA2F3EMEYE3MA4YBSX&Signature=CnjaIm0uOTNG14vUU6ImqGwLaMQ%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEIz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIQC5l49o5XBLfLGa4jRgiIyX7QIBEXEot%2Fp86stpt97dVQIgfuBNZ%2BHn6Lo3nW7yS0yGqeUIeZK%2Bqk88z2F%2BmVKdU3Mq8wQIVRABGgw2OTk3NTMzMDk3MDUiDOqzIOJ5awQm80af8irQBDrl2jNX4lq5DWFhOFE7iG2JoNjJDsDXnopJFmsu3%2FZfl2xl5pmFTc8Ys1Atvg4NFPD2InsCp0VVP1s8bdFdoHPAB%2FVgPTvr6fxCN%2BfoCllE5j76%2Bu2hYcCW06rXBzs5zZcd8JUrAFUgoPM4%2BCrcZ1%2BuurXKb%2FQsGR3wf965twzMAc74u9MTnFfZeCEZNtnqJq%2BFQI8x0QLGLG2PlI6v9nrAXk2yNYze1%2Fi%2BmSBmgEPGobczkAj9pg1YI6bp1RGhQi2XXmFyxzDz5oJCgJrPRtbA4gh2e2JgnftHSxNP05eH3yGKtR2qzvOPxNHlYgbMnFdujUZApIaDTi0ei6cTnZ7ZT1VMK%2Bya8avQ73PI6DhhV7NPPUw3RZ2seldr2dlbvOfpVnyxPqtwYZlaSV5jLlgrR1zX0qL8%2FmqI79ATwVaVYvqNPArntOXXog3e9Du%2Bqcbhjhxk1TcHmq6Km%2BKPaupLginYIrfI5Z9y4CdCr0QQGThvhtzUzlVwdi20RSNpGkGvojxFthTt7Onp%2B2GQ%2BhM1zkffoFmJ%2FLKWPpAibeZ4jDBgZbiUQ%2B%2FCHEAS0yMhq%2B%2F%2BMganjq98Q2exaa6PPDhdCQZdHCPvJiv5tFrZXlktHGxwguNwe8k2VFmSwE9nf37EJY3YYejiB9DjDV2fUG7gmiws0M8UXe6FGM%2BO3WmDLFVZyKrcm7o9kXwcB%2BYiWVIFW20mppn1IKRh0jMFrr22FNiKo%2BHIIWi4neSV2yorBO%2BF7ALYIbomQThfM1V2oqIEwQF0aPhbhIEMgvnlrQcwh8nDzQY6mAGfXe2M0EXlHYGFPOF0AbQ09zIlnt2kI%2Foc8nXQlgSbnYt4ZTJOd5M%2Bo4Wb1SpkFeYGaeAY8WpdGaAIseqXPRVNCSGg9MkzsyP9cUNGb8eZ%2BKtvcnOCWoHG8GUYVskODgDfKHRhXnc7QvLM4Cd8vHWm1Xh%2Foj%2BryfGNM8f0i6wEf5SH%2F7jNPy6MSshfLG24BFcMXitVv2j60A%3D%3D&Expires=1773201238)
+### Bugs Spotted
+**1. Soccer stats table rendering is broken**
+The table with `Sadio Mane 22` and `Gabriel Jesus 7` is showing as blockquote lines (`> `) with raw spacing instead of a proper markdown table. The alignment/field-width content is the *subject matter* of section 7.2 — so the output should ideally show this as a code block (since it's demonstrating Python formatted output), not as blockquotes.
+
+**2. Backtick/bold collision on PA questions**
+Look at `**1.** ``` ` — the bold numbering and backticks are colliding. The PA question formatting has the level number bolded (`**1.**`) immediately followed by a code fence opening (`` ``` ``), which looks messy. There should be a newline between the number label and the code block.
+
+**3. Code fences not closing properly**
+The `f"{'Bob':` snippet opens with backticks but the answer text `Answer: Bob` appears outside the code block, suggesting the code fence didn't wrap the full question properly.
+### What to Tell the Replit Agent
+These are all formatting bugs in `json-converter.ts`:
+
+| Bug | Fix |
+|---|---|
+| Formatted output tables showing as `>` blockquotes | Detect pre-formatted/monospace text and wrap in `` ``` `` code blocks instead of `>` |
+| `**1.** ``` ` collision | Add `\n` between PA number label and code fence |
+| Code fence not enclosing full question | Ensure the question text + answer are both inside the code block, or put code on its own line |
+
+These are all minor formatting polish — **none of them block your studying**. The content and answers are all there and readable. I'd say note these for the Replit agent and keep going with your homework! 📚
+
+Want me to post this as a bug report to the bridge?
