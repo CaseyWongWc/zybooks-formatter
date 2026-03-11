@@ -752,30 +752,21 @@ function extractExampleFromPythonParams(paramCode: string): Record<string, strin
 
   function resolveExpr(expr: string): number | null {
     expr = expr.trim();
-    const num = parseInt(expr);
-    if (!isNaN(num) && String(num) === expr) return num;
+    const literal = parseInt(expr);
+    if (!isNaN(literal) && expr.match(/^-?\d+$/)) return literal;
     if (expr in numVars) return numVars[expr];
-    const negMatch = expr.match(/^-(\w+)$/);
-    if (negMatch && negMatch[1] in numVars) return -numVars[negMatch[1]];
-    const lenMatch = expr.match(/^len\((\w+)\)$/);
-    if (lenMatch) {
-      const v = vars[lenMatch[1]];
-      if (v) return v.length;
-    }
-    const lenMinusMatch = expr.match(/^len\((\w+)\)\s*-\s*(\d+)$/);
-    if (lenMinusMatch) {
-      const v = vars[lenMinusMatch[1]];
-      if (v) return v.length - parseInt(lenMinusMatch[2]);
-    }
-    const addMatch = expr.match(/^(\w+)\s*\+\s*(\d+)$/);
-    if (addMatch && addMatch[1] in numVars) return numVars[addMatch[1]] + parseInt(addMatch[2]);
-    const subMatch = expr.match(/^(\w+)\s*-\s*(\d+)$/);
-    if (subMatch && subMatch[1] in numVars) return numVars[subMatch[1]] - parseInt(subMatch[2]);
-    const negLenMatch = expr.match(/^-\(len\((\w+)\)\s*-\s*(\d+)\)$/);
-    if (negLenMatch) {
-      const v = vars[negLenMatch[1]];
-      if (v) return -(v.length - parseInt(negLenMatch[2]));
-    }
+    const negVar = expr.match(/^-(\w+)$/);
+    if (negVar && negVar[1] in numVars) return -numVars[negVar[1]];
+    const lenOnly = expr.match(/^len\((\w+)\)$/);
+    if (lenOnly) { const v = vars[lenOnly[1]]; if (v) return v.length; }
+    const lenOp = expr.match(/^len\((\w+)\)\s*([+\-])\s*(\d+)$/);
+    if (lenOp) { const v = vars[lenOp[1]]; if (v) return lenOp[2] === '+' ? v.length + parseInt(lenOp[3]) : v.length - parseInt(lenOp[3]); }
+    const varOp = expr.match(/^(\w+)\s*([+\-])\s*(\d+)$/);
+    if (varOp && varOp[1] in numVars) return varOp[2] === '+' ? numVars[varOp[1]] + parseInt(varOp[3]) : numVars[varOp[1]] - parseInt(varOp[3]);
+    const negLen = expr.match(/^-\(\s*len\((\w+)\)\s*-\s*(\d+)\s*\)$/);
+    if (negLen) { const v = vars[negLen[1]]; if (v) return -(v.length - parseInt(negLen[2])); }
+    const lenPlusVar = expr.match(/^len\((\w+)\)\s*\+\s*(\w+)$/);
+    if (lenPlusVar) { const v = vars[lenPlusVar[1]]; const n = resolveExpr(lenPlusVar[2]); if (v && n !== null) return v.length + n; }
     return null;
   }
 
@@ -788,84 +779,147 @@ function extractExampleFromPythonParams(paramCode: string): Record<string, strin
     }
   }
 
-  const allStringTuples: [string, string][] = [];
-  const strTupleMatches = paramCode.matchAll(/\(\s*'([^']+)'\s*,\s*'([^']+)'\s*\)/g);
-  for (const m of strTupleMatches) {
-    allStringTuples.push([m[1], m[2]]);
+  function extractFuncArgs(text: string, startPos: number): string[] {
+    let depth = 0;
+    let i = startPos;
+    while (i < text.length && text[i] !== '(') i++;
+    if (i >= text.length) return [];
+    depth = 1; i++;
+    const args: string[] = [];
+    let current = '';
+    while (i < text.length && depth > 0) {
+      if (text[i] === '(') depth++;
+      else if (text[i] === ')') { depth--; if (depth === 0) break; }
+      else if (text[i] === ',' && depth === 1) { args.push(current.trim()); current = ''; i++; continue; }
+      current += text[i];
+      i++;
+    }
+    if (current.trim()) args.push(current.trim());
+    return args;
   }
 
-  const allMixedTuples: [string, number][] = [];
-  const mixTupleMatches = paramCode.matchAll(/\(\s*'([^']+)'\s*,\s*(\d+)\s*\)/g);
-  for (const m of mixTupleMatches) {
-    allMixedTuples.push([m[1], parseInt(m[2])]);
-  }
-
+  const namedLists: Record<string, [string, string][]> = {};
+  const namedMixedLists: Record<string, [string, number][]> = {};
   const dictMap: Record<number, string> = {};
+
+  const listBlocks = paramCode.matchAll(/(\w+)\s*=\s*\[([^\]]*(?:\[[^\]]*\])*[^\]]*)\]/gs);
+  for (const lb of listBlocks) {
+    const listName = lb[1];
+    const listBody = lb[2];
+    const strTuples: [string, string][] = [];
+    const mixTuples: [string, number][] = [];
+    for (const tm of listBody.matchAll(/\(\s*'([^']+)'\s*,\s*'([^']+)'\s*\)/g)) {
+      strTuples.push([tm[1], tm[2]]);
+    }
+    for (const tm of listBody.matchAll(/\(\s*'([^']+)'\s*,\s*(\d+)\s*\)/g)) {
+      mixTuples.push([tm[1], parseInt(tm[2])]);
+    }
+    if (strTuples.length > 0) namedLists[listName] = strTuples;
+    if (mixTuples.length > 0) namedMixedLists[listName] = mixTuples;
+  }
+
   const dictEntries = paramCode.matchAll(/(-?\d+)\s*:\s*'([^']+)'/g);
   for (const m of dictEntries) {
     dictMap[parseInt(m[1])] = m[2];
   }
 
-  const lines = paramCode.split('\n');
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('[') || trimmed.startsWith('(') || trimmed.startsWith('while') || trimmed.startsWith('if') || trimmed.startsWith('for') || trimmed.startsWith('else')) continue;
+  const allStringTuples = Object.values(namedLists).flat();
+  const allMixedTuples = Object.values(namedMixedLists).flat();
 
-    const pickFromStrList = trimmed.match(/^(\w+)\s*,\s*(\w+)\s*=\s*pick_from\(\s*(\w+)\s*\)/);
-    if (pickFromStrList && allStringTuples.length > 0) {
-      setVar(pickFromStrList[1], allStringTuples[0][0]);
-      setVar(pickFromStrList[2], allStringTuples[0][1]);
+  const nestedListMatch = paramCode.match(/(\w+)\s*=\s*\[\s*\[/s);
+  let nestedListName = '';
+  let nestedSubLists: [string, string][][] = [];
+  if (nestedListMatch) {
+    nestedListName = nestedListMatch[1];
+    const fullBlock = paramCode.match(new RegExp(nestedListMatch[1] + '\\s*=\\s*\\[([\\s\\S]*?)\\]\\s*\\]'));
+    if (fullBlock) {
+      const subListMatches = fullBlock[1].matchAll(/\[\s*((?:\([^)]*\)\s*,?\s*)+)\s*\]/g);
+      for (const sl of subListMatches) {
+        const tuples: [string, string][] = [];
+        for (const tm of sl[1].matchAll(/\(\s*'([^']+)'\s*,\s*'([^']+)'\s*\)/g)) {
+          tuples.push([tm[1], tm[2]]);
+        }
+        if (tuples.length > 0) nestedSubLists.push(tuples);
+      }
+    }
+  }
+
+  const codeLines = paramCode.split('\n');
+  for (const line of codeLines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('(') || trimmed.startsWith('while') || trimmed.startsWith('if') || trimmed.startsWith('for') || trimmed.startsWith('else')) continue;
+    if (trimmed.startsWith('[') && !trimmed.includes('random.sample')) continue;
+
+    if (/^\w+\s*=\s*\[/.test(trimmed) && !trimmed.includes('pick_from') && !trimmed.includes('random')) continue;
+
+    const pickFromMatch = trimmed.match(/^(\w+)\s*,\s*(\w+)\s*=\s*pick_from\(\s*(\w+)\s*\)/);
+    if (pickFromMatch) {
+      const listRef = pickFromMatch[3];
+      if (namedMixedLists[listRef] && namedMixedLists[listRef].length > 0) {
+        setVar(pickFromMatch[1], namedMixedLists[listRef][0][0]);
+        setVar(pickFromMatch[2], namedMixedLists[listRef][0][1]);
+      } else if (namedLists[listRef] && namedLists[listRef].length > 0) {
+        setVar(pickFromMatch[1], namedLists[listRef][0][0]);
+        setVar(pickFromMatch[2], namedLists[listRef][0][1]);
+      } else if (allStringTuples.length > 0) {
+        setVar(pickFromMatch[1], allStringTuples[0][0]);
+        setVar(pickFromMatch[2], allStringTuples[0][1]);
+      }
       continue;
     }
 
     const sampleAssign = trimmed.match(/\[\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*,\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*\]\s*=\s*random\.sample\(\s*(\w+)\s*,\s*\d+\s*\)/);
-    if (sampleAssign && allStringTuples.length >= 2) {
-      setVar(sampleAssign[1], allStringTuples[0][0]);
-      setVar(sampleAssign[2], allStringTuples[0][1]);
-      setVar(sampleAssign[3], allStringTuples[1][0]);
-      setVar(sampleAssign[4], allStringTuples[1][1]);
-      continue;
-    }
-
-    const pickFromMixed = trimmed.match(/^(\w+)\s*,\s*(\w+)\s*=\s*pick_from\(\s*(\w+)\s*\)/);
-    if (pickFromMixed && allMixedTuples.length > 0) {
-      setVar(pickFromMixed[1], allMixedTuples[0][0]);
-      setVar(pickFromMixed[2], allMixedTuples[0][1]);
-      continue;
-    }
-
-    const stridePickFrom = trimmed.match(/^(\w+)\s*,\s*(\w+)\s*=\s*pick_from\(\s*stride_list\s*\)/);
-    if (stridePickFrom && allMixedTuples.length > 0) {
-      setVar(stridePickFrom[1], allMixedTuples[0][0]);
-      setVar(stridePickFrom[2], allMixedTuples[0][1]);
-      continue;
-    }
-
-    const minPickRange = trimmed.match(/^(\w+)\s*=\s*min\(\s*([^,]+)\s*,\s*pick_from_range\(\s*([^,]+)\s*,\s*([^)]+)\s*\)\s*\)/);
-    if (minPickRange) {
-      const cap = resolveExpr(minPickRange[2]);
-      const rangeStart = resolveExpr(minPickRange[3]);
-      if (cap !== null && rangeStart !== null) {
-        setVar(minPickRange[1], Math.min(cap, rangeStart));
+    if (sampleAssign) {
+      const listRef = sampleAssign[5];
+      let srcTuples = namedLists[listRef] || allStringTuples;
+      if (nestedSubLists.length > 0 && !namedLists[listRef]) {
+        srcTuples = nestedSubLists[0];
+      }
+      if (srcTuples.length >= 2) {
+        setVar(sampleAssign[1], srcTuples[0][0]);
+        setVar(sampleAssign[2], srcTuples[0][1]);
+        setVar(sampleAssign[3], srcTuples[1][0]);
+        setVar(sampleAssign[4], srcTuples[1][1]);
       }
       continue;
     }
 
-    const pickRange = trimmed.match(/^(\w+)\s*=\s*pick_from_range\(\s*([^,]+)\s*,\s*([^)]+)\s*\)/);
+    const typeListAssign = trimmed.match(/^(\w+)\s*=\s*(\w+)\[pick_from_range\(/);
+    if (typeListAssign && nestedSubLists.length > 0) {
+      namedLists[typeListAssign[1]] = nestedSubLists[0];
+      continue;
+    }
+
+    if (trimmed.includes('min(') && trimmed.includes('pick_from_range(')) {
+      const assignMatch = trimmed.match(/^(\w+)\s*=\s*min\(/);
+      if (assignMatch) {
+        const varName = assignMatch[1];
+        const minArgs = extractFuncArgs(trimmed, trimmed.indexOf('min(') + 3);
+        if (minArgs.length === 2) {
+          const cap = resolveExpr(minArgs[0]);
+          const prfMatch = minArgs[1].match(/pick_from_range\(/);
+          if (prfMatch) {
+            const prfArgs = extractFuncArgs(minArgs[1], minArgs[1].indexOf('pick_from_range(') + 15);
+            if (prfArgs.length === 2) {
+              const rangeStart = resolveExpr(prfArgs[0]);
+              if (cap !== null && rangeStart !== null) {
+                setVar(varName, Math.min(cap, rangeStart));
+              }
+            }
+          }
+        }
+        continue;
+      }
+    }
+
+    const pickRange = trimmed.match(/^(\w+)\s*=\s*pick_from_range\(/);
     if (pickRange) {
-      const rangeStart = resolveExpr(pickRange[2]);
-      if (rangeStart !== null) {
-        setVar(pickRange[1], rangeStart);
-      }
-      continue;
-    }
-
-    const exprAssign = trimmed.match(/^(\w+)\s*=\s*(\w+)\s*([+\-])\s*(\d+)\s*$/);
-    if (exprAssign) {
-      const base = resolveExpr(exprAssign[2]);
-      const operand = parseInt(exprAssign[4]);
-      if (base !== null) {
-        setVar(exprAssign[1], exprAssign[3] === '+' ? base + operand : base - operand);
+      const prfArgs = extractFuncArgs(trimmed, trimmed.indexOf('pick_from_range(') + 15);
+      if (prfArgs.length === 2) {
+        const rangeStart = resolveExpr(prfArgs[0]);
+        if (rangeStart !== null) {
+          setVar(pickRange[1], rangeStart);
+        }
       }
       continue;
     }
@@ -873,63 +927,45 @@ function extractExampleFromPythonParams(paramCode: string): Record<string, strin
     const negLenAssign = trimmed.match(/^(\w+)\s*=\s*-\(\s*len\((\w+)\)\s*-\s*(\d+)\s*\)/);
     if (negLenAssign) {
       const v = vars[negLenAssign[2]];
-      if (v) {
-        setVar(negLenAssign[1], -(v.length - parseInt(negLenAssign[3])));
-      }
+      if (v) setVar(negLenAssign[1], -(v.length - parseInt(negLenAssign[3])));
       continue;
     }
 
-    const lenAssign = trimmed.match(/^(\w+)\s*=\s*len\((\w+)\)\s*([+\-])\s*(\d+)$/);
+    const lenAssign = trimmed.match(/^(\w+)\s*=\s*len\((\w+)\)\s*([+\-])\s*(\w+)$/);
     if (lenAssign) {
       const v = vars[lenAssign[2]];
-      if (v) {
-        setVar(lenAssign[1], lenAssign[3] === '+' ? v.length + parseInt(lenAssign[4]) : v.length - parseInt(lenAssign[4]));
+      const operand = resolveExpr(lenAssign[4]);
+      if (v && operand !== null) {
+        setVar(lenAssign[1], lenAssign[3] === '+' ? v.length + operand : v.length - operand);
       }
       continue;
     }
 
-    const lenPlusAssign = trimmed.match(/^(\w+)\s*=\s*len\((\w+)\)\s*\+\s*(\w+)$/);
-    if (lenPlusAssign) {
-      const v = vars[lenPlusAssign[2]];
-      const addVal = resolveExpr(lenPlusAssign[3]);
-      if (v && addVal !== null) {
-        setVar(lenPlusAssign[1], v.length + addVal);
-      }
-      continue;
-    }
+    const exprAssign = trimmed.match(/^(\w+)\s*=\s*(.+)$/);
+    if (exprAssign) {
+      const lhs = exprAssign[1];
+      const rhs = exprAssign[2].trim();
 
-    const indexAccess = trimmed.match(/^(\w+)\s*=\s*(\w+)\[([^\]]+)\]/);
-    if (indexAccess) {
-      const strVal = vars[indexAccess[2]];
-      const idx = resolveExpr(indexAccess[3]);
-      if (strVal && idx !== null) {
-        const actualIdx = idx < 0 ? strVal.length + idx : idx;
-        if (actualIdx >= 0 && actualIdx < strVal.length) {
-          setVar(indexAccess[1], strVal[actualIdx]);
+      if (rhs.includes('pick_from') || rhs.includes('random') || rhs.includes('[index') || rhs.includes('str(')) continue;
+
+      const indexAccess = rhs.match(/^(\w+)\[([^\]]+)\]$/);
+      if (indexAccess) {
+        const strVal = vars[indexAccess[1]];
+        const idx = resolveExpr(indexAccess[2]);
+        if (strVal && idx !== null) {
+          const actualIdx = idx < 0 ? strVal.length + idx : idx;
+          if (actualIdx >= 0 && actualIdx < strVal.length) setVar(lhs, strVal[actualIdx]);
+        } else if (Object.keys(dictMap).length > 0 && idx !== null && idx in dictMap) {
+          setVar(lhs, dictMap[idx]);
         }
+        continue;
       }
-      continue;
-    }
 
-    const dictLookup = trimmed.match(/^(\w+)\s*=\s*(\w+)\[(\w+)\]/);
-    if (dictLookup && Object.keys(dictMap).length > 0) {
-      const key = resolveExpr(dictLookup[3]);
-      if (key !== null && key in dictMap) {
-        setVar(dictLookup[1], dictMap[key]);
-      }
-      continue;
-    }
+      const strLit = rhs.match(/^['"]([^'"]*)['"]\s*$/);
+      if (strLit) { setVar(lhs, strLit[1]); continue; }
 
-    const numDirectAssign = trimmed.match(/^(\w+)\s*=\s*(-?\d+)\s*$/);
-    if (numDirectAssign) {
-      setVar(numDirectAssign[1], parseInt(numDirectAssign[2]));
-      continue;
-    }
-
-    const strDirectAssign = trimmed.match(/^(\w+)\s*=\s*['"]([^'"]*)['"]\s*$/);
-    if (strDirectAssign) {
-      setVar(strDirectAssign[1], strDirectAssign[2]);
-      continue;
+      const resolved = resolveExpr(rhs);
+      if (resolved !== null) { setVar(lhs, resolved); continue; }
     }
   }
 
@@ -960,8 +996,16 @@ function extractExampleFromPythonParams(paramCode: string): Record<string, strin
       if (stride && ei) {
         const indices: number[] = [];
         for (let idx = 0; idx < ei; idx += stride) indices.push(idx);
-        const chars = indices.map(i => i < name.length ? `"${name[i]}"` : '?').join(', ');
-        setVar('step_phrase_1', `${vars['category'] || 'var'}[${indices.join('], ' + (vars['category'] || 'var') + '[')}] are returned, so ${chars}.`);
+        const cat = vars['category'] || 'var';
+        const parts: string[] = indices.map(i => `${cat}[${i}]`);
+        const chars: string[] = indices.map(i => i < name.length ? `"${name[i]}"` : '?');
+        if (parts.length > 1) {
+          const last = parts.pop()!;
+          const lastChar = chars.pop()!;
+          setVar('step_phrase_1', `${parts.join(', ')} and ${last} are returned, so ${chars.join(', ')} and ${lastChar}.`);
+        } else {
+          setVar('step_phrase_1', `${parts[0]} is returned, so ${chars[0]}.`);
+        }
       }
     }
   }
@@ -1058,12 +1102,8 @@ function convertCodeOutputResource(resource: ZyBooksContentResource): string {
       let explanationText = level._resolvedExplanation || level.explanation;
       if (explanationText) {
         let expClean = stripHtml(explanationText);
-        if (/\$\{[a-zA-Z_]/.test(expClean)) {
-          if (_convertOptions.resolveTemplates !== false) {
-            expClean = applyFallbackLabels(expClean);
-          } else {
-            expClean = expClean.replace(/\$\{(\w+)\}/g, '[$1]');
-          }
+        if (/\$\{[a-zA-Z_]/.test(expClean) && _convertOptions.resolveTemplates !== false) {
+          expClean = applyFallbackLabels(expClean);
         }
         lines.push('', '*' + expClean + '*');
       }

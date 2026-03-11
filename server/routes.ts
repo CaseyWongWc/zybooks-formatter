@@ -523,6 +523,7 @@ document.getElementById("submitForm").addEventListener("submit", async function(
             chapter: "number (required)",
             section: "number (required)",
             format: "string (optional) — 'json' (default) or 'text' for raw markdown",
+            resolve_templates: "string (optional) — 'true' (default) resolves ${...} placeholders to concrete example values; 'false' keeps raw templates",
           },
           auth: "Optional. Bearer token in Authorization header, or auth_token query param. Falls back to stored token.",
           example: `curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1"`,

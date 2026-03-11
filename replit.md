@@ -62,7 +62,7 @@ The application is a single-page web tool built with a frontend-only architectur
     - `zyAnimator`: Animation descriptions with alt text
     - `homeworkSystem`: Instructions + given/suffix code blocks
     - `CodeWriting`: **Smart renderer** that parses Python randomization data to extract all problem variants grouped by category (e.g., 14 conversion types across Mass/Length/Volume/Temperature, 5 geometric shapes with measurements/formulas), shows task/explanation patterns with readable placeholders, and displays code structure templates
-    - `codeOutput`: Multi-level "what is the output?" challenges with code blocks
+    - `codeOutput`: Multi-level "what is the output?" challenges with code blocks; **template placeholder resolution** resolves `${...}` variables to concrete first-example values from Python randomization params (e.g., `state[0:4]` instead of `state[0:${end_index}]`); handles `pick_from()`, `pick_from_range()`, `min()`, `random.sample()`, named list tracking, nested list-of-lists, derived computations (`end_index_minus`, `char1`, `char2`, `stride`, `step_phrase_1`, negative indices, ordinals); toggle via `&resolve_templates=false` query param to keep raw templates
     - `ParsonsCodingPA`: Parsons problems with prompt and solution code
     - `defnMatch`: Term-definition matching activities
     - `CodingProgression`: Multi-level coding challenges
