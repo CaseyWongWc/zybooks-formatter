@@ -3,7 +3,9 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { sendToNotion, listNotionPages } from "./notion";
-import { convertZybooksJson } from "../client/src/lib/json-converter";
+import { convertZybooksJson, type ConvertOptions } from "../client/src/lib/json-converter";
+import fs from "fs";
+import path from "path";
 
 async function getGitHubToken(): Promise<{ token: string; login: string } | null> {
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
@@ -45,7 +47,40 @@ interface TokenStore {
   user_id: number;
 }
 
-let storedTokens: TokenStore | null = null;
+const TOKEN_FILE = '.data/zybooks_tokens.json';
+
+function loadTokensFromDisk(): TokenStore | null {
+  try {
+    const filePath = path.resolve(TOKEN_FILE);
+    if (fs.existsSync(filePath)) {
+      const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      console.log(`[Token] Loaded from disk. Expires: ${data.expiry_date}`);
+      return data;
+    }
+  } catch (e: any) {
+    console.error(`[Token] Failed to load from disk:`, e.message);
+  }
+  return null;
+}
+
+function saveTokensToDisk(tokens: TokenStore | null) {
+  try {
+    const dir = path.dirname(path.resolve(TOKEN_FILE));
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    if (tokens) {
+      fs.writeFileSync(path.resolve(TOKEN_FILE), JSON.stringify(tokens, null, 2));
+      console.log(`[Token] Saved to disk.`);
+    } else {
+      const filePath = path.resolve(TOKEN_FILE);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      console.log(`[Token] Removed from disk.`);
+    }
+  } catch (e: any) {
+    console.error(`[Token] Failed to save to disk:`, e.message);
+  }
+}
+
+let storedTokens: TokenStore | null = loadTokensFromDisk();
 
 async function refreshZybooksToken(refresh_token: string): Promise<TokenStore | null> {
   try {
@@ -67,6 +102,7 @@ async function refreshZybooksToken(refresh_token: string): Promise<TokenStore | 
         user_id: data.session.user_id,
       };
       storedTokens = tokens;
+      saveTokensToDisk(tokens);
       console.log(`[Token] Refreshed. Expires: ${tokens.expiry_date}`);
       return tokens;
     }
@@ -175,6 +211,7 @@ export async function registerRoutes(
   app.delete("/api/token", (req, res) => {
     if (!requireAdmin(req, res)) return;
     storedTokens = null;
+    saveTokensToDisk(null);
     return res.json({ ok: true });
   });
 
@@ -433,7 +470,8 @@ document.getElementById("submitForm").addEventListener("submit", async function(
           if (data.success === false || data.error) {
             return res.status(400).json({ error: data.error?.message || data.error || "Unknown error" });
           }
-          const markdown = convertZybooksJson(data, Number(chapter), Number(section));
+          const convertOpts: ConvertOptions = { resolveTemplates: req.query.resolve_templates !== 'false' };
+          const markdown = convertZybooksJson(data, Number(chapter), Number(section), convertOpts);
           const title = data.section?.title || `Section ${chapter}.${section}`;
           const format = req.query.format || 'json';
           if (format === 'text') {
@@ -456,7 +494,8 @@ document.getElementById("submitForm").addEventListener("submit", async function(
       if (data.success === false || data.error) {
         return res.status(400).json({ error: data.error?.message || data.error || "Unknown error" });
       }
-      const markdown = convertZybooksJson(data, Number(chapter), Number(section));
+      const convertOpts2: ConvertOptions = { resolveTemplates: req.query.resolve_templates !== 'false' };
+      const markdown = convertZybooksJson(data, Number(chapter), Number(section), convertOpts2);
       const title = data.section?.title || `Section ${chapter}.${section}`;
       const format = req.query.format || 'json';
       if (format === 'text') {
@@ -499,48 +538,139 @@ document.getElementById("submitForm").addEventListener("submit", async function(
     }
   });
 
-  app.get("/api", (_req, res) => {
-    const baseUrl = `https://${_req.headers.host || 'zy-books-formatter.replit.app'}`;
-    res.json({
-      name: "zyBooks Formatter API",
-      description: "Converts zyBooks textbook sections into clean, readable Markdown. Supports auto token refresh.",
-      endpoints: {
-        "POST /api/token": {
-          description: "Store a zyBooks refresh token for auto-authentication. Only needed once — the app will auto-refresh the auth token.",
-          body: { refresh_token: "string (required)", auth_token: "string (optional, current auth token)" },
-          example: `curl -X POST ${baseUrl}/api/token -H "Content-Type: application/json" -d '{"refresh_token":"YOUR_REFRESH_TOKEN"}'`,
+  const getApiDocs = (baseUrl: string) => ({
+    name: "zyBooks Formatter API",
+    version: "1.0",
+    description: "Converts zyBooks textbook sections into clean, readable Markdown with answers, hints, and code examples. Supports auto token refresh, Notion export, and Colab notebooks.",
+    base_url: baseUrl,
+    default_zybook: "CPPCS2520NguyenSpring2026",
+    endpoints: {
+      "GET /api/zybooks-markdown": {
+        description: "Fetch and convert a zyBooks section to Markdown. Uses stored token if no auth provided.",
+        params: {
+          zybook_code: "string (required) — e.g. CPPCS2520NguyenSpring2026",
+          chapter: "number (required)",
+          section: "number (required)",
+          format: "'json' (default, returns {markdown, title}) or 'text' (raw markdown string)",
+          resolve_templates: "'true' (default) resolves ${...} placeholders to concrete example values; 'false' keeps raw templates",
         },
-        "GET /api/token/status": {
-          description: "Check if a token is configured and when it expires.",
-          example: `curl ${baseUrl}/api/token/status`,
-        },
-        "GET /api/zybooks-markdown": {
-          description: "Fetch and convert a zyBooks section to Markdown. Uses stored token if no auth provided.",
-          params: {
-            zybook_code: "string (required) — e.g. CPPCS2520NguyenSpring2026",
-            chapter: "number (required)",
-            section: "number (required)",
-            format: "string (optional) — 'json' (default) or 'text' for raw markdown",
-          },
-          auth: "Optional. Bearer token in Authorization header, or auth_token query param. Falls back to stored token.",
-          example: `curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1"`,
-          example_text: `curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1&format=text"`,
-        },
-        "GET /api/notebook-template": {
-          description: "Download a Colab-ready Jupyter notebook with study helpers.",
-          example: `curl -O ${baseUrl}/api/notebook-template`,
-        },
-        "POST /api/notion/send": {
-          description: "Publish markdown content to Notion.",
-          body: { markdown: "string (required)", title: "string (required)", parentPageId: "string (optional)" },
-        },
+        auth: "Optional. Bearer token in Authorization header, or auth_token query param. Falls back to stored token.",
+        examples: [
+          `curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1"`,
+          `curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1&format=text"`,
+        ],
+        llm_usage: "For LLM/agent access: GET the endpoint with format=text to receive raw markdown directly. No auth needed if the server token is configured.",
       },
-      quickstart: [
-        `1. Set your refresh token once: curl -X POST ${baseUrl}/api/token -H "Content-Type: application/json" -d '{"refresh_token":"YOUR_TOKEN"}'`,
-        `2. Fetch any section: curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1&format=text"`,
-        "3. The app auto-refreshes auth tokens — no manual token management needed.",
-      ],
-    });
+      "POST /api/token": {
+        description: "Store a zyBooks refresh token for auto-authentication. Only needed once — the app auto-refreshes.",
+        headers: { "Content-Type": "application/json", "X-Admin-Key": "required (SESSION_SECRET)" },
+        body: { refresh_token: "string (required)", auth_token: "string (optional, current auth token)" },
+        example: `curl -X POST ${baseUrl}/api/token -H "Content-Type: application/json" -H "X-Admin-Key: YOUR_ADMIN_KEY" -d '{"refresh_token":"YOUR_REFRESH_TOKEN"}'`,
+      },
+      "GET /api/token/status": {
+        description: "Check if a token is configured and when it expires.",
+        example: `curl ${baseUrl}/api/token/status`,
+        response: "{ configured: boolean, expires_at: string|null, user_id: number|null }",
+      },
+      "POST /api/zybooks-json": {
+        description: "Convert raw zyBooks JSON (from bookmarklet or manual capture) to formatted Markdown.",
+        headers: { "Content-Type": "application/json" },
+        body: { json: "object (the raw zyBooks API response)", chapter: "number", section: "number" },
+        example: `curl -X POST ${baseUrl}/api/zybooks-json -H "Content-Type: application/json" -d '{"json":{...},"chapter":7,"section":1}'`,
+      },
+      "POST /api/bookmarklet": {
+        description: "Receive data from the zyBooks bookmarklet (browser-side auto-capture).",
+        body: { html: "string (optional)", json: "string (optional)", chapter: "number", section: "number" },
+      },
+      "GET /api/notebook-template": {
+        description: "Download a Colab-ready Jupyter notebook (.ipynb) with study helpers.",
+        example: `curl -O ${baseUrl}/api/notebook-template`,
+      },
+      "POST /api/notion/send": {
+        description: "Publish formatted markdown content to a Notion page.",
+        body: { markdown: "string (required)", title: "string (required)", parentPageId: "string (optional)" },
+      },
+      "GET /api/docs": {
+        description: "This endpoint. Returns API documentation as JSON, or as HTML if Accept header includes text/html.",
+      },
+    },
+    quickstart: [
+      `1. Check token status: curl ${baseUrl}/api/token/status`,
+      `2. Fetch any section as markdown: curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1&format=text"`,
+      `3. Get JSON response with title: curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1"`,
+      "4. The server auto-refreshes auth tokens — no manual token management needed after initial setup.",
+    ],
+    for_llm_agents: {
+      summary: "To fetch formatted zyBooks content, make a GET request to /api/zybooks-markdown with chapter and section params. Use format=text for raw markdown. No auth needed if the server has a stored token.",
+      example_python: `import requests\nresp = requests.get("${baseUrl}/api/zybooks-markdown", params={"zybook_code": "CPPCS2520NguyenSpring2026", "chapter": 7, "section": 1, "format": "text"})\nprint(resp.text)`,
+      example_curl: `curl "${baseUrl}/api/zybooks-markdown?zybook_code=CPPCS2520NguyenSpring2026&chapter=7&section=1&format=text"`,
+    },
+  });
+
+  const renderDocsHtml = (docs: any) => `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>zyBooks Formatter API</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:900px;margin:0 auto;padding:2rem;background:#0a0a0a;color:#e0e0e0}
+h1{color:#fff;border-bottom:2px solid #333;padding-bottom:.5rem}
+h2{color:#90caf9;margin-top:2rem}
+h3{color:#ce93d8;font-size:1rem;margin-top:1.5rem}
+code{background:#1a1a2e;padding:2px 6px;border-radius:4px;font-size:.9em;color:#a5d6a7}
+pre{background:#1a1a2e;padding:1rem;border-radius:8px;overflow-x:auto;border:1px solid #333}
+pre code{padding:0;background:none}
+.endpoint{background:#111;border:1px solid #333;border-radius:8px;padding:1rem;margin:1rem 0}
+.method-get{color:#66bb6a}.method-post{color:#ffa726}
+table{border-collapse:collapse;width:100%;margin:.5rem 0}
+th,td{border:1px solid #333;padding:.5rem;text-align:left}
+th{background:#1a1a2e}
+.quickstart{background:#1a2e1a;border:1px solid #2e7d32;border-radius:8px;padding:1rem;margin:1rem 0}
+.llm-box{background:#1a1a2e;border:1px solid #5c6bc0;border-radius:8px;padding:1rem;margin:1rem 0}
+</style></head><body>
+<h1>${docs.name} <small>v${docs.version}</small></h1>
+<p>${docs.description}</p>
+<p>Base URL: <code>${docs.base_url}</code> | Default zybook: <code>${docs.default_zybook}</code></p>
+
+<div class="quickstart"><h2>Quickstart</h2><ol>${docs.quickstart.map((s: string) => `<li><code>${s.replace(/^\d+\.\s*/, '')}</code></li>`).join('')}</ol></div>
+
+<div class="llm-box"><h2>For LLM Agents</h2>
+<p>${docs.for_llm_agents.summary}</p>
+<pre><code>${docs.for_llm_agents.example_curl}</code></pre>
+<p>Python:</p><pre><code>${docs.for_llm_agents.example_python}</code></pre></div>
+
+<h2>Endpoints</h2>
+${Object.entries(docs.endpoints).map(([path, info]: [string, any]) => {
+  const method = path.split(' ')[0];
+  const methodClass = method === 'GET' ? 'method-get' : 'method-post';
+  let html = `<div class="endpoint"><h3><span class="${methodClass}">${method}</span> ${path.split(' ')[1]}</h3>`;
+  html += `<p>${info.description}</p>`;
+  if (info.params) {
+    html += '<table><tr><th>Parameter</th><th>Description</th></tr>';
+    html += Object.entries(info.params).map(([k, v]) => `<tr><td><code>${k}</code></td><td>${v}</td></tr>`).join('');
+    html += '</table>';
+  }
+  if (info.body) {
+    html += '<p><strong>Body:</strong></p><table><tr><th>Field</th><th>Description</th></tr>';
+    html += Object.entries(info.body).map(([k, v]) => `<tr><td><code>${k}</code></td><td>${v}</td></tr>`).join('');
+    html += '</table>';
+  }
+  if (info.auth) html += `<p><strong>Auth:</strong> ${info.auth}</p>`;
+  if (info.examples) html += info.examples.map((e: string) => `<pre><code>${e}</code></pre>`).join('');
+  else if (info.example) html += `<pre><code>${info.example}</code></pre>`;
+  html += '</div>';
+  return html;
+}).join('')}
+
+<p style="text-align:center;color:#666;margin-top:2rem">JSON version: <a href="/api/docs" style="color:#90caf9">GET /api/docs</a> (set Accept: application/json)</p>
+</body></html>`;
+
+  app.get(["/api", "/api/docs"], (_req, res) => {
+    const baseUrl = `https://${_req.headers.host || 'zy-books-formatter.replit.app'}`;
+    const docs = getApiDocs(baseUrl);
+    const acceptsHtml = (_req.headers.accept || '').includes('text/html');
+    if (acceptsHtml && _req.path === '/api/docs') {
+      res.type('html').send(renderDocsHtml(docs));
+    } else {
+      res.json(docs);
+    }
   });
 
   return httpServer;
