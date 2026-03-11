@@ -266,6 +266,75 @@ function convertMultipleChoiceResource(resource: ZyBooksContentResource): string
   return lines.join('\n');
 }
 
+function convertHtmlTableToMarkdown(tableHtml: string): string[] {
+  const lines: string[] = [];
+  const rowRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const rows: string[][] = [];
+  let hasHeader = false;
+  let match;
+
+  while ((match = rowRegex.exec(tableHtml)) !== null) {
+    const rowHtml = match[1];
+    const cells: string[] = [];
+    const isHeaderRow = /<th[\s>]/i.test(rowHtml);
+    if (isHeaderRow) hasHeader = true;
+
+    const cellRegex = /<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/gi;
+    let cellMatch;
+    while ((cellMatch = cellRegex.exec(rowHtml)) !== null) {
+      let cellContent = cellMatch[1];
+      const consoleMatch = cellContent.match(/<div class="console">\s*<pre>([\s\S]*?)<\/pre>\s*<\/div>/i);
+      if (consoleMatch) {
+        cellContent = '`' + decodeEntities(consoleMatch[1].replace(/<[^>]+>/g, '')).trim() + '`';
+      } else {
+        cellContent = extractCodeFromHtml(cellContent) || stripHtml(cellContent).trim();
+      }
+      cellContent = cellContent.replace(/\|/g, '\\|').replace(/\n/g, ' ');
+      cells.push(cellContent);
+    }
+    if (cells.length > 0) rows.push(cells);
+  }
+
+  if (rows.length === 0) return [];
+
+  const hasSideBySideCodeBlocks = rows.length === 1 && rows[0].length === 2 &&
+    tableHtml.includes('class="code') && tableHtml.includes('class="console"');
+
+  if (hasSideBySideCodeBlocks) {
+    const codeMatch = tableHtml.match(/<div class="code[^"]*">\s*<div class="highlight">\s*<pre>([\s\S]*?)<\/pre>\s*<\/div>\s*<\/div>/i);
+    const consoleMatch = tableHtml.match(/<div class="console">\s*<pre>([\s\S]*?)<\/pre>\s*<\/div>/i);
+    if (codeMatch) {
+      const code = extractCodeFromHtml(codeMatch[0]);
+      lines.push('> ```python', ...code.split('\n').map(l => '> ' + l), '> ```');
+    }
+    if (consoleMatch) {
+      const output = decodeEntities(consoleMatch[1].replace(/<[^>]+>/g, '')).trim();
+      lines.push('> ```', ...output.split('\n').map(l => '> ' + l), '> ```');
+    }
+    return lines;
+  }
+
+  const colCount = Math.max(...rows.map(r => r.length));
+  for (const row of rows) {
+    while (row.length < colCount) row.push('');
+  }
+
+  if (hasHeader) {
+    const headerRow = rows[0];
+    lines.push('> | ' + headerRow.join(' | ') + ' |');
+    lines.push('> | ' + headerRow.map(() => '---').join(' | ') + ' |');
+    for (let i = 1; i < rows.length; i++) {
+      lines.push('> | ' + rows[i].join(' | ') + ' |');
+    }
+  } else {
+    for (const row of rows) {
+      lines.push('> | ' + row.join(' | ') + ' |');
+    }
+  }
+
+  return lines;
+}
+
 function convertContainerResource(resource: ZyBooksContentResource): string {
   const payload = resource.payload || {};
   const lines: string[] = [];
@@ -280,14 +349,21 @@ function convertContainerResource(resource: ZyBooksContentResource): string {
   if (Array.isArray(htmlArray)) {
     const rawHtml = htmlArray.map((item: any) => extractAttributedText(item)).join('');
 
+    const tableRegex = /<(?:div class="table"[^>]*>\s*)*<table[^>]*>([\s\S]*?)<\/table>(?:\s*<\/div>)*/gi;
     const consoleParts: string[] = [];
     const codeParts: string[] = [];
-    const proseParts: string[] = [];
+    const tableParts: string[][] = [];
+
+    let workingHtml = rawHtml;
+
+    workingHtml = workingHtml.replace(tableRegex, (fullMatch) => {
+      const tableLines = convertHtmlTableToMarkdown(fullMatch);
+      tableParts.push(tableLines);
+      return '%%TABLE_BLOCK%%';
+    });
 
     const consoleRegex = /<div class="console">\s*<pre>([\s\S]*?)<\/pre>\s*<\/div>/gi;
     const codeRegex = /<div class="code[^"]*">\s*<div class="highlight">\s*<pre>([\s\S]*?)<\/pre>\s*<\/div>\s*<\/div>/gi;
-
-    let workingHtml = rawHtml;
 
     workingHtml = workingHtml.replace(consoleRegex, (_, content) => {
       consoleParts.push(stripHtml(content).trim());
@@ -301,10 +377,16 @@ function convertContainerResource(resource: ZyBooksContentResource): string {
 
     let consoleIdx = 0;
     let codeIdx = 0;
+    let tableIdx = 0;
 
-    const allParts = workingHtml.split(/(%%CONSOLE_BLOCK%%|%%CODE_BLOCK%%)/);
+    const allParts = workingHtml.split(/(%%CONSOLE_BLOCK%%|%%CODE_BLOCK%%|%%TABLE_BLOCK%%)/);
     for (const part of allParts) {
-      if (part === '%%CONSOLE_BLOCK%%') {
+      if (part === '%%TABLE_BLOCK%%') {
+        if (tableIdx < tableParts.length) {
+          lines.push(...tableParts[tableIdx]);
+          tableIdx++;
+        }
+      } else if (part === '%%CONSOLE_BLOCK%%') {
         if (consoleIdx < consoleParts.length) {
           lines.push('> ```', ...consoleParts[consoleIdx].split('\n').map(l => '> ' + l), '> ```');
           consoleIdx++;

@@ -1,0 +1,62 @@
+Done! The spec is live on the bridge. 🎯
+
+Here's what I just posted to Agent Bridge — Task Queue & Coordination:
+
+NEW TASK: Universal API Access (/api/docs endpoint)
+The full spec covers:
+
+4 endpoints to document: /api/zybooks-markdown, /api/bookmarklet, /api/token-status, and /api/docs itself
+
+JSON + optional HTML response formats so both agents and humans can read it
+
+Usage examples for Perplexity threads, browser control, and curl
+
+5 acceptance criteria including no regressions and all 25 tests still passing
+
+The why: turns the formatter from "Casey has to explain it" into "any agent can self-serve"
+
+OPTIONAL TASK: Custom Colab Formats
+Collapsible sections, quiz mode, reference mode ideas
+
+Clearly marked as non-blocking nice-to-have
+
+The Replit agent can pick this up next time it reads the bridge. When you're chatting with it, just point it to the bridge page and say "new task from overseer" — it'll see the spec and acceptance criteria right there.
+
+The /api/docs task is a quick win — probably 30 minutes of work for the Replit agent — and once it's done, every thread you open can discover the formatter on its own. No more re-explaining! 🚀
+
+Prepared by Deep Research
+ah,tables! caught this here and btw thank you so much! :D
+
+Attachment
+image.jpg
+Good catch! I can see the issue clearly:
+​
+
+The Bug
+Table 7.2.1: "Using fill characters to pad tables" — on the zyBooks side (left), it's a clean 4-column table with headers: Format specification | Value of score | Output. But on the Notion side (right), it's rendering as a blockquote list with > lines instead of an actual table:
+
+text
+> {score:}
+> 9
+> ' '
+> 9
+> {score:4}
+...
+Instead of a proper markdown table like:
+
+text
+| Format specification | Value of score | Output |
+|---|---|---|
+| {score:} | 9 | 9 |
+| {score:4} | 9 | ' 9' |
+| {score:0>4} | 9 | 0009 |
+What's Happening
+The zyBooks HTML table is getting picked up as a "container" element and dumped into blockquote format instead of being parsed as an actual <table> → markdown table conversion. The Replit agent just fixed this pattern for code-in-containers (the soccer stats fix), but data tables like this one are a different case — they need | header | header | markdown output, not > line output 
+​.
+
+What to Tell the Replit Agent
+Bug: HTML tables inside content sections render as blockquotes instead of markdown tables. Example: Table 7.2.1 in Section 7.2 — "Using fill characters to pad tables." Should be a proper | col | col | markdown table, not > line blockquotes. See screenshot.
+
+Want me to post this to the bridge too, or are you forwarding it yourself? And you're welcome — this has been a fun project to oversee! 😊
+
+Prepared by Deep Research

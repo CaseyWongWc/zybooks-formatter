@@ -55,7 +55,7 @@ The application is a single-page web tool built with a frontend-only architectur
 - `client/src/lib/json-converter.ts` — Converts `content_resources[]` array to markdown with intelligent handling of all zyBooks resource types:
   - **html**: Attributed string arrays `[{text, attributes}]` → clean markdown
   - **multiple_choice**: Questions with numbered choices and correct answer markers (✓)
-  - **container**: Aside/elaboration blocks rendered as blockquotes
+  - **container**: Aside/elaboration blocks rendered as blockquotes; detects `<table>` HTML and converts to proper markdown tables with headers; detects `<div class="console">` and `<div class="code">` blocks and wraps in code fences; side-by-side code/output tables render as paired code blocks
   - **zystudio**: Challenge activities with top-level instructions
   - **custom** resources dispatched by `payload.tool`:
     - `python-tutor-v5`: Alt text + runnable trace code
@@ -87,7 +87,9 @@ The application is a single-page web tool built with a frontend-only architectur
   - Refresh tokens are long-lived (no expiry); auth tokens expire in ~24h
   - **Persistent storage**: Tokens saved to `.data/zybooks_tokens.json` (file-based) — survives server restarts and deploys; no more manual re-seeding after publish
 - Server-side markdown endpoint: `GET /api/zybooks-markdown` — fetches and converts in one call; uses stored token if no explicit auth provided
-- **LLM API access**: `GET /api` returns full API guide with all endpoints, params, and quickstart instructions
+- **LLM API access**: `GET /api` returns full JSON API guide; `GET /api/docs` serves HTML docs page for humans (dark theme, styled) or JSON for agents; includes dedicated `for_llm_agents` section with summary, curl, and Python examples
+  - **short_answer** code handling: `extractCodeFromHtml()` safely extracts code from HTML `<pre>` blocks without format specifiers like `<5` getting eaten by tag stripping; `stripHtml()` uses protected block tokens to preserve decoded code through multiple tag-strip passes; hex entity decoding (`&#x27;`) supported
+  - **Answer formatting**: Answers with trailing/leading spaces wrapped in backtick formatting for visibility
 - Colab notebook template: `GET /api/notebook-template` — downloads .ipynb with `fetch_section()`, `fetch_chapter()`, `save_chapter_md()`, `publish_to_notion()` functions; auto-detects server-stored token
 - Notebook pushed to GitHub: `notebooks/zybooks_study_notebook.ipynb` — opens directly in Colab via GitHub link
 
