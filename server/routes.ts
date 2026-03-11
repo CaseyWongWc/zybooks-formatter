@@ -3,7 +3,7 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { sendToNotion, listNotionPages } from "./notion";
-import { convertZybooksJson } from "../client/src/lib/json-converter";
+import { convertZybooksJson, type ConvertOptions } from "../client/src/lib/json-converter";
 
 async function getGitHubToken(): Promise<{ token: string; login: string } | null> {
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
@@ -433,7 +433,8 @@ document.getElementById("submitForm").addEventListener("submit", async function(
           if (data.success === false || data.error) {
             return res.status(400).json({ error: data.error?.message || data.error || "Unknown error" });
           }
-          const markdown = convertZybooksJson(data, Number(chapter), Number(section));
+          const convertOpts: ConvertOptions = { resolveTemplates: req.query.resolve_templates !== 'false' };
+          const markdown = convertZybooksJson(data, Number(chapter), Number(section), convertOpts);
           const title = data.section?.title || `Section ${chapter}.${section}`;
           const format = req.query.format || 'json';
           if (format === 'text') {
@@ -456,7 +457,8 @@ document.getElementById("submitForm").addEventListener("submit", async function(
       if (data.success === false || data.error) {
         return res.status(400).json({ error: data.error?.message || data.error || "Unknown error" });
       }
-      const markdown = convertZybooksJson(data, Number(chapter), Number(section));
+      const convertOpts2: ConvertOptions = { resolveTemplates: req.query.resolve_templates !== 'false' };
+      const markdown = convertZybooksJson(data, Number(chapter), Number(section), convertOpts2);
       const title = data.section?.title || `Section ${chapter}.${section}`;
       const format = req.query.format || 'json';
       if (format === 'text') {

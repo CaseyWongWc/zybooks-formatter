@@ -100,7 +100,14 @@ function cleanText(val: any): string {
   return stripHtml(raw);
 }
 
-export function convertZybooksJson(data: ZyBooksSectionResponse, chapter?: number, section?: number): string {
+export interface ConvertOptions {
+  resolveTemplates?: boolean;
+}
+
+let _convertOptions: ConvertOptions = { resolveTemplates: true };
+
+export function convertZybooksJson(data: ZyBooksSectionResponse, chapter?: number, section?: number, options?: ConvertOptions): string {
+  _convertOptions = { resolveTemplates: true, ...options };
   const lines: string[] = [];
   const sectionTitle = data.section?.title || '';
 
@@ -741,103 +748,220 @@ function convertDetectAnswerResource(resource: ZyBooksContentResource): string {
 
 function extractExampleFromPythonParams(paramCode: string): Record<string, string> {
   const vars: Record<string, string> = {};
+  const numVars: Record<string, number> = {};
 
-  const listMatch = paramCode.match(/\[\s*\(([^)]*)\)/);
-  if (listMatch) {
-    const firstTuple = listMatch[1];
-    const parts = firstTuple.split(',').map(s => s.trim().replace(/^['"]|['"]$/g, ''));
-    if (parts.length >= 2) {
-      vars['category'] = parts[0];
-      vars['name'] = parts[1];
+  function resolveExpr(expr: string): number | null {
+    expr = expr.trim();
+    const num = parseInt(expr);
+    if (!isNaN(num) && String(num) === expr) return num;
+    if (expr in numVars) return numVars[expr];
+    const negMatch = expr.match(/^-(\w+)$/);
+    if (negMatch && negMatch[1] in numVars) return -numVars[negMatch[1]];
+    const lenMatch = expr.match(/^len\((\w+)\)$/);
+    if (lenMatch) {
+      const v = vars[lenMatch[1]];
+      if (v) return v.length;
+    }
+    const lenMinusMatch = expr.match(/^len\((\w+)\)\s*-\s*(\d+)$/);
+    if (lenMinusMatch) {
+      const v = vars[lenMinusMatch[1]];
+      if (v) return v.length - parseInt(lenMinusMatch[2]);
+    }
+    const addMatch = expr.match(/^(\w+)\s*\+\s*(\d+)$/);
+    if (addMatch && addMatch[1] in numVars) return numVars[addMatch[1]] + parseInt(addMatch[2]);
+    const subMatch = expr.match(/^(\w+)\s*-\s*(\d+)$/);
+    if (subMatch && subMatch[1] in numVars) return numVars[subMatch[1]] - parseInt(subMatch[2]);
+    const negLenMatch = expr.match(/^-\(len\((\w+)\)\s*-\s*(\d+)\)$/);
+    if (negLenMatch) {
+      const v = vars[negLenMatch[1]];
+      if (v) return -(v.length - parseInt(negLenMatch[2]));
+    }
+    return null;
+  }
+
+  function setVar(name: string, val: string | number) {
+    if (typeof val === 'number') {
+      numVars[name] = val;
+      vars[name] = String(val);
+    } else {
+      vars[name] = val;
     }
   }
 
-  const allTuples: [string, string][] = [];
-  const tupleMatches = paramCode.matchAll(/\(\s*'([^']+)'\s*,\s*'([^']+)'\s*\)/g);
-  for (const m of tupleMatches) {
-    allTuples.push([m[1], m[2]]);
+  const allStringTuples: [string, string][] = [];
+  const strTupleMatches = paramCode.matchAll(/\(\s*'([^']+)'\s*,\s*'([^']+)'\s*\)/g);
+  for (const m of strTupleMatches) {
+    allStringTuples.push([m[1], m[2]]);
   }
 
-  const namedTupleLists = paramCode.matchAll(/(\w+)\s*=\s*\[\s*\((['"][^'"]+['"])\s*,\s*(\d+)\)/g);
-  for (const m of namedTupleLists) {
-    const listName = m[1];
-    const firstStr = m[2].replace(/^['"]|['"]$/g, '');
-    const firstNum = m[3];
-    if (listName === 'stride_list') {
-      if (!vars['stride_str']) vars['stride_str'] = firstStr;
-      if (!vars['stride']) vars['stride'] = firstNum;
-    }
+  const allMixedTuples: [string, number][] = [];
+  const mixTupleMatches = paramCode.matchAll(/\(\s*'([^']+)'\s*,\s*(\d+)\s*\)/g);
+  for (const m of mixTupleMatches) {
+    allMixedTuples.push([m[1], parseInt(m[2])]);
   }
 
+  const dictMap: Record<number, string> = {};
   const dictEntries = paramCode.matchAll(/(-?\d+)\s*:\s*'([^']+)'/g);
   for (const m of dictEntries) {
-    break;
+    dictMap[parseInt(m[1])] = m[2];
   }
 
-  const minWrapMatch = paramCode.matchAll(/(\w+)\s*=\s*min\(\s*(\d+)\s*,\s*pick_from_range\(\s*([^,)]+)\s*,/g);
-  for (const m of minWrapMatch) {
-    const varName = m[1];
-    const minCap = parseInt(m[2]);
-    let rangeStart = parseInt(m[3]);
-    if (isNaN(rangeStart)) {
-      rangeStart = 2;
+  const lines = paramCode.split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('[') || trimmed.startsWith('(') || trimmed.startsWith('while') || trimmed.startsWith('if') || trimmed.startsWith('for') || trimmed.startsWith('else')) continue;
+
+    const pickFromStrList = trimmed.match(/^(\w+)\s*,\s*(\w+)\s*=\s*pick_from\(\s*(\w+)\s*\)/);
+    if (pickFromStrList && allStringTuples.length > 0) {
+      setVar(pickFromStrList[1], allStringTuples[0][0]);
+      setVar(pickFromStrList[2], allStringTuples[0][1]);
+      continue;
     }
-    if (!vars[varName]) {
-      vars[varName] = String(Math.min(minCap, rangeStart + 2));
+
+    const sampleAssign = trimmed.match(/\[\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*,\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*\]\s*=\s*random\.sample\(\s*(\w+)\s*,\s*\d+\s*\)/);
+    if (sampleAssign && allStringTuples.length >= 2) {
+      setVar(sampleAssign[1], allStringTuples[0][0]);
+      setVar(sampleAssign[2], allStringTuples[0][1]);
+      setVar(sampleAssign[3], allStringTuples[1][0]);
+      setVar(sampleAssign[4], allStringTuples[1][1]);
+      continue;
     }
-  }
 
-  const pickRangeMatches = paramCode.matchAll(/(\w+)\s*=\s*pick_from_range\(\s*(-?\d+)\s*,/g);
-  for (const m of pickRangeMatches) {
-    if (!vars[m[1]]) vars[m[1]] = m[2];
-  }
+    const pickFromMixed = trimmed.match(/^(\w+)\s*,\s*(\w+)\s*=\s*pick_from\(\s*(\w+)\s*\)/);
+    if (pickFromMixed && allMixedTuples.length > 0) {
+      setVar(pickFromMixed[1], allMixedTuples[0][0]);
+      setVar(pickFromMixed[2], allMixedTuples[0][1]);
+      continue;
+    }
 
-  const numAssignsDirect = paramCode.matchAll(/^(\w+)\s*=\s*(\d+)\s*$/gm);
-  for (const m of numAssignsDirect) {
-    if (!vars[m[1]]) vars[m[1]] = m[2];
-  }
+    const stridePickFrom = trimmed.match(/^(\w+)\s*,\s*(\w+)\s*=\s*pick_from\(\s*stride_list\s*\)/);
+    if (stridePickFrom && allMixedTuples.length > 0) {
+      setVar(stridePickFrom[1], allMixedTuples[0][0]);
+      setVar(stridePickFrom[2], allMixedTuples[0][1]);
+      continue;
+    }
 
-  const simpleAssigns = paramCode.matchAll(/(\w+)\s*=\s*['"]([^'"]+)['"]/g);
-  for (const m of simpleAssigns) {
-    if (!vars[m[1]]) vars[m[1]] = m[2];
-  }
+    const minPickRange = trimmed.match(/^(\w+)\s*=\s*min\(\s*([^,]+)\s*,\s*pick_from_range\(\s*([^,]+)\s*,\s*([^)]+)\s*\)\s*\)/);
+    if (minPickRange) {
+      const cap = resolveExpr(minPickRange[2]);
+      const rangeStart = resolveExpr(minPickRange[3]);
+      if (cap !== null && rangeStart !== null) {
+        setVar(minPickRange[1], Math.min(cap, rangeStart));
+      }
+      continue;
+    }
 
-  const sampleMatch = paramCode.match(/\[\s*\(\s*\w+\s*,\s*(\w+)\s*\)\s*,\s*\(\s*\w+\s*,\s*(\w+)\s*\)\s*\]\s*=\s*random\.sample/);
-  if (sampleMatch && allTuples.length >= 2) {
-    if (!vars[sampleMatch[1]]) vars[sampleMatch[1]] = allTuples[0][1];
-    if (!vars[sampleMatch[2]]) vars[sampleMatch[2]] = allTuples.length > 1 ? allTuples[1][1] : allTuples[0][1];
+    const pickRange = trimmed.match(/^(\w+)\s*=\s*pick_from_range\(\s*([^,]+)\s*,\s*([^)]+)\s*\)/);
+    if (pickRange) {
+      const rangeStart = resolveExpr(pickRange[2]);
+      if (rangeStart !== null) {
+        setVar(pickRange[1], rangeStart);
+      }
+      continue;
+    }
+
+    const exprAssign = trimmed.match(/^(\w+)\s*=\s*(\w+)\s*([+\-])\s*(\d+)\s*$/);
+    if (exprAssign) {
+      const base = resolveExpr(exprAssign[2]);
+      const operand = parseInt(exprAssign[4]);
+      if (base !== null) {
+        setVar(exprAssign[1], exprAssign[3] === '+' ? base + operand : base - operand);
+      }
+      continue;
+    }
+
+    const negLenAssign = trimmed.match(/^(\w+)\s*=\s*-\(\s*len\((\w+)\)\s*-\s*(\d+)\s*\)/);
+    if (negLenAssign) {
+      const v = vars[negLenAssign[2]];
+      if (v) {
+        setVar(negLenAssign[1], -(v.length - parseInt(negLenAssign[3])));
+      }
+      continue;
+    }
+
+    const lenAssign = trimmed.match(/^(\w+)\s*=\s*len\((\w+)\)\s*([+\-])\s*(\d+)$/);
+    if (lenAssign) {
+      const v = vars[lenAssign[2]];
+      if (v) {
+        setVar(lenAssign[1], lenAssign[3] === '+' ? v.length + parseInt(lenAssign[4]) : v.length - parseInt(lenAssign[4]));
+      }
+      continue;
+    }
+
+    const lenPlusAssign = trimmed.match(/^(\w+)\s*=\s*len\((\w+)\)\s*\+\s*(\w+)$/);
+    if (lenPlusAssign) {
+      const v = vars[lenPlusAssign[2]];
+      const addVal = resolveExpr(lenPlusAssign[3]);
+      if (v && addVal !== null) {
+        setVar(lenPlusAssign[1], v.length + addVal);
+      }
+      continue;
+    }
+
+    const indexAccess = trimmed.match(/^(\w+)\s*=\s*(\w+)\[([^\]]+)\]/);
+    if (indexAccess) {
+      const strVal = vars[indexAccess[2]];
+      const idx = resolveExpr(indexAccess[3]);
+      if (strVal && idx !== null) {
+        const actualIdx = idx < 0 ? strVal.length + idx : idx;
+        if (actualIdx >= 0 && actualIdx < strVal.length) {
+          setVar(indexAccess[1], strVal[actualIdx]);
+        }
+      }
+      continue;
+    }
+
+    const dictLookup = trimmed.match(/^(\w+)\s*=\s*(\w+)\[(\w+)\]/);
+    if (dictLookup && Object.keys(dictMap).length > 0) {
+      const key = resolveExpr(dictLookup[3]);
+      if (key !== null && key in dictMap) {
+        setVar(dictLookup[1], dictMap[key]);
+      }
+      continue;
+    }
+
+    const numDirectAssign = trimmed.match(/^(\w+)\s*=\s*(-?\d+)\s*$/);
+    if (numDirectAssign) {
+      setVar(numDirectAssign[1], parseInt(numDirectAssign[2]));
+      continue;
+    }
+
+    const strDirectAssign = trimmed.match(/^(\w+)\s*=\s*['"]([^'"]*)['"]\s*$/);
+    if (strDirectAssign) {
+      setVar(strDirectAssign[1], strDirectAssign[2]);
+      continue;
+    }
   }
 
   const name = vars['name'] || vars['name1'] || '';
   if (name) {
-    const endIdxStr = vars['end_index'];
-    if (endIdxStr) {
-      const endIdx = parseInt(endIdxStr);
-      if (!isNaN(endIdx) && endIdx > 0) {
-        if (!vars['end_index_minus']) vars['end_index_minus'] = String(endIdx - 1);
-        if (!vars['char1'] && name.length > 0) {
-          const startIdx = parseInt(vars['start_index'] || '0');
-          vars['char1'] = name[isNaN(startIdx) ? 0 : startIdx] || name[0];
-        }
-        if (!vars['char2'] && endIdx <= name.length) vars['char2'] = name[endIdx - 1];
-      } else if (!isNaN(endIdx) && endIdx < 0) {
+    const endIdx = numVars['end_index'];
+    const startIdx = numVars['start_index'] ?? 0;
+    if (endIdx !== undefined) {
+      if (!vars['end_index_minus']) setVar('end_index_minus', endIdx - 1);
+      if (endIdx > 0) {
+        if (!vars['char1'] && startIdx >= 0 && startIdx < name.length) setVar('char1', name[startIdx]);
+        if (!vars['char2'] && endIdx - 1 >= 0 && endIdx - 1 < name.length) setVar('char2', name[endIdx - 1]);
+      } else if (endIdx < 0) {
         const posIdx = name.length + endIdx;
-        if (!vars['end_index_pos']) vars['end_index_pos'] = String(posIdx);
-        if (!vars['end_index_pos_in']) vars['end_index_pos_in'] = String(posIdx - 1);
-        if (!vars['end_val'] && posIdx >= 0 && posIdx < name.length) vars['end_val'] = name[posIdx];
-        if (!vars['start_val_in']) vars['start_val_in'] = name[0];
-        if (!vars['end_val_in'] && posIdx > 0) vars['end_val_in'] = name[posIdx - 1];
+        if (!vars['end_index_pos']) setVar('end_index_pos', posIdx);
+        if (!vars['end_index_pos_in']) setVar('end_index_pos_in', posIdx - 1);
+        if (!vars['end_val'] && posIdx >= 0 && posIdx < name.length) setVar('end_val', name[posIdx]);
+        if (!vars['start_val_in'] && name.length > 0) setVar('start_val_in', name[0]);
+        if (!vars['end_val_in'] && posIdx > 0 && posIdx <= name.length) setVar('end_val_in', name[posIdx - 1]);
         const ordinals: Record<number, string> = {2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth', 6: 'sixth', 7: 'seventh'};
-        if (!vars['ordinal']) vars['ordinal'] = ordinals[Math.abs(endIdx)] || String(Math.abs(endIdx)) + 'th';
+        if (!vars['ordinal']) setVar('ordinal', ordinals[Math.abs(endIdx)] || Math.abs(endIdx) + 'th');
       }
     }
 
-    if (vars['start_index'] && vars['end_index']) {
-      const si = parseInt(vars['start_index']);
-      const ei = parseInt(vars['end_index']);
-      if (!isNaN(si) && !isNaN(ei) && ei > si && ei <= name.length) {
-        if (!vars['char1']) vars['char1'] = name[si];
-        if (!vars['char2']) vars['char2'] = name[ei - 1];
+    if (vars['stride'] && vars['end_index'] && !vars['step_phrase_1']) {
+      const stride = numVars['stride'];
+      const ei = numVars['end_index'];
+      if (stride && ei) {
+        const indices: number[] = [];
+        for (let idx = 0; idx < ei; idx += stride) indices.push(idx);
+        const chars = indices.map(i => i < name.length ? `"${name[i]}"` : '?').join(', ');
+        setVar('step_phrase_1', `${vars['category'] || 'var'}[${indices.join('], ' + (vars['category'] || 'var') + '[')}] are returned, so ${chars}.`);
       }
     }
   }
@@ -852,6 +976,22 @@ function applyDollarVarSubstitution(text: string, vars: Record<string, string>):
     text = text.replace(new RegExp(`\\$\\{${key}\\}`, 'g'), val);
   }
   return text;
+}
+
+const fallbackLabels: Record<string, string> = {
+  step_phrase_1: '[computed stride description]',
+  step_phrase_2: '[computed stride description]',
+  slice_result: '[computed slice result]',
+  stride_desc: '[computed stride description]',
+  ordinal_desc: '[ordinal position]',
+};
+
+function applyFallbackLabels(text: string): string {
+  return text.replace(/\$\{(\w+)\}/g, (match, varName) => {
+    if (fallbackLabels[varName]) return fallbackLabels[varName];
+    const readable = varName.replace(/_/g, ' ');
+    return `[${readable}]`;
+  });
 }
 
 function convertCodeOutputResource(resource: ZyBooksContentResource): string {
@@ -887,11 +1027,13 @@ function convertCodeOutputResource(resource: ZyBooksContentResource): string {
         }
 
         if (typeof params === 'string' && code.includes('${')) {
-          const exampleVars = extractExampleFromPythonParams(params);
-          if (Object.keys(exampleVars).length > 0) {
-            code = applyDollarVarSubstitution(code, exampleVars);
-            if (level.explanation) {
-              level._resolvedExplanation = applyDollarVarSubstitution(level.explanation, exampleVars);
+          if (_convertOptions.resolveTemplates !== false) {
+            const exampleVars = extractExampleFromPythonParams(params);
+            if (Object.keys(exampleVars).length > 0) {
+              code = applyDollarVarSubstitution(code, exampleVars);
+              if (level.explanation) {
+                level._resolvedExplanation = applyDollarVarSubstitution(level.explanation, exampleVars);
+              }
             }
           }
         }
@@ -901,20 +1043,27 @@ function convertCodeOutputResource(resource: ZyBooksContentResource): string {
 
       const hasDollarVars = /\$\{[a-zA-Z_]/.test(code);
 
+      if (hasDollarVars && _convertOptions.resolveTemplates !== false) {
+        code = applyFallbackLabels(code);
+      }
+
       if (code) {
         lines.push('', 'What is the output?', '', '```' + lang, decodeEntities(code).trim(), '```');
       }
 
-      if (hasDollarVars) {
+      if (hasDollarVars && _convertOptions.resolveTemplates === false) {
         lines.push('*Note: `${...}` placeholders are filled with random values at runtime (e.g., different names/numbers each attempt).*');
       }
 
-      const explanationText = level._resolvedExplanation || level.explanation;
+      let explanationText = level._resolvedExplanation || level.explanation;
       if (explanationText) {
         let expClean = stripHtml(explanationText);
-        const hasUnresolved = /\$\{[a-zA-Z_]/.test(expClean);
-        if (hasUnresolved) {
-          expClean = expClean.replace(/\$\{(\w+)\}/g, '[$1]');
+        if (/\$\{[a-zA-Z_]/.test(expClean)) {
+          if (_convertOptions.resolveTemplates !== false) {
+            expClean = applyFallbackLabels(expClean);
+          } else {
+            expClean = expClean.replace(/\$\{(\w+)\}/g, '[$1]');
+          }
         }
         lines.push('', '*' + expClean + '*');
       }
