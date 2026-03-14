@@ -240,64 +240,85 @@ export default function Home() {
   }, [input, pasteMode, toast, session, addToSession]);
 
   const handleApiFetch = useCallback(async () => {
-    if (!apiToken.trim() || !apiChapter.trim() || !apiSection.trim()) {
-      toast({ title: "Missing fields", description: "Please fill in auth token, chapter, and section.", variant: "destructive" });
+    if (!apiChapter.trim() || !apiSection.trim()) {
+      toast({ title: "Missing fields", description: "Please fill in chapter and section.", variant: "destructive" });
       return;
     }
-    localStorage.setItem("zybooks_api_token", apiToken);
+    if (apiToken.trim()) localStorage.setItem("zybooks_api_token", apiToken);
     localStorage.setItem("zybooks_zybook_code", apiZybookCode);
     setApiFetching(true);
     try {
-      const params = new URLSearchParams({
-        auth_token: apiToken,
-        zybook_code: apiZybookCode,
-        chapter: apiChapter,
-        section: apiSection,
-      });
-      const res = await fetch(`/api/zybooks-section?${params}`);
-      const rawText = await res.text();
-      let data: any;
-      try {
-        data = JSON.parse(rawText);
-      } catch {
-        throw new Error(`Invalid JSON response from server:\n${rawText.substring(0, 500)}`);
-      }
-      if (!res.ok) throw new Error(data.error || `Server returned ${res.status}`);
-      if (data.success === false || data.error) {
-        const errMsg = data.error?.message || data.error || "Unknown zyBooks error";
-        throw new Error(`zyBooks API: ${errMsg}`);
-      }
+      const hasLocalToken = apiToken.trim().length > 0;
 
-      const topKeys = Object.keys(data);
-      const sectionData = data.section;
-      if (!sectionData) {
-        throw new Error(`No 'section' key in response. Top-level keys: [${topKeys.join(', ')}]\n\nRaw response preview:\n${JSON.stringify(data, null, 2).substring(0, 2000)}`);
-      }
-      const sectionKeys = Object.keys(sectionData);
-      const resources = sectionData.content_resources;
-      if (!resources || !Array.isArray(resources)) {
-        throw new Error(`No 'content_resources' array in section. Section keys: [${sectionKeys.join(', ')}]\n\nSection preview:\n${JSON.stringify(sectionData, null, 2).substring(0, 2000)}`);
-      }
+      if (hasLocalToken) {
+        const params = new URLSearchParams({
+          auth_token: apiToken,
+          zybook_code: apiZybookCode,
+          chapter: apiChapter,
+          section: apiSection,
+        });
+        const res = await fetch(`/api/zybooks-section?${params}`);
+        const rawText = await res.text();
+        let data: any;
+        try {
+          data = JSON.parse(rawText);
+        } catch {
+          throw new Error(`Invalid JSON response from server:\n${rawText.substring(0, 500)}`);
+        }
+        if (!res.ok) throw new Error(data.error || `Server returned ${res.status}`);
+        if (data.success === false || data.error) {
+          const errMsg = data.error?.message || data.error || "Unknown zyBooks error";
+          throw new Error(`zyBooks API: ${errMsg}`);
+        }
 
-      const resourceTypes = resources.map((r: any) => r.type || 'unknown');
-      const typeCounts: Record<string, number> = {};
-      for (const t of resourceTypes) typeCounts[t] = (typeCounts[t] || 0) + 1;
+        const sectionData = data.section;
+        if (!sectionData) {
+          throw new Error(`No 'section' key in response. Top-level keys: [${Object.keys(data).join(', ')}]`);
+        }
+        const resources = sectionData.content_resources;
+        if (!resources || !Array.isArray(resources)) {
+          throw new Error(`No 'content_resources' array in section.`);
+        }
 
-      const formatted = convertZybooksJson(data as ZyBooksSectionResponse, parseInt(apiChapter), parseInt(apiSection));
+        const resourceTypes = resources.map((r: any) => r.type || 'unknown');
+        const typeCounts: Record<string, number> = {};
+        for (const t of resourceTypes) typeCounts[t] = (typeCounts[t] || 0) + 1;
 
-      const debugInfo = `\n\n---\n_API Debug: ${resources.length} resources fetched. Types: ${Object.entries(typeCounts).map(([t,c]) => `${t}(${c})`).join(', ')}_`;
+        const formatted = convertZybooksJson(data as ZyBooksSectionResponse, parseInt(apiChapter), parseInt(apiSection));
+        const debugInfo = `\n\n---\n_API Debug: ${resources.length} resources fetched. Types: ${Object.entries(typeCounts).map(([t,c]) => `${t}(${c})`).join(', ')}_`;
+        const finalOutput = formatted ? formatted + debugInfo : `[Empty conversion result]\n\nAPI returned ${resources.length} content_resources`;
 
-      const finalOutput = formatted ? formatted + debugInfo : `[Empty conversion result]\n\nAPI returned ${resources.length} content_resources with types: ${JSON.stringify(typeCounts, null, 2)}\n\nFirst 3 resources:\n${JSON.stringify(resources.slice(0, 3), null, 2).substring(0, 3000)}`;
-
-      if (session?.active) {
-        addToSession(formatted || finalOutput, JSON.stringify(data), "api");
-        toast({ title: "Section fetched & captured!", description: `Chapter ${apiChapter}.${apiSection} — ${resources.length} resources.` });
+        if (session?.active) {
+          addToSession(formatted || finalOutput, JSON.stringify(data), "api");
+          toast({ title: "Section fetched & captured!", description: `Chapter ${apiChapter}.${apiSection} — ${resources.length} resources.` });
+        } else {
+          setOutput(finalOutput);
+          toast({ title: "Section fetched!", description: `Chapter ${apiChapter}.${apiSection} — ${resources.length} resources converted.` });
+        }
       } else {
-        setOutput(finalOutput);
-        toast({ title: "Section fetched!", description: `Chapter ${apiChapter}.${apiSection} — ${resources.length} resources converted.` });
+        const params = new URLSearchParams({
+          zybook_code: apiZybookCode,
+          chapter: apiChapter,
+          section: apiSection,
+          format: 'json',
+        });
+        const res = await fetch(`/api/zybooks-markdown?${params}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `Server returned ${res.status}`);
+
+        const markdown = data.markdown;
+        if (!markdown) throw new Error("No markdown in response");
+
+        if (session?.active) {
+          addToSession(markdown, "", "api");
+          toast({ title: "Section fetched & captured!", description: `Chapter ${apiChapter}.${apiSection}` });
+        } else {
+          setOutput(markdown);
+          toast({ title: "Section fetched!", description: `Chapter ${apiChapter}.${apiSection} converted via server token.` });
+        }
       }
     } catch (err: any) {
-      const errorText = `ERROR: ${err.message}\n\nTroubleshooting:\n- Check that your auth_token is valid (tokens expire)\n- Log in to zyBooks, then re-copy the token from localStorage\n- Verify the zybook code, chapter, and section are correct`;
+      const errorText = `ERROR: ${err.message}\n\nTroubleshooting:\n- If no auth token is set, the server uses its stored token (check /api/token/status)\n- Or paste your auth_token from zyBooks localStorage\n- Verify the zybook code, chapter, and section are correct`;
       setOutput(errorText);
       toast({ title: "API fetch failed", description: err.message, variant: "destructive" });
     } finally {
@@ -399,7 +420,7 @@ export default function Home() {
     if (!output.trim()) return;
     setNotionLoading(true);
     try {
-      const titleMatch = output.match(/^#\s+(.+)$/m);
+      const titleMatch = output.match(/^#{1,3}\s+(.+)$/m);
       const title = titleMatch ? titleMatch[1].trim() : "zyBooks Section";
       const res = await fetch("/api/notion/send", {
         method: "POST",
@@ -707,16 +728,16 @@ export default function Home() {
               {pasteMode === "api" ? (
                 <div className="flex-1 min-h-[400px] lg:min-h-[600px] border rounded-md p-4 bg-muted/20 flex flex-col gap-4" data-testid="panel-api-mode">
                   <div>
-                    <label className="text-xs font-medium text-muted-foreground block mb-1">Auth Token</label>
+                    <label className="text-xs font-medium text-muted-foreground block mb-1">Auth Token <span className="text-muted-foreground/60">(optional — server has stored token)</span></label>
                     <input
                       type="password"
                       value={apiToken}
                       onChange={(e) => setApiToken(e.target.value)}
-                      placeholder="Paste your zyBooks auth_token here..."
+                      placeholder="Leave empty to use server token, or paste your own..."
                       className="w-full text-xs px-3 py-2 border rounded-md bg-background font-mono"
                       data-testid="input-api-token"
                     />
-                    <p className="text-xs text-muted-foreground mt-1">From localStorage: ember_simple_auth-session-5 → authenticated → session → auth_token</p>
+                    <p className="text-xs text-muted-foreground mt-1">Leave blank to use the server's stored token (auto-refreshes). Or paste from zyBooks localStorage.</p>
                   </div>
                   <div>
                     <label className="text-xs font-medium text-muted-foreground block mb-1">Zybook Code</label>
@@ -777,13 +798,11 @@ export default function Home() {
                     <div className="text-xs text-muted-foreground bg-background border rounded-md p-3 space-y-1">
                       <p className="font-medium">How API Mode works:</p>
                       <ol className="list-decimal list-inside space-y-0.5">
-                        <li>Log in to zyBooks in your browser</li>
-                        <li>Open DevTools → Application → Local Storage</li>
-                        <li>Find ember_simple_auth-session-5</li>
-                        <li>Copy the auth_token value and paste above</li>
-                        <li>Enter chapter & section numbers, then click Fetch</li>
+                        <li>Just enter chapter & section numbers, then click Fetch</li>
+                        <li>The server uses its stored token (auto-refreshes)</li>
+                        <li>No auth token needed on your end!</li>
                       </ol>
-                      <p className="mt-2 text-muted-foreground/80">Or use the bookmarklet — it auto-grabs the token for you.</p>
+                      <p className="mt-2 text-muted-foreground/80">Works on mobile — no bookmarklet required. Optionally paste your own auth_token to override.</p>
                     </div>
                   </div>
                 </div>
