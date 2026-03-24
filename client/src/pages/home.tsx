@@ -778,7 +778,7 @@ export default function Home() {
                   </div>
                   <Button
                     onClick={handleApiFetch}
-                    disabled={apiFetching || !apiToken.trim() || !apiChapter.trim() || !apiSection.trim()}
+                    disabled={apiFetching || !apiChapter.trim() || !apiSection.trim()}
                     className="gap-1.5"
                     data-testid="button-api-fetch"
                   >
