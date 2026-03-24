@@ -537,13 +537,19 @@ function convertPythonTutorResource(resource: ZyBooksContentResource): string {
 
   lines.push(`**${caption}**`);
 
-  if (payload.alt_text) {
-    lines.push('', stripHtml(payload.alt_text));
-  }
-
   const traceCode = payload.options?.trace?.code;
   if (traceCode && typeof traceCode === 'string') {
     lines.push('', '```python', decodeEntities(traceCode).trim(), '```');
+  }
+
+  if (payload.alt_text) {
+    let altText = String(payload.alt_text);
+    altText = altText.replace(/<div class="code[^"]*">[\s\S]*?<\/div>\s*<\/div>/gi, '');
+    altText = altText.replace(/<pre[^>]*>[\s\S]*?<\/pre>/gi, '');
+    const cleaned = stripHtml(altText).trim();
+    if (cleaned) {
+      lines.push('', cleaned);
+    }
   }
 
   return lines.join('\n');
@@ -1245,9 +1251,36 @@ function convertCodeOutputResource(resource: ZyBooksContentResource): string {
         const params = level.parameters || {};
 
         if (typeof params === 'object' && !Array.isArray(params) && params !== null && typeof params !== 'string') {
+          const resolvedParams: Record<string, any> = {};
           for (const [key, values] of Object.entries(params)) {
-            const firstVal = Array.isArray(values) ? (values as string[])[0] : String(values);
-            code = code.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), firstVal);
+            if (Array.isArray(values) && values.length > 0) {
+              resolvedParams[key] = values[0];
+            } else {
+              resolvedParams[key] = values;
+            }
+          }
+
+          function resolveNestedValue(obj: any, path: string): string {
+            const parts = path.split('.');
+            let current = obj;
+            for (const part of parts) {
+              if (current == null || typeof current !== 'object') return `{{${path}}}`;
+              const val = (current as Record<string, any>)[part];
+              if (val === undefined) return `{{${path}}}`;
+              current = Array.isArray(val) ? val[0] : val;
+            }
+            return String(current);
+          }
+
+          code = code.replace(/\{\{([a-zA-Z_][a-zA-Z0-9_.]*)\}\}/g, (_match, path) => {
+            return resolveNestedValue(resolvedParams, path);
+          });
+
+          if (level.explanation) {
+            level._resolvedExplanation = String(level.explanation).replace(
+              /\{\{([a-zA-Z_][a-zA-Z0-9_.]*)\}\}/g,
+              (_match: string, path: string) => resolveNestedValue(resolvedParams, path)
+            );
           }
         }
 
