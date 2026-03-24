@@ -173,6 +173,7 @@ function convertResource(resource: ZyBooksContentResource): string {
     case 'multiple_choice_question':
     case 'true_false':
     case 'true_false_question':
+      return convertMultipleChoiceResource(resource);
     case 'short_answer':
     case 'short_answer_question':
       return convertShortAnswerResource(resource);
@@ -226,26 +227,46 @@ function convertMultipleChoiceResource(resource: ZyBooksContentResource): string
 
   const questions = payload.questions || [];
   if (Array.isArray(questions) && questions.length > 0) {
+    const isTrueFalse = questions.every((q: any) => {
+      const choices = q.choices || q.options || [];
+      return choices.length === 2 &&
+        choices.some((c: any) => (typeof c.label === 'string' ? c.label : cleanText(c.label)) === 'True') &&
+        choices.some((c: any) => (typeof c.label === 'string' ? c.label : cleanText(c.label)) === 'False');
+    });
+
     for (let qi = 0; qi < questions.length; qi++) {
       const q = questions[qi];
       const questionText = cleanText(q.text);
-      if (questionText) {
-        if (questions.length > 1) {
-          lines.push('', `**${qi + 1}.** ${questionText}`);
-        } else {
-          lines.push('', questionText);
-        }
-      }
-
       const choices = q.choices || q.options || [];
-      if (Array.isArray(choices) && choices.length > 0) {
-        for (const choice of choices) {
-          const choiceLabel = choice.label || cleanText(choice.text) || '';
-          const isCorrect = choice.correct === true;
-          const marker = isCorrect ? ' ✓' : '';
-          if (choiceLabel) {
-            lines.push(`- ${choiceLabel}${marker}`);
+      const correctChoice = choices.find((c: any) => c.correct === true);
+      const correctLabel = correctChoice ? (typeof correctChoice.label === 'string' ? correctChoice.label : cleanText(correctChoice.label)) : '';
+      const explanation = correctChoice?.explanation ? cleanText(correctChoice.explanation) : '';
+
+      if (isTrueFalse) {
+        if (questionText) {
+          lines.push('', `**${qi + 1}.** ${questionText}`);
+          lines.push(`Answer: **${correctLabel}**`);
+          if (explanation) lines.push(`*${explanation}*`);
+        }
+      } else {
+        if (questionText) {
+          if (questions.length > 1) {
+            lines.push('', `**${qi + 1}.** ${questionText}`);
+          } else {
+            lines.push('', questionText);
           }
+        }
+
+        if (Array.isArray(choices) && choices.length > 0) {
+          for (const choice of choices) {
+            const choiceLabel = typeof choice.label === 'string' ? choice.label : cleanText(choice.label);
+            const isCorrect = choice.correct === true;
+            const marker = isCorrect ? ' ✓' : '';
+            if (choiceLabel) {
+              lines.push(`- ${choiceLabel}${marker}`);
+            }
+          }
+          if (explanation) lines.push(`*${explanation}*`);
         }
       }
     }
