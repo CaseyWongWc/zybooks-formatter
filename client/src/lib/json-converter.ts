@@ -788,9 +788,13 @@ function convertCodeWritingResource(resource: ZyBooksContentResource): string {
       const prompt = level.prompt || level.instructions || level.description || '';
       if (prompt) {
         const described = describePromptPattern(prompt);
-        if (described) {
-          lines.push('', '**Task pattern:**', described);
+        if (described && described !== '[...]' && described.replace(/\[\.\.\.]/g, '').trim().length > 5) {
+          lines.push('', '**Task:**', described);
+        } else {
+          lines.push('', '*Task is dynamically generated (randomized each attempt).*');
         }
+      } else {
+        lines.push('', '*Task is dynamically generated (randomized each attempt).*');
       }
 
       const explanation = level.explanation || '';
@@ -834,7 +838,10 @@ function convertShortAnswerResource(resource: ZyBooksContentResource): string {
       const q = questions[qi];
       const rawText = extractAttributedText(q.text);
       const hasCodeBlock = rawText.includes('class="highlight"') || rawText.includes('class="code');
-      const questionText = hasCodeBlock ? extractCodeFromHtml(rawText) : stripHtml(rawText.replace(/<\/br>/gi, '<br/>'));
+      const hasMultiLineCode = /<code[^>]*>[^<]*\n[^<]*<\/code>/i.test(rawText);
+      const questionText = hasCodeBlock ? extractCodeFromHtml(rawText) :
+        hasMultiLineCode ? rawText.replace(/<code[^>]*>([\s\S]*?)<\/code>/gi, (_m, code) => decodeEntities(code.replace(/<[^>]+>/g, '')).trim()).replace(/<[^>]+>/g, '').trim() :
+        stripHtml(rawText.replace(/<\/br>/gi, '<br/>'));
 
       const rawBefore = q.text_before ? extractAttributedText(q.text_before).replace(/<\/br>/gi, '<br/>') : '';
       const rawAfter = q.text_after ? extractAttributedText(q.text_after).replace(/<\/br>/gi, '<br/>') : '';
@@ -856,13 +863,13 @@ function convertShortAnswerResource(resource: ZyBooksContentResource): string {
 
       if (prompt) {
         if (questions.length > 1) {
-          if (hasCodeBlock) {
+          if (hasCodeBlock || hasMultiLineCode) {
             lines.push('', `**${qi + 1}.**`, '```', questionText.trim(), '```');
           } else {
             lines.push('', `**${qi + 1}.** ${prompt}`);
           }
         } else {
-          if (hasCodeBlock) {
+          if (hasCodeBlock || hasMultiLineCode) {
             lines.push('', '```', questionText.trim(), '```');
           } else {
             lines.push('', prompt);
