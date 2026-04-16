@@ -8,6 +8,7 @@ import {
   markdownToNotebook,
   downloadNotebook,
   generateFilename,
+  type SplitMode,
 } from "@/lib/notebook-generator";
 import {
   loadSession, saveSession, clearSession, createSession,
@@ -25,6 +26,7 @@ export default function Home() {
   const [output, setOutput] = useState("");
   const [copied, setCopied] = useState(false);
   const [colabLoading, setColabLoading] = useState(false);
+  const [cellDensity, setCellDensity] = useState<"compact" | "granular">("compact");
   const [notionLoading, setNotionLoading] = useState(false);
   const [notionModalOpen, setNotionModalOpen] = useState(false);
   const [notionPages, setNotionPages] = useState<{ id: string; title: string }[]>([]);
@@ -351,10 +353,10 @@ export default function Home() {
   const handleDownloadNotebook = useCallback(() => {
     if (!output.trim()) return;
     try {
-      const notebook = markdownToNotebook(output);
+      const notebook = markdownToNotebook(output, undefined, cellDensity);
       const filename = generateFilename(output);
       downloadNotebook(notebook, filename);
-      toast({ title: "Notebook downloaded", description: filename });
+      toast({ title: "Notebook downloaded", description: `${filename} (${cellDensity})` });
     } catch {
       toast({
         title: "Generation failed",
@@ -362,13 +364,13 @@ export default function Home() {
         variant: "destructive",
       });
     }
-  }, [output, toast]);
+  }, [output, toast, cellDensity]);
 
   const handleOpenInColab = useCallback(async () => {
     if (!output.trim()) return;
     setColabLoading(true);
     try {
-      const notebook = markdownToNotebook(output);
+      const notebook = markdownToNotebook(output, undefined, cellDensity);
       const filename = generateFilename(output);
       const res = await fetch("/api/create-colab-link", {
         method: "POST",
@@ -390,7 +392,7 @@ export default function Home() {
     } finally {
       setColabLoading(false);
     }
-  }, [output, toast]);
+  }, [output, toast, cellDensity]);
 
   const loadNotionPages = useCallback(async () => {
     setNotionPagesLoading(true);
@@ -861,6 +863,19 @@ export default function Home() {
                     )}
                     {copied ? "Copied" : "Copy"}
                   </Button>
+                  <div className="flex items-center gap-1 border rounded-md px-2 py-1 text-xs" data-testid="toggle-cell-density">
+                    <span className="text-muted-foreground mr-1">Cells:</span>
+                    <button
+                      className={`px-1.5 py-0.5 rounded ${cellDensity === "compact" ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                      onClick={() => setCellDensity("compact")}
+                      data-testid="button-density-compact"
+                    >Compact</button>
+                    <button
+                      className={`px-1.5 py-0.5 rounded ${cellDensity === "granular" ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                      onClick={() => setCellDensity("granular")}
+                      data-testid="button-density-granular"
+                    >Granular</button>
+                  </div>
                   <Button
                     variant="default"
                     size="sm"
