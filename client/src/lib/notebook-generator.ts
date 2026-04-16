@@ -50,7 +50,9 @@ function makeCodeCell(content: string): NotebookCell {
   };
 }
 
-export function markdownToNotebook(markdown: string, title?: string): Notebook {
+export type SplitMode = "compact" | "granular";
+
+export function markdownToNotebook(markdown: string, title?: string, splitMode: SplitMode = "compact"): Notebook {
   const cells: NotebookCell[] = [];
 
   const codeBlockRegex = /```(\w*)\n([\s\S]*?)```/g;
@@ -61,7 +63,8 @@ export function markdownToNotebook(markdown: string, title?: string): Notebook {
   while ((match = codeBlockRegex.exec(markdown)) !== null) {
     const beforeCode = markdown.slice(lastIndex, match.index).trim();
     if (beforeCode) {
-      cells.push(makeMarkdownCell(beforeCode));
+      const sections = splitMarkdownBySections(beforeCode, splitMode);
+      cells.push(...sections);
     }
 
     const codeContent = match[2];
@@ -74,12 +77,12 @@ export function markdownToNotebook(markdown: string, title?: string): Notebook {
 
   const remaining = markdown.slice(lastIndex).trim();
   if (remaining) {
-    const sections = splitMarkdownBySections(remaining);
+    const sections = splitMarkdownBySections(remaining, splitMode);
     cells.push(...sections);
   }
 
   if (cells.length === 0) {
-    const sections = splitMarkdownBySections(markdown);
+    const sections = splitMarkdownBySections(markdown, splitMode);
     cells.push(...sections);
   }
 
@@ -111,35 +114,50 @@ export function markdownToNotebook(markdown: string, title?: string): Notebook {
   };
 }
 
-function splitMarkdownBySections(text: string): NotebookCell[] {
+function splitMarkdownBySections(text: string, splitMode: SplitMode = "compact"): NotebookCell[] {
   const cells: NotebookCell[] = [];
   const lines = text.split("\n");
   let currentChunk: string[] = [];
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const isActivityHeader = /^\*\*(PARTICIPATION|CHALLENGE)\s+ACTIVITY\*\*$/i.test(line.trim());
-    const isSectionHeading = /^#{1,3}\s+/.test(line) || /^\d+\.\d+(\.\d+)?[\s:]/.test(line);
-    const isMajorBreak = isActivityHeader || isSectionHeading;
-
-    if (isMajorBreak && currentChunk.length > 0) {
-      const content = currentChunk.join("\n").trim();
-      if (content) {
-        cells.push(makeMarkdownCell(content));
-      }
-      currentChunk = [line];
-    } else {
-      currentChunk.push(line);
-    }
-  }
-
-  if (currentChunk.length > 0) {
+  const flushChunk = () => {
     const content = currentChunk.join("\n").trim();
     if (content) {
       cells.push(makeMarkdownCell(content));
     }
+    currentChunk = [];
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    const isActivityHeader = /^\*\*(PARTICIPATION|CHALLENGE)\s+ACTIVITY\*\*$/i.test(trimmed);
+    const isSectionHeading = /^#{1,3}\s+/.test(line) || /^\d+\.\d+(\.\d+)?[\s:]/.test(line);
+    let isMajorBreak = isActivityHeader || isSectionHeading;
+
+    if (splitMode === "granular" && !isMajorBreak) {
+      const isHorizontalRule = /^(-{3,}|\*{3,}|_{3,})$/.test(trimmed);
+      const isBoldStandalone = /^\*\*.+\*\*$/.test(trimmed) && trimmed.length > 4;
+      const isBlockquoteStart = /^>\s/.test(line) && (i === 0 || !/^>\s/.test(lines[i - 1]?.trim() || ""));
+      const isTableBoundary = /^\|/.test(trimmed) && (i === 0 || !/^\|/.test(lines[i - 1]?.trim() || ""));
+      const isDoubleBlank = trimmed === "" && (lines[i - 1]?.trim() || "") === "";
+
+      if (isHorizontalRule || isBoldStandalone || isBlockquoteStart || isTableBoundary || isDoubleBlank) {
+        isMajorBreak = true;
+      }
+    }
+
+    if (isMajorBreak && currentChunk.length > 0) {
+      flushChunk();
+      if (splitMode === "granular" && /^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) {
+        cells.push(makeMarkdownCell(trimmed));
+        continue;
+      }
+    }
+
+    currentChunk.push(line);
   }
 
+  flushChunk();
   return cells;
 }
 
