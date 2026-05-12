@@ -1,0 +1,2103 @@
+Skip to main content
+zyBooks
+My library >
+CS 2520: Python for Programmers home
+zyBooks catalog
+Help/FAQ
+Casey Wong
+CS 2520: Python for Programmers
+Spring 2026
+Generic zyBook
+
+My activity
+
+My subscription
+
+Assignments
+View my activity
+Select date and time below to show all activity up until a specific time. Default is current time.
+May 12th, 2026
+PDT
+Generate score report
+All scores from start of class until May 12th, 2026 at 11:59 pm PDT will be downloaded
+
+Generate score report
+You must select at least one section from the table of contents to generate a score report.
+Search content
+
+Search
+View content explorer
+Showing my activity
+zyLabs
+Challenge
+Participation
+1. Introduction to Python
+L
+100%
+C
+100%
+P
+100%
+
+1.1 Programming (general)
+P
+100%
+
+1.2 Programming using Python
+P
+100%
+
+1.3 Basic input and output
+C
+100%
+P
+100%
+
+1.4 Errors
+C
+100%
+P
+100%
+
+1.5 Integrated development environment
+P
+100%
+
+1.6 Computers and programs (general)
+P
+100%
+
+1.7 Computer tour
+P
+100%
+
+1.8 Language history
+P
+100%
+
+1.9 Why whitespace and precision matter
+C
+100%
+P
+100%
+
+1.10 Python example: Salary calculation
+No points
+1.11 Additional practice: Output art
+No points
+1.12 zyLab training: Basics
+Lab
+L
+100%
+
+1.13 zyLab training: Interactive console
+Lab
+L
+100%
+
+1.14 zyLab training: Output format errors in Pluto.py
+Lab
+L
+100%
+
+1.15 zyLab training: Logic errors in Kite.py
+Lab
+L
+100%
+
+1.16 zyLab training: Syntax errors in Baseball.py
+Lab
+L
+100%
+
+1.17 zyLab training*: One large program
+Lab
+L
+100%
+
+1.18 LAB: Formatted output: Hello World!
+Lab
+L
+100%
+
+1.19 LAB: Formatted output: No parking sign
+Lab
+L
+100%
+
+1.20 LAB: Input: Welcome message
+Lab
+L
+100%
+
+1.21 LAB: Input: Mad Lib
+Lab
+L
+100%
+
+Print chapter
+2. Variables and Expressions
+L
+100%
+C
+100%
+P
+100%
+
+2.1 Variables and assignments
+C
+100%
+P
+100%
+
+2.2 Identifiers
+P
+100%
+
+2.3 Objects
+P
+100%
+
+2.4 Numeric types: Floating-point
+C
+100%
+P
+100%
+
+2.5 Arithmetic expressions
+C
+100%
+P
+100%
+
+2.6 Python expressions
+C
+100%
+P
+100%
+
+2.7 Division and modulo
+C
+100%
+P
+100%
+
+2.8 Module basics
+C
+100%
+P
+100%
+
+2.9 Math module
+C
+100%
+P
+100%
+
+2.10 Random numbers
+P
+100%
+
+2.11 Representing text
+C
+100%
+P
+100%
+
+2.12 Style guidelines
+No points
+2.13 Additional practice: Number games
+No points
+2.14 LAB: Divide input integers
+Lab
+L
+100%
+
+2.15 LAB: Driving costs
+Lab
+L
+100%
+
+2.16 LAB: Expression for calories burned during workout
+Lab
+L
+100%
+
+2.17 LAB: Using math functions
+Lab
+L
+100%
+
+2.18 LAB: Musical note frequencies
+Lab
+L
+100%
+
+2.19 LAB: Convert to dollars
+Lab
+L
+100%
+
+Print chapter
+3. Types
+L
+100%
+C
+100%
+P
+100%
+
+3.1 String basics
+C
+100%
+P
+100%
+
+3.2 String formatting
+C
+100%
+P
+100%
+
+3.3 List basics
+C
+100%
+P
+100%
+
+3.4 Tuple basics
+C
+100%
+P
+100%
+
+3.5 Set basics
+C
+100%
+P
+100%
+
+3.6 Dictionary basics
+C
+100%
+P
+100%
+
+3.7 Common data types summary
+P
+100%
+
+3.8 Additional practice: Grade calculation
+No points
+3.9 Type conversions
+C
+100%
+P
+100%
+
+3.10 Binary numbers
+C
+100%
+P
+100%
+
+3.11 Additional practice: Health data
+No points
+3.12 LAB: List basics
+Lab
+L
+100%
+
+3.13 LAB: Set basics
+Lab
+L
+100%
+
+3.14 LAB: Input and formatted output: Right-facing arrow
+Lab
+L
+100%
+
+3.15 LAB: Phone number breakdown
+Lab
+L
+100%
+
+3.16 LAB: Simple statistics
+Lab
+L
+100%
+
+Print chapter
+4. Branching
+L
+100%
+C
+100%
+P
+100%
+
+4.1 If-else branches (general)
+C
+100%
+P
+100%
+
+4.2 Detecting equal values with branches
+C
+100%
+P
+100%
+
+4.3 Detecting ranges with branches (general)
+C
+100%
+P
+100%
+
+4.4 Detecting ranges with branches
+C
+100%
+P
+100%
+
+4.5 Detecting ranges using logical operators
+C
+100%
+P
+100%
+
+4.6 Detecting ranges with gaps
+C
+100%
+P
+100%
+
+4.7 Detecting multiple features with branches
+C
+100%
+P
+100%
+
+4.8 Comparing data types and common errors
+C
+100%
+P
+100%
+
+4.9 Membership and identity operators
+C
+100%
+P
+100%
+
+4.10 Order of evaluation
+C
+100%
+P
+100%
+
+4.11 Code blocks and indentation
+C
+100%
+P
+100%
+
+4.12 Conditional expressions
+C
+100%
+P
+100%
+
+4.13 Additional practice: Abbreviation decoder
+No points
+4.14 LAB: Smallest number
+Lab
+L
+100%
+
+4.15 LAB: Interstate highway numbers
+Lab
+L
+100%
+
+4.16 LAB: Seasons
+Lab
+L
+100%
+
+4.17 LAB: Exact change
+Lab
+L
+100%
+
+4.18 LAB: Leap year
+Lab
+L
+100%
+
+4.19 LAB: Golf scores
+Lab
+L
+100%
+
+Print chapter
+5. Loops
+L
+100%
+C
+100%
+P
+100%
+
+5.1 Loops (general)
+P
+100%
+
+5.2 While loops
+C
+100%
+P
+100%
+
+5.3 More while loop examples
+C
+100%
+P
+100%
+
+5.4 Counting
+C
+100%
+P
+100%
+
+5.5 For loops
+C
+100%
+P
+100%
+
+5.6 Counting using the range() function
+C
+100%
+P
+100%
+
+5.7 While vs. for loops
+P
+100%
+
+5.8 Nested loops
+C
+100%
+P
+100%
+
+5.9 Developing programs incrementally
+P
+100%
+
+5.10 Break and continue
+C
+100%
+P
+100%
+
+5.11 Loop else
+C
+100%
+P
+100%
+
+5.12 Getting both index and value when looping: enumerate()
+C
+100%
+P
+100%
+
+5.13 Additional practice: Dice statistics
+No points
+5.14 LAB: Convert to reverse binary
+Lab
+L
+100%
+
+5.15 LAB: Password modifier
+Lab
+L
+100%
+
+5.16 LAB: Output range with increment of 5
+Lab
+L
+100%
+
+5.17 LAB: Print string in reverse
+Lab
+L
+100%
+
+5.18 LAB: Brute force equation solver
+Lab
+L
+100%
+
+5.19 LAB: Adjust values in a list by normalizing
+Lab
+L
+100%
+
+Print chapter
+6. Functions
+L
+100%
+C
+100%
+P
+100%
+
+6.1 User-defined function basics
+C
+100%
+P
+100%
+
+6.2 Print functions
+C
+100%
+P
+100%
+
+6.3 Dynamic typing
+P
+100%
+
+6.4 Reasons for defining functions
+C
+100%
+P
+100%
+
+6.5 Writing mathematical functions
+C
+100%
+P
+100%
+
+6.6 Function stubs
+C
+100%
+P
+100%
+
+6.7 Functions with branches/loops
+C
+100%
+P
+100%
+
+6.8 Functions are objects
+P
+100%
+
+6.9 Functions: Common errors
+C
+100%
+P
+100%
+
+6.10 Scope of variables and functions
+P
+100%
+
+6.11 Namespaces and scope resolution
+P
+100%
+
+6.12 Function arguments
+C
+100%
+P
+100%
+
+6.13 Keyword arguments and default parameter values
+C
+100%
+P
+100%
+
+6.14 Arbitrary argument lists
+P
+100%
+
+6.15 Multiple function outputs
+C
+100%
+P
+100%
+
+6.16 Help! Using docstrings to document functions
+C
+100%
+
+6.17 Engineering examples
+C
+100%
+P
+100%
+
+6.18 zyLab training: Unit tests to evaluate your program
+Lab
+L
+100%
+
+6.19 LAB: Driving costs - functions
+Lab
+L
+100%
+
+6.20 LAB: Step counter
+Lab
+L
+100%
+
+6.21 LAB: Convert to binary - functions
+Lab
+L
+100%
+
+6.22 LAB: Swapping variables
+Lab
+L
+100%
+
+6.23 LAB: Fibonacci sequence
+Lab
+L
+100%
+
+Print chapter
+7. Strings
+L
+100%
+C
+100%
+P
+100%
+
+7.1 String slicing
+C
+100%
+P
+100%
+
+7.2 Advanced string formatting
+C
+100%
+P
+100%
+
+7.3 String methods
+C
+100%
+P
+100%
+
+7.4 Splitting and joining strings
+C
+100%
+P
+100%
+
+7.5 LAB: Checker for integer string
+Lab
+L
+100%
+
+7.6 LAB: Name format
+Lab
+L
+100%
+
+7.7 LAB: Count characters
+Lab
+L
+100%
+
+7.8 LAB: Mad Lib - loops
+Lab
+L
+100%
+
+7.9 LAB: Palindrome
+Lab
+L
+100%
+
+7.10 LAB: Remove all non-alpha characters
+Lab
+L
+100%
+
+Print chapter
+8. Lists and Dictionaries
+L
+100%
+C
+100%
+P
+100%
+
+8.1 Lists
+C
+100%
+P
+100%
+
+8.2 List methods
+C
+100%
+P
+100%
+
+8.3 Iterating over a list
+C
+100%
+P
+100%
+
+8.4 List games
+P
+100%
+
+8.5 List nesting
+C
+100%
+P
+100%
+
+8.6 List slicing
+C
+100%
+P
+100%
+
+8.7 Loops modifying lists
+C
+100%
+P
+100%
+
+8.8 List comprehensions
+C
+100%
+P
+100%
+
+8.9 Sorting lists
+P
+100%
+
+8.10 Command-line arguments
+P
+100%
+
+8.11 Additional practice: Engineering examples
+No points
+8.12 Dictionaries
+C
+100%
+P
+100%
+
+8.13 Dictionary methods
+C
+100%
+P
+100%
+
+8.14 Iterating over a dictionary
+C
+100%
+P
+100%
+
+8.15 Dictionary nesting
+P
+100%
+
+8.16 LAB: Varied amount of input data
+Lab
+L
+100%
+
+8.17 LAB: Filter and sort a list
+Lab
+L
+100%
+
+8.18 LAB: Elements in a range
+Lab
+L
+100%
+
+8.19 LAB: Contact list
+Lab
+L
+100%
+
+8.20 LAB: Car wash
+Lab
+L
+100%
+
+8.21 LAB: Check if list is sorted
+Lab
+L
+100%
+
+Print chapter
+9. Classes
+L
+100%
+C
+100%
+P
+100%
+
+9.1 Classes: Introduction
+P
+100%
+
+9.2 Classes: Grouping data
+C
+100%
+P
+100%
+
+9.3 Instance methods
+C
+100%
+P
+100%
+
+9.4 Class and instance object types
+C
+100%
+P
+100%
+
+9.5 Class example: Seat reservation system
+No points
+9.6 Class constructors
+C
+100%
+P
+100%
+
+9.7 Class interfaces
+P
+100%
+
+9.8 Class customization
+C
+100%
+P
+100%
+
+9.9 More operator overloading: Classes as numeric types
+C
+100%
+P
+100%
+
+9.10 Memory allocation and garbage collection
+P
+100%
+
+9.11 LAB: Car value (classes)
+Lab
+L
+100%
+
+9.12 LAB: Nutritional information (classes/constructors)
+Lab
+L
+100%
+
+9.13 LAB: Artwork label (classes/constructors)
+Lab
+L
+100%
+
+9.14 LAB: Triangle area comparison (classes)
+Lab
+L
+100%
+
+9.15 LAB: Winning team (classes)
+Lab
+L
+100%
+
+9.16 LAB: Vending machine
+Lab
+L
+100%
+
+Print chapter
+10. Exceptions
+L
+100%
+C
+100%
+P
+100%
+
+10.1 Handling exceptions using try and except
+C
+100%
+P
+100%
+
+10.2 Multiple exception handlers
+C
+100%
+P
+100%
+
+10.3 Raising exceptions
+C
+100%
+P
+100%
+
+10.4 Exceptions with functions
+C
+100%
+P
+100%
+
+10.5 Using finally to clean up
+C
+100%
+P
+100%
+
+10.6 Custom exception types
+P
+100%
+
+10.7 LAB: Fat-burning heart rate
+Lab
+L
+100%
+
+10.8 LAB: Exception handling to detect input string vs. integer
+Lab
+L
+100%
+
+10.9 LAB: Exceptions with lists
+Lab
+L
+100%
+
+10.10 LAB: Simple integer division - multiple exception handlers
+Lab
+L
+100%
+
+10.11 LAB: Step counter - exceptions
+Lab
+L
+100%
+
+10.12 LAB: Student info not found - custom exception types
+Lab
+L
+100%
+
+Print chapter
+11. Modules
+L
+83%
+C
+100%
+P
+100%
+
+11.1 Modules
+C
+100%
+P
+100%
+
+11.2 Finding modules
+P
+100%
+
+11.3 Importing specific names from a module
+C
+100%
+P
+100%
+
+11.4 Executing modules as scripts
+P
+100%
+
+11.5 Reloading modules
+P
+100%
+
+11.6 Packages
+C
+100%
+P
+100%
+
+11.7 Standard library
+P
+100%
+
+11.8 LAB: Artwork label (modules)
+Lab
+L
+100%
+
+11.9 LAB: Guess the random number
+Lab
+L
+100%
+
+11.10 LAB: Quadratic formula
+Lab
+L
+100%
+
+11.11 LAB: Unique random numbers (random module)
+Lab
+L
+100%
+
+11.12 LAB: Dates
+Lab
+L
+100%
+
+11.13 LAB: Radioactive decay
+Unpublished
+Lab
+L
+0%
+
+Print chapter
+12. Files
+L
+50%
+C
+100%
+P
+100%
+
+12.1 Reading files
+C
+100%
+P
+100%
+
+12.2 Writing files
+C
+100%
+P
+100%
+
+12.3 Interacting with file systems
+P
+100%
+
+12.4 Binary data
+P
+100%
+
+12.5 Command-line arguments and files
+P
+100%
+
+12.6 The "with" statement
+C
+100%
+P
+100%
+
+12.7 Comma-separated values files
+P
+100%
+
+12.8 LAB: Words in a range (lists)
+Lab
+L
+100%
+
+12.9 LAB: Word frequencies (lists)
+Lab
+L
+100%
+
+12.10 LAB: Sorting TV Shows (dictionaries and lists)
+Unpublished
+Lab
+L
+0%
+
+12.11 LAB: Course Grade
+Unpublished
+Lab
+L
+0%
+
+12.12 LAB: File name change
+Lab
+L
+100%
+
+12.13 LAB: Thesaurus
+Unpublished
+Lab
+L
+0%
+
+Print chapter
+13. Inheritance
+L
+100%
+C
+100%
+P
+100%
+
+13.1 Derived classes
+C
+100%
+P
+100%
+
+13.2 Accessing base class attributes
+C
+100%
+P
+100%
+
+13.3 Overriding class methods
+C
+100%
+P
+100%
+
+13.4 Is-a versus has-a relationships
+C
+100%
+P
+100%
+
+13.5 Mixin classes and multiple inheritance
+P
+100%
+
+13.6 Testing your code: The unittest module
+P
+100%
+
+13.7 LAB: Pet information (derived classes)
+Lab
+L
+100%
+
+13.8 LAB: Instrument information (derived classes)
+Lab
+L
+100%
+
+13.9 LAB: Course information (derived classes)
+Lab
+L
+100%
+
+13.10 LAB: Book information (overriding member methods)
+Lab
+L
+100%
+
+13.11 LAB: Plant information
+Lab
+L
+100%
+
+Print chapter
+14. Recursion
+L
+66%
+C
+100%
+P
+100%
+
+14.1 Recursive functions
+C
+100%
+P
+100%
+
+14.2 Recursive algorithm: Search
+C
+100%
+P
+100%
+
+14.3 Adding output statements for debugging
+P
+100%
+
+14.4 Creating a recursive function
+C
+100%
+P
+100%
+
+14.5 Recursive math functions
+C
+100%
+P
+100%
+
+14.6 Recursive exploration of all possibilities
+C
+100%
+P
+100%
+
+14.7 LAB: Fibonacci sequence (recursion)
+Lab
+L
+100%
+
+14.8 LAB: All permutations of names
+Lab
+L
+100%
+
+14.9 LAB: Number pattern
+Lab
+L
+100%
+
+14.10 LAB: Count the digits
+Lab
+L
+100%
+
+14.11 LAB: Drawing a right side up triangle
+Unpublished
+Lab
+L
+0%
+
+14.12 LAB: Output a linked list
+Unpublished
+Lab
+L
+0%
+
+Print chapter
+15. Python for Data Science
+L
+0%
+C
+0%
+P
+0%
+
+15.1 Introduction to data science
+P
+0%
+
+15.2 Data science life cycle
+C
+0%
+P
+0%
+
+15.3 Introduction to Python for data science
+P
+0%
+
+15.4 Introduction to Jupyter Notebooks
+P
+0%
+
+15.5 NumPy
+C
+0%
+P
+0%
+
+15.6 pandas
+C
+0%
+P
+0%
+
+15.7 Matplotlib
+P
+0%
+
+15.8 LAB: Average exam scores (NumPy arrays basic)
+Unpublished
+Lab
+L
+0%
+
+15.9 LAB: Curve student scores
+Unpublished
+Lab
+L
+0%
+
+15.10 LAB: Course grade statistics (pandas)
+Unpublished
+Lab
+L
+0%
+
+15.11 LAB: Flight status (line plot)
+Unpublished
+Lab
+L
+0%
+
+15.12 LAB: Broadway show scatter plot
+Unpublished
+Lab
+L
+0%
+
+15.13 LAB: Broadway show multiple plots
+Unpublished
+Lab
+L
+0%
+
+Print chapter
+16. Searching and Sorting Algorithms
+L
+0%
+C
+0%
+P
+0%
+
+16.1 Searching and algorithms
+P
+0%
+
+16.2 Binary search
+C
+0%
+P
+0%
+
+16.3 O notation
+P
+0%
+
+16.4 Algorithm analysis
+P
+0%
+
+16.5 Sorting: Introduction
+P
+0%
+
+16.6 Selection sort
+C
+0%
+P
+0%
+
+16.7 Insertion sort
+C
+0%
+P
+0%
+
+16.8 Quicksort
+C
+0%
+P
+0%
+
+16.9 Merge sort
+C
+0%
+P
+0%
+
+16.10 LAB: Descending selection sort with output during execution
+Unpublished
+Lab
+L
+0%
+
+16.11 LAB: Sorting user IDs
+Unpublished
+Lab
+L
+0%
+
+16.12 LAB: Insertion sort
+Unpublished
+Lab
+L
+0%
+
+16.13 LAB: Merge sort
+Unpublished
+Lab
+L
+0%
+
+16.14 LAB: Binary Search
+Unpublished
+Lab
+L
+0%
+
+Print chapter
+17. Artificial Intelligence
+C
+0%
+P
+0%
+
+17.1 Artificial intelligence
+C
+0%
+P
+0%
+
+17.2 Generative AI and LLMs
+P
+0%
+
+17.3 Generative AI in action
+P
+0%
+
+17.4 Generative AI Programming in Python
+P
+0%
+
+17.5 Building AI systems
+P
+0%
+
+17.6 Building a simple RAG system in Python
+P
+0%
+
+17.7 Risks and ethics in AI
+C
+0%
+P
+0%
+
+Print chapter
+18. Additional Material
+C
+0%
+P
+0%
+
+18.1 String formatting using %
+C
+0%
+P
+0%
+
+18.2 String formatting using format()
+C
+0%
+P
+0%
+
+18.3 String formatting using dictionaries
+P
+0%
+
+18.4 Basic graphics
+P
+0%
+
+18.5 zyBooks built-in programming window
+No points
+Print chapter
+19. Coding Practice Problems
+L
+1%
+
+19.1 Coding practice problems overview
+Lab
+L
+100%
+
+19.2 PRACTICE: Input/Output* Mad Libs
+Lab
+L
+0%
+
+19.3 PRACTICE: Input/Output* Welcome Message
+Lab
+L
+0%
+
+19.4 PRACTICE: Expressions* Percentages
+Lab
+L
+0%
+
+19.5 PRACTICE: Expressions* Inches to feet
+Lab
+L
+0%
+
+19.6 PRACTICE: Expressions*: Simple floating-point expression
+Lab
+L
+0%
+
+19.7 PRACTICE: Expressions*: Distance formula
+Lab
+L
+0%
+
+19.8 PRACTICE: Expressions* Phone numbers
+Lab
+L
+0%
+
+19.9 PRACTICE: Expressions* Proper name layout
+Lab
+L
+0%
+
+19.10 PRACTICE: Expressions*: Test
+Lab
+L
+0%
+
+19.11 PRACTICE: Branches*: Shape display
+Lab
+L
+0%
+
+19.12 PRACTICE: Branches*: Guitar tabs
+Lab
+L
+0%
+
+19.13 PRACTICE: Branches*: Listing names
+Lab
+L
+0%
+
+19.14 PRACTICE: Branches**: Complex cost structure
+Lab
+L
+0%
+
+19.15 PRACTICE: Branches**: Caption punctuation
+Lab
+L
+0%
+
+19.16 PRACTICE: Branches**: 24-hour time
+Lab
+L
+0%
+
+19.17 PRACTICE: Branches**: Next date
+Lab
+L
+0%
+
+19.18 PRACTICE: Branches**: Runway headings
+Lab
+L
+0%
+
+19.19 PRACTICE: Branches** Leap Year
+Lab
+L
+0%
+
+19.20 PRACTICE: Branches***: Next license plate number
+Lab
+L
+0%
+
+19.21 PRACTICE: Loops (for)*: Output sequence
+Lab
+L
+0%
+
+19.22 PRACTICE: Loops (for)*: Output evens
+Lab
+L
+0%
+
+19.23 PRACTICE: Loops*: Output integers as comma-separated list
+Lab
+L
+0%
+
+19.24 PRACTICE: Loops*: Password requirements
+Lab
+L
+0%
+
+19.25 PRACTICE: Loops*: Biggest difference
+Lab
+L
+0%
+
+19.26 PRACTICE: Loops*: Check if sorted
+Lab
+L
+0%
+
+19.27 PRACTICE: Loops (while)**: Output rocket height
+Lab
+L
+0%
+
+19.28 PRACTICE: Loops (while)**: Compute modified average
+Lab
+L
+0%
+
+19.29 PRACTICE: Loops (nested)**: Sum a given number of integers
+Lab
+L
+0%
+
+19.30 PRACTICE: Loops (nested)**: HTML table
+Lab
+L
+0%
+
+19.31 PRACTICE: Loops**: Removing leading/trailing whitespace
+Lab
+L
+0%
+
+19.32 PRACTICE: Loops**: Output integer's digits
+Lab
+L
+0%
+
+19.33 PRACTICE: Loops**: Customer lookup
+Lab
+L
+0%
+
+19.34 PRACTICE: Loops**: Word count
+Lab
+L
+0%
+
+19.35 PRACTICE: Loops**: Academic index score table
+Lab
+L
+0%
+
+19.36 PRACTICE: Loops**: TV aspect ratios
+Lab
+L
+0%
+
+19.37 PRACTICE: Functions*: Calorie estimator
+Lab
+L
+0%
+
+19.38 PRACTICE: Function*: Split cents into dollars and cents
+Lab
+L
+0%
+
+19.39 PRACTICE: Functions*: Rectangles sizes
+Lab
+L
+0%
+
+19.40 PRACTICE: Functions*: Digits to number
+Lab
+L
+0%
+
+19.41 PRACTICE: Functions*: Rotate three values
+Lab
+L
+0%
+
+19.42 PRACTICE: Functions**: Compute max
+Lab
+L
+0%
+
+19.43 PRACTICE: Functions**: Sort three values
+Lab
+L
+0%
+
+19.44 PRACTICE: Functions**: Rideshare pickup time
+Lab
+L
+0%
+
+19.45 PRACTICE: Functions**: User age
+Lab
+L
+0%
+
+19.46 PRACTICE: Functions**: Simulating waiting time (fast clerk)
+Lab
+L
+0%
+
+19.47 PRACTICE: Functions**: Number to words
+Lab
+L
+0%
+
+19.48 PRACTICE: Functions**: Driving cost estimator
+Lab
+L
+0%
+
+19.49 PRACTICE: Functions**: Next char in string
+Lab
+L
+0%
+
+19.50 PRACTICE: Functions***: Electric bill
+Lab
+L
+0%
+
+19.51 PRACTICE: Functions***: Commas in integer
+Lab
+L
+0%
+
+19.52 PRACTICE: Functions***: Find next substring
+Lab
+L
+0%
+
+19.53 PRACTICE: Functions***: Output guitar tabs
+Lab
+L
+0%
+
+19.54 PRACTICE: Lists*: Find max
+Lab
+L
+0%
+
+19.55 PRACTICE: Lists*: Outputting multiple elements per line
+Lab
+L
+0%
+
+19.56 PRACTICE: Lists*: Copying only negative values
+Lab
+L
+0%
+
+19.57 PRACTICE: Lists**: Binary to decimal conversion
+Lab
+L
+0%
+
+19.58 PRACTICE: Lists**: Min, max, average
+Lab
+L
+0%
+
+19.59 PRACTICE: Lists**: Mode
+Lab
+L
+0%
+
+19.60 PRACTICE: Lists**: Longest sequence
+Lab
+L
+0%
+
+19.61 PRACTICE: Lists**: Reverse in place
+Lab
+L
+0%
+
+19.62 PRACTICE: Lists***: Bowling score
+Lab
+L
+0%
+
+19.63 PRACTICE: Lists***: Grouping into ranges
+Lab
+L
+0%
+
+Print chapter
+20. Additional Labs: Introduction to Python
+Unpublished
+L
+0%
+
+21. Additional Labs: Variables and Expressions
+Unpublished
+L
+0%
+
+22. Additional Labs: Types
+Unpublished
+L
+0%
+
+23. Additional Labs: Branching
+Unpublished
+L
+0%
+
+24. Additional Labs: Loops
+Unpublished
+L
+0%
+
+25. Additional Labs: Functions
+Unpublished
+L
+0%
+
+26. Additional Labs: Strings
+Unpublished
+L
+0%
+
+27. Additional Labs: Lists and Dictionaries
+Unpublished
+L
+0%
+
+28. Additional Labs: Classes
+L
+48%
+
+28.1 LAB: Simple car
+Lab
+L
+100%
+
+28.2 LAB: Calculator class
+Lab
+L
+100%
+
+28.3 LAB: Product class
+Lab
+L
+100%
+
+28.4 LAB: Student class
+Lab
+L
+100%
+
+28.5 LAB: Random values
+Unpublished
+Lab
+L
+0%
+
+28.6 LAB: BankAccount class
+Lab
+L
+100%
+
+28.7 LAB: How many dice rolls?
+Unpublished
+Lab
+L
+0%
+
+28.8 LAB: Consecutive heads
+Unpublished
+Lab
+L
+0%
+
+28.9 LAB: Flipping for tails
+Unpublished
+Lab
+L
+0%
+
+28.10 LAB: Flipping for heads
+Unpublished
+Lab
+L
+0%
+
+28.11 LAB: Course size
+Lab
+L
+100%
+
+28.12 LAB: What is the dice average?
+Unpublished
+Lab
+L
+0%
+
+28.13 LAB: Dean's list
+Lab
+L
+100%
+
+28.14 LAB: Drop student
+Lab
+L
+100%
+
+28.15 LAB: Rolling for X
+Unpublished
+Lab
+L
+0%
+
+28.16 LAB: Rolling for a pair
+Unpublished
+Lab
+L
+0%
+
+28.17 LAB: Count honors
+Lab
+L
+100%
+
+28.18 LAB: Find student with highest GPA
+Lab
+L
+100%
+
+28.19 LAB: Print student roster
+Lab
+L
+100%
+
+28.20 LAB: Swap two numbers
+Lab
+L
+100%
+
+28.21 LAB: The __str__() method
+Lab
+L
+100%
+
+28.22 LAB: Find the maximum in a list
+Unpublished
+Lab
+L
+0%
+
+28.23 LAB*: Program: Lucky 7
+Unpublished
+Lab
+L
+0%
+
+28.24 LAB*: Program: Fancy car
+Unpublished
+Lab
+L
+0%
+
+28.25 LAB*: Program: Self pay kiosk
+Unpublished
+Lab
+L
+0%
+
+28.26 LAB*: Program: Online shopping cart (Part 1)
+Lab
+L
+100%
+
+28.27 LAB*: Program: Online shopping cart (Part 2)
+Unpublished
+Lab
+L
+0%
+
+Print chapter
+29. Additional Labs: Exceptions
+L
+0%
+
+29.1 LAB: Exceptions with read-only files
+Unpublished
+Lab
+L
+0%
+
+Print chapter
+30. Additional Labs: Files
+L
+0%
+
+30.1 LAB: Parsing food data
+Unpublished
+Lab
+L
+0%
+
+30.2 LAB: Movie show time display
+Unpublished
+Lab
+L
+0%
+
+Print chapter
+31. Additional Labs: Recursion
+L
+0%
+
+31.1 LAB: Drawing an upside down triangle
+Unpublished
+Lab
+L
+0%
+
+31.2 LAB: Reverse a string
+Unpublished
+Lab
+L
+0%
+
+Print chapter
