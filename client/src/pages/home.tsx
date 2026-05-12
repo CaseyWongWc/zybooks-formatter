@@ -57,6 +57,8 @@ export default function Home() {
   const [apiChapter, setApiChapter] = useState("6");
   const [apiSection, setApiSection] = useState("1");
   const [apiFetching, setApiFetching] = useState(false);
+  const [archiveStatus, setArchiveStatus] = useState<any>(null);
+  const [archiveStarting, setArchiveStarting] = useState(false);
 
   useEffect(() => {
     const saved = loadSession();
@@ -327,6 +329,59 @@ export default function Home() {
       setApiFetching(false);
     }
   }, [apiToken, apiZybookCode, apiChapter, apiSection, session, addToSession, toast]);
+
+  const pollArchiveStatus = useCallback(async () => {
+    try {
+      const res = await fetch("/api/archive-to-notion/status");
+      const data = await res.json();
+      if (data && (data.active || data.status)) setArchiveStatus(data);
+      return data;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  useEffect(() => {
+    let id: ReturnType<typeof setInterval> | null = null;
+    let cancelled = false;
+    const tick = async () => {
+      const data = await pollArchiveStatus();
+      if (cancelled) return;
+      if (data?.status && data.status !== "running" && id) {
+        clearInterval(id);
+        id = null;
+      }
+    };
+    tick();
+    id = setInterval(tick, 3000);
+    return () => {
+      cancelled = true;
+      if (id) clearInterval(id);
+    };
+  }, [pollArchiveStatus, archiveStarting]);
+
+  const handleArchiveToNotion = useCallback(async () => {
+    if (!confirm(`Archive the entire "${apiZybookCode}" textbook to Notion?\n\nThis fetches every chapter & section and creates a Notion page tree. Existing pages with the same titles are reused/skipped.`)) return;
+    setArchiveStarting(true);
+    try {
+      const res = await fetch("/api/archive-to-notion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ zybook_code: apiZybookCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast({ title: "Archive failed to start", description: data.error || "Unknown error", variant: "destructive" });
+        return;
+      }
+      toast({ title: "Archive started", description: "Watch the status panel below for progress." });
+      pollArchiveStatus();
+    } catch (err: any) {
+      toast({ title: "Archive failed to start", description: err.message, variant: "destructive" });
+    } finally {
+      setArchiveStarting(false);
+    }
+  }, [apiZybookCode, toast, pollArchiveStatus]);
 
   const handleCopy = useCallback(async () => {
     if (!output) return;
@@ -796,6 +851,73 @@ export default function Home() {
                       </>
                     )}
                   </Button>
+                  <div className="border-t pt-3 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-medium">Archive entire textbook to Notion</p>
+                        <p className="text-xs text-muted-foreground">Creates root → chapter → section page tree. Resumable & idempotent.</p>
+                      </div>
+                      <Button
+                        onClick={handleArchiveToNotion}
+                        disabled={archiveStarting || archiveStatus?.status === "running"}
+                        variant="secondary"
+                        size="sm"
+                        data-testid="button-archive-to-notion"
+                      >
+                        {archiveStarting || archiveStatus?.status === "running" ? (
+                          <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" />Archiving…</>
+                        ) : (
+                          <>Archive to Notion</>
+                        )}
+                      </Button>
+                    </div>
+                    {archiveStatus && (
+                      <div className="text-xs bg-background border rounded-md p-3 space-y-1" data-testid="status-archive">
+                        <div className="flex items-center justify-between gap-2">
+                          <span>
+                            <span className="font-medium">Status:</span>{" "}
+                            <span className={
+                              archiveStatus.status === "completed" ? "text-green-500" :
+                              archiveStatus.status === "failed" ? "text-red-500" : "text-blue-400"
+                            }>{archiveStatus.status}</span>
+                          </span>
+                          {archiveStatus.status === "running" && archiveStatus.currentChapter && (
+                            <span className="text-muted-foreground">
+                              Working on {archiveStatus.currentChapter}.{archiveStatus.currentSection}
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Progress:</span>{" "}
+                          {archiveStatus.sectionsCompleted} written, {archiveStatus.sectionsSkipped} skipped, {archiveStatus.errorCount || 0} errors
+                        </div>
+                        {archiveStatus.rootPageUrl && (
+                          <div className="truncate">
+                            <a
+                              href={archiveStatus.rootPageUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-blue-400 hover:underline"
+                              data-testid="link-archive-root"
+                            >Open root Notion page →</a>
+                          </div>
+                        )}
+                        {archiveStatus.error && (
+                          <div className="text-red-400 break-words">Error: {archiveStatus.error}</div>
+                        )}
+                        {archiveStatus.errors && archiveStatus.errors.length > 0 && (
+                          <details>
+                            <summary className="cursor-pointer text-muted-foreground">Recent errors ({archiveStatus.errorCount})</summary>
+                            <ul className="mt-1 space-y-0.5 max-h-32 overflow-auto">
+                              {archiveStatus.errors.map((e: any, i: number) => (
+                                <li key={i} className="text-red-400">{e.chapter}.{e.section}: {e.error}</li>
+                              ))}
+                            </ul>
+                          </details>
+                        )}
+                      </div>
+                    )}
+                  </div>
                   <div className="flex-1 flex flex-col justify-end">
                     <div className="text-xs text-muted-foreground bg-background border rounded-md p-3 space-y-1">
                       <p className="font-medium">How API Mode works:</p>

@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { sendToNotion, listNotionPages } from "./notion";
+import { sendToNotion, listNotionPages, createEmptyChildPage, findRootPageByTitle, listChildPages } from "./notion";
 import { convertZybooksJson, type ConvertOptions } from "../client/src/lib/json-converter";
 import fs from "fs";
 import path from "path";
@@ -506,6 +506,262 @@ document.getElementById("submitForm").addEventListener("submit", async function(
     } catch (err: any) {
       return res.status(502).json({ error: err.message || "Failed to fetch/convert section" });
     }
+  });
+
+  // ============================================================
+  // Bulk archive: zyBook → Notion (root → chapter → section pages)
+  // ============================================================
+  async function fetchSectionMarkdown(
+    zybookCode: string,
+    chapter: number,
+    section: number,
+    authToken: string
+  ): Promise<{ status: number; markdown?: string; title?: string; error?: string }> {
+    const url = `https://zyserver.zybooks.com/v1/zybook/${zybookCode}/chapter/${chapter}/section/${section}`;
+    const headers = {
+      "Accept": "application/json, text/javascript, */*; q=0.01",
+      "Authorization": `Bearer ${authToken}`,
+      "Origin": "https://learn.zybooks.com",
+      "Referer": "https://learn.zybooks.com/",
+      "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    };
+    let apiRes = await fetch(url, { headers });
+    if (apiRes.status === 401 && storedTokens) {
+      const refreshed = await refreshZybooksToken(storedTokens.refresh_token);
+      if (refreshed) {
+        authToken = refreshed.auth_token;
+        apiRes = await fetch(url, { headers: { ...headers, Authorization: `Bearer ${authToken}` } });
+      }
+    }
+    if (apiRes.status === 404) return { status: 404, error: "Section does not exist" };
+    if (!apiRes.ok) return { status: apiRes.status, error: `zyBooks returned ${apiRes.status}` };
+    const data: any = await apiRes.json();
+    if (data.success === false) {
+      const msg: string = data.error?.message || "Unknown error";
+      if (/does not exist|not found/i.test(msg)) return { status: 404, error: msg };
+      return { status: 400, error: msg };
+    }
+    const markdown = convertZybooksJson(data, chapter, section, { resolveTemplates: true });
+    const title = data.section?.title || `Section ${chapter}.${section}`;
+    return { status: 200, markdown, title };
+  }
+
+  interface ArchiveJob {
+    id: string;
+    zybookCode: string;
+    rootTitle: string;
+    rootPageId?: string;
+    rootPageUrl?: string;
+    status: "running" | "completed" | "failed";
+    startedAt: number;
+    finishedAt?: number;
+    currentChapter?: number;
+    currentSection?: number;
+    chaptersTotal: number;
+    sectionsCompleted: number;
+    sectionsSkipped: number;
+    errors: { chapter: number; section: number; error: string }[];
+    log: string[];
+    error?: string;
+  }
+
+  let activeArchiveJob: ArchiveJob | null = null;
+  const archiveJobs = new Map<string, ArchiveJob>();
+
+  function addLog(job: ArchiveJob, msg: string) {
+    const line = `[${new Date().toISOString()}] ${msg}`;
+    console.log(`[Archive] ${msg}`);
+    job.log.push(line);
+    if (job.log.length > 500) job.log.splice(0, job.log.length - 500);
+  }
+
+  async function runArchive(job: ArchiveJob, parentPageId: string | undefined) {
+    try {
+      const authToken = await getValidAuthToken();
+      if (!authToken) {
+        job.status = "failed";
+        job.error = "No zyBooks token configured. POST refresh_token to /api/token first.";
+        job.finishedAt = Date.now();
+        return;
+      }
+
+      // 1. Find or create root page
+      let rootPageId: string | undefined;
+      let rootPageUrl: string | undefined;
+      const existing = await findRootPageByTitle(job.rootTitle).catch(() => null);
+      if (existing) {
+        rootPageId = existing.pageId;
+        rootPageUrl = existing.pageUrl;
+        addLog(job, `Reusing existing root page: ${job.rootTitle}`);
+      } else {
+        const created = await createEmptyChildPage(parentPageId || (await pickDefaultParent()), job.rootTitle);
+        rootPageId = created.pageId;
+        rootPageUrl = created.pageUrl;
+        addLog(job, `Created root page: ${job.rootTitle}`);
+      }
+      job.rootPageId = rootPageId;
+      job.rootPageUrl = rootPageUrl;
+
+      // 2. Discover existing chapter pages for idempotency
+      const existingChapters = await listChildPages(rootPageId!);
+      const chapterByTitle = new Map(existingChapters.map(c => [c.title, c]));
+
+      // 3. Iterate chapters — probe every chapter up to MAX_CHAPTERS;
+      //    do NOT terminate on missing chapters (zyBooks can have gaps for
+      //    unpublished/skipped ranges). Skip empty ones and continue.
+      const MAX_CHAPTERS = 60;
+      const MAX_SECTIONS = 60;
+
+      for (let chapter = 1; chapter <= MAX_CHAPTERS; chapter++) {
+        job.currentChapter = chapter;
+        job.currentSection = 1;
+
+        // Probe first section to confirm chapter exists
+        const probe = await fetchSectionMarkdown(job.zybookCode, chapter, 1, authToken);
+        if (probe.status === 404) {
+          addLog(job, `Chapter ${chapter} has no section 1 — skipping`);
+          continue;
+        }
+        if (probe.status !== 200 || !probe.markdown) {
+          addLog(job, `Chapter ${chapter}.1 error: ${probe.error}`);
+          job.errors.push({ chapter, section: 1, error: probe.error || "fetch failed" });
+          continue;
+        }
+
+        // Find or create chapter page
+        const chapterTitle = `Chapter ${chapter}`;
+        let chapterPage = chapterByTitle.get(chapterTitle);
+        if (!chapterPage) {
+          const created = await createEmptyChildPage(rootPageId!, chapterTitle);
+          chapterPage = { pageId: created.pageId, title: chapterTitle, pageUrl: created.pageUrl };
+          chapterByTitle.set(chapterTitle, chapterPage);
+          addLog(job, `Created ${chapterTitle}`);
+        } else {
+          addLog(job, `Reusing existing ${chapterTitle}`);
+        }
+        job.chaptersTotal = Math.max(job.chaptersTotal, chapter);
+
+        // Discover existing section pages under chapter
+        const existingSectionPages = await listChildPages(chapterPage.pageId);
+        const sectionTitles = new Set(existingSectionPages.map(s => s.title));
+
+        // Process section 1 (already fetched)
+        await archiveSection(job, chapter, 1, probe.title!, probe.markdown, chapterPage.pageId, sectionTitles);
+
+        // Iterate remaining sections
+        let sec = 2;
+        while (sec <= MAX_SECTIONS) {
+          job.currentSection = sec;
+          await new Promise(r => setTimeout(r, 250)); // throttle
+          const result = await fetchSectionMarkdown(job.zybookCode, chapter, sec, authToken);
+          if (result.status === 404) {
+            addLog(job, `End of chapter ${chapter} at section ${sec - 1}`);
+            break;
+          }
+          if (result.status !== 200 || !result.markdown) {
+            addLog(job, `Chapter ${chapter}.${sec} error: ${result.error}`);
+            job.errors.push({ chapter, section: sec, error: result.error || "fetch failed" });
+            sec++;
+            continue;
+          }
+          await archiveSection(job, chapter, sec, result.title!, result.markdown, chapterPage.pageId, sectionTitles);
+          sec++;
+        }
+      }
+
+      job.status = "completed";
+      job.finishedAt = Date.now();
+      addLog(job, `Archive complete. ${job.sectionsCompleted} sections written, ${job.sectionsSkipped} skipped, ${job.errors.length} errors.`);
+    } catch (err: any) {
+      job.status = "failed";
+      job.error = err.message || String(err);
+      job.finishedAt = Date.now();
+      addLog(job, `Fatal error: ${job.error}`);
+    } finally {
+      if (activeArchiveJob && activeArchiveJob.id === job.id) activeArchiveJob = null;
+    }
+  }
+
+  async function archiveSection(
+    job: ArchiveJob,
+    chapter: number,
+    section: number,
+    title: string,
+    markdown: string,
+    chapterPageId: string,
+    existingTitles: Set<string>
+  ) {
+    const pageTitle = `${chapter}.${section} ${title}`.slice(0, 200);
+    if (existingTitles.has(pageTitle)) {
+      addLog(job, `Skip ${pageTitle} (already archived)`);
+      job.sectionsSkipped++;
+      return;
+    }
+    try {
+      await sendToNotion(markdown, pageTitle, chapterPageId);
+      existingTitles.add(pageTitle);
+      job.sectionsCompleted++;
+      addLog(job, `Wrote ${pageTitle} (${markdown.length} chars)`);
+    } catch (err: any) {
+      job.errors.push({ chapter, section, error: err.message || String(err) });
+      addLog(job, `Notion write failed for ${pageTitle}: ${err.message}`);
+    }
+  }
+
+  async function pickDefaultParent(): Promise<string> {
+    const pages = await listNotionPages();
+    if (!pages.length) throw new Error("No Notion pages accessible to the integration. Share at least one page with it.");
+    return pages[0].id;
+  }
+
+  app.post("/api/archive-to-notion", express.json(), async (req, res) => {
+    if (activeArchiveJob && activeArchiveJob.status === "running") {
+      return res.status(409).json({ error: "An archive job is already running", jobId: activeArchiveJob.id });
+    }
+    const zybookCode = (req.body?.zybook_code || "CPPCS2520NguyenSpring2026").toString();
+    const parentPageId = req.body?.parentPageId ? String(req.body.parentPageId) : undefined;
+    const rootTitle = (req.body?.rootTitle || "CS 2520: Python for Programmers (Spring 2026)").toString();
+    const job: ArchiveJob = {
+      id: `archive-${Date.now()}`,
+      zybookCode,
+      rootTitle,
+      status: "running",
+      startedAt: Date.now(),
+      chaptersTotal: 0,
+      sectionsCompleted: 0,
+      sectionsSkipped: 0,
+      errors: [],
+      log: [],
+    };
+    activeArchiveJob = job;
+    archiveJobs.set(job.id, job);
+    runArchive(job, parentPageId);
+    return res.json({ ok: true, jobId: job.id });
+  });
+
+  app.get("/api/archive-to-notion/status", (req, res) => {
+    const id = req.query.jobId as string | undefined;
+    const job = id ? archiveJobs.get(id) : activeArchiveJob || Array.from(archiveJobs.values()).pop();
+    if (!job) return res.json({ active: false });
+    return res.json({
+      active: true,
+      jobId: job.id,
+      status: job.status,
+      zybookCode: job.zybookCode,
+      rootTitle: job.rootTitle,
+      rootPageUrl: job.rootPageUrl,
+      currentChapter: job.currentChapter,
+      currentSection: job.currentSection,
+      chaptersTotal: job.chaptersTotal,
+      sectionsCompleted: job.sectionsCompleted,
+      sectionsSkipped: job.sectionsSkipped,
+      errors: job.errors.slice(-10),
+      errorCount: job.errors.length,
+      lastLog: job.log.slice(-20),
+      startedAt: job.startedAt,
+      finishedAt: job.finishedAt,
+      error: job.error,
+    });
   });
 
   app.get("/api/notebook-template", (req, res) => {

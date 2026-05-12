@@ -93,6 +93,23 @@ The application is a single-page web tool built with a frontend-only architectur
 - Colab notebook template: `GET /api/notebook-template` — downloads .ipynb with `fetch_section()`, `fetch_chapter()`, `save_chapter_md()`, `publish_to_notion()` functions; auto-detects server-stored token
 - Notebook pushed to GitHub: `notebooks/zybooks_study_notebook.ipynb` — opens directly in Colab via GitHub link
 
+## Bulk Archive to Notion
+
+- `POST /api/archive-to-notion` — Kicks off a background job that fetches every chapter/section of a zyBook (default `CPPCS2520NguyenSpring2026`) and creates a Notion page tree:
+  - Root page: "CS 2520: Python for Programmers (Spring 2026)" (configurable via `rootTitle`)
+  - One child page per chapter ("Chapter N")
+  - One child page per section ("N.S Section Title") with the full formatted markdown
+- `GET /api/archive-to-notion/status[?jobId=...]` — Returns live progress: status, currentChapter/Section, sectionsCompleted, sectionsSkipped, errorCount, recent log lines, and the rootPageUrl
+- Idempotent: reuses an existing root page (search by title) and skips section pages whose titles already exist under their chapter — safe to re-run after partial failures
+- Discovers TOC by probing every chapter (1..60) and every section (1..60) per chapter and stopping that chapter on 404 ("Section does not exist"); missing chapters are skipped (not treated as end-of-book) so gaps in chapter numbering don't truncate the archive
+- Throttled with a 250ms delay between section fetches to be polite to zyBooks
+- Per-section errors are recorded but do NOT abort the run; the job continues to the next section
+- Uses the server's stored zyBooks refresh token (auto-refreshes on 401) and the existing Notion connector — no credentials required from the client
+- UI: "Archive to Notion" button in the API Mode panel with a live status card (current chapter/section, counts, root page link, recent errors); polls `/status` every 3s
+- Notion long-content fix: `markdownToNotionBlocks()` now chunks both inline rich_text and code-block content into ≤2000-char pieces (Notion's per-text-node limit), so large sections no longer fail validation
+- `sendToNotion()` and `createEmptyChildPage()` now also return `pageId` so child pages can be nested under the newly created parents
+- Verified end-to-end against `CPPCS2520NguyenSpring2026`: 30 chapters, 414 sections written, 0 errors
+
 ## Submit Page (Browser Control Integration)
 
 - `GET /submit` — Standalone HTML form page at `/submit` for browser control automation

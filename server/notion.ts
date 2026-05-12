@@ -69,11 +69,13 @@ function markdownToNotionBlocks(markdown: string): NotionBlock[] {
       i++;
       const codeText = codeLines.join('\n');
       if (codeText.trim()) {
+        const chunks: string[] = [];
+        for (let p = 0; p < codeText.length; p += 2000) chunks.push(codeText.slice(p, p + 2000));
         blocks.push({
           object: 'block',
           type: 'code',
           code: {
-            rich_text: [{ type: 'text', text: { content: codeText.substring(0, 2000) } }],
+            rich_text: chunks.map(c => ({ type: 'text', text: { content: c } })),
             language: lang === 'python' ? 'python' : 'plain text',
           }
         });
@@ -160,6 +162,25 @@ function markdownToNotionBlocks(markdown: string): NotionBlock[] {
   return blocks;
 }
 
+function chunkRichText(rt: any[]): any[] {
+  const MAX = 2000;
+  const out: any[] = [];
+  for (const item of rt) {
+    const content = item?.text?.content ?? '';
+    if (typeof content !== 'string' || content.length <= MAX) {
+      out.push(item);
+      continue;
+    }
+    for (let i = 0; i < content.length; i += MAX) {
+      out.push({
+        ...item,
+        text: { ...item.text, content: content.slice(i, i + MAX) },
+      });
+    }
+  }
+  return out;
+}
+
 function parseInlineFormatting(text: string): any[] {
   const parts: any[] = [];
   const regex = /(\*\*(.+?)\*\*)|(`([^`]+?)`)|(_([^_]+?)_)/g;
@@ -208,7 +229,7 @@ function parseInlineFormatting(text: string): any[] {
     parts.push({ type: 'text', text: { content: text } });
   }
 
-  return parts;
+  return chunkRichText(parts);
 }
 
 export async function listNotionPages(): Promise<{ id: string; title: string }[]> {
@@ -229,7 +250,7 @@ export async function sendToNotion(
   markdown: string,
   title: string,
   parentPageId?: string
-): Promise<{ pageUrl: string }> {
+): Promise<{ pageUrl: string; pageId: string }> {
   const notion = await getUncachableNotionClient();
   const blocks = markdownToNotionBlocks(markdown);
 
@@ -251,7 +272,7 @@ export async function sendToNotion(
   const batchSize = 100;
   const firstBatch = blocks.slice(0, batchSize);
 
-  const page = await notion.pages.create({
+  const page: any = await notion.pages.create({
     parent,
     properties: {
       title: [{ type: 'text', text: { content: title } }],
@@ -267,5 +288,60 @@ export async function sendToNotion(
     });
   }
 
-  return { pageUrl: page.url };
+  return { pageUrl: page.url, pageId: page.id };
+}
+
+export async function createEmptyChildPage(
+  parentPageId: string,
+  title: string
+): Promise<{ pageUrl: string; pageId: string }> {
+  const notion = await getUncachableNotionClient();
+  const page: any = await notion.pages.create({
+    parent: { page_id: parentPageId },
+    properties: {
+      title: [{ type: 'text', text: { content: title } }],
+    },
+    children: [],
+  });
+  return { pageUrl: page.url, pageId: page.id };
+}
+
+export async function findRootPageByTitle(title: string): Promise<{ pageId: string; pageUrl: string } | null> {
+  const notion = await getUncachableNotionClient();
+  const res: any = await notion.search({
+    query: title,
+    filter: { property: 'object', value: 'page' },
+    page_size: 25,
+  });
+  for (const page of res.results || []) {
+    const t = page.properties?.title?.title?.[0]?.plain_text
+      || page.properties?.Name?.title?.[0]?.plain_text
+      || '';
+    if (t === title) return { pageId: page.id, pageUrl: page.url };
+  }
+  return null;
+}
+
+export async function listChildPages(parentPageId: string): Promise<{ pageId: string; title: string; pageUrl: string }[]> {
+  const notion = await getUncachableNotionClient();
+  const out: { pageId: string; title: string; pageUrl: string }[] = [];
+  let cursor: string | undefined = undefined;
+  do {
+    const res: any = await notion.blocks.children.list({
+      block_id: parentPageId,
+      start_cursor: cursor,
+      page_size: 100,
+    });
+    for (const block of res.results || []) {
+      if (block.type === 'child_page') {
+        out.push({
+          pageId: block.id,
+          title: block.child_page?.title || '',
+          pageUrl: `https://www.notion.so/${block.id.replace(/-/g, '')}`,
+        });
+      }
+    }
+    cursor = res.has_more ? res.next_cursor : undefined;
+  } while (cursor);
+  return out;
 }
